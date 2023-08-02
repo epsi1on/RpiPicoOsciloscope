@@ -95,6 +95,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataRepository.cs" />
+    <Compile Include="SignalGraphRenderer.cs" />
+    <Compile Include="MainWindowDataContext.cs" />
+    <Compile Include="PropertyValueChangedEventArgs.cs" />
+    <Compile Include="SnifferSerial.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UiState.cs" />
+    <Compile Include="Utils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -128,6 +137,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Architecture.md" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

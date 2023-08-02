@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +22,12 @@ namespace SimpleOsciloscope.UI
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this.Context = new MainWindowDataContext();
+            Context.Init();
         }
+
+        private MainWindowDataContext Context;
+        
     }
+
 }

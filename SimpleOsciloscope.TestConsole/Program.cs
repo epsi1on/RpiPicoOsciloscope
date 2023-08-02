@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SimpleOsciloscope.TestConsole
@@ -11,7 +12,12 @@ namespace SimpleOsciloscope.TestConsole
     {
         static void Main(string[] args)
         {
-            DaqInterface.Test();
+            var ifs = new DaqInterface();
+
+            ifs.TargetRepository = UiState.Instance.CurrentRepo;
+
+            ifs.StartSync();
+
         }
     }
 }
