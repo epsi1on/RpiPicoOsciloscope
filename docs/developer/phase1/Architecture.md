@@ -47,3 +47,9 @@ Which means there are periodic signals stored in `DataRepository`, first we need
 Finding frequency of signal
 FFT is good? no. look at here https://stackoverflow.com/a/6288230
 what we need is find the autocorrelation: the interval at which the signal becomes most like itself
+
+
+
+## Existing osciloscopes
+
+https://github.com/OpenHantek/OpenHantek6022/blob/main/docs/developer_info.md

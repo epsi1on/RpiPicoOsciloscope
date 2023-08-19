@@ -1,0 +1,29 @@
+﻿<Window x:Class="SimpleOsciloscope.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimpleOsciloscope.UI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="71*"/>
+            <ColumnDefinition Width="654*"/>
+            <ColumnDefinition Width="75*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="89*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Left" Margin="5,5,0,5" TextWrapping="Wrap" Text="Smaples" />
+        <TextBlock HorizontalAlignment="Left" Margin="5,5,0,5" TextWrapping="Wrap" Text="{Binding TotalSamplesStr}" Grid.Column="1"/>
+        <Image Grid.Column="1" Margin="5,5,5,5" Grid.Row="1" Source="{Binding BitmapSource}" Grid.ColumnSpan="2" Grid.RowSpan="1"/>
+        <Slider Margin="5" Grid.Row="2" Grid.ColumnSpan="2" Minimum="-6" Maximum="6" Value="{Binding FreqExponent}"/>
+        <Slider Margin="5" Grid.Row="3" Grid.ColumnSpan="2" Minimum="0" Maximum="10" Value="{Binding FreqBase}"/>
+        <TextBlock Margin="5" Grid.Row="3" Grid.Column="2" Text="{Binding Freq}"/>
+        
+    </Grid>
+</Window>

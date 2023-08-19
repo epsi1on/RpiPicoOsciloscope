@@ -9,7 +9,6 @@ using System.Windows.Input;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using System.Windows.Media.TextFormatting;
-using MadWizard.WinUSBNet;
 using System.Threading;
 using System.IO;
 using System.Windows.Markup;
@@ -17,14 +16,17 @@ using System.Windows.Markup;
 namespace SimpleOsciloscope.UI
 {
 
-    public class DaqInterface
+    public class RpiPicoDaqInterface: IDaqInterface
     {
-        public DataRepository TargetRepository;
+    
+        int SampleRate = 500_000;
+
+        public DataRepository TargetRepository { get; set; }
 
         public void StartSync()
         {
             var sport = new SnifferSerial("COM6", 268435456);
-
+            
             {//https://stackoverflow.com/a/73668856
                 sport.Handshake = Handshake.None;
                 sport.DtrEnable = true;
@@ -64,7 +66,7 @@ namespace SimpleOsciloscope.UI
             int bitwidth;
             var blockSize = 100;//samples per block
             var blockCount = 10;
-
+            
             {//send command for ADC
                 var cmd = Command.Default();
 
@@ -74,7 +76,7 @@ namespace SimpleOsciloscope.UI
                     cmd.blocksize = (ushort)blockSize;
                     cmd.blocks_to_send = (ushort)blockCount;
                     cmd.infinite = 1;
-                    cmd.clkdiv = 96;
+                    cmd.clkdiv = (ushort)(48_000_000/SampleRate); //rate is 48MHz/clkdiv (e.g. 96 gives 500 ksps; 48000 gives 1000 sps etc.)
                 }
 
 
@@ -101,7 +103,7 @@ namespace SimpleOsciloscope.UI
                 uint tmp;
                 byte a, b, c;
 
-                var chn = TargetRepository.Channels[0];
+                var chn = TargetRepository.Channel1;// Channels[0];
 
                 var cnt = 0;
 
@@ -126,10 +128,12 @@ namespace SimpleOsciloscope.UI
                         c = buf[j + 2];
 
                         v1 = a + ((b & 0xF0) << 4);
-                        v2 = (c & 0xF0) / 16 + (b & 0x0F) * 16 + (c & 0x0F) * 256;
+                        v2 = (c & 0xF0) / 16 + (b & 0x0F) * 16 + (c & 0x0F) * 256;//todo replace / 16 and * 16 with bitwise operators
 
-                        chn.Add((short)v1);
-                        chn.Add((short)v2);
+
+                        throw new NotImplementedException();
+                        //chn.Add((short)v1);
+                        //chn.Add((short)v2);
                         cnt++;
                     }
                 }

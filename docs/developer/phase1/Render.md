@@ -15,7 +15,7 @@ for detecting frequency:
 
 ## Finding frequency of signal
 
-FFT is good? no. look at here https://stackoverflow.com/a/6288230
+FFT is good? maybe no. look at here https://stackoverflow.com/a/6288230
 what we need is find the autocorrelation: the interval at which the signal becomes most like itself
 
 
