@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Accord.Diagnostics;
+using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -274,7 +276,6 @@ namespace SimpleOsciloscope.UI
 		internal void Init()
         {
 			{
-
 				this.BitmapSource = new WriteableBitmap(UiState.Instance.RenderBitmapWidth, UiState.Instance.RenderBitmapHeight, 96, 96, pixelFormat: UiState.BitmapPixelFormat, null);
 
 				var thr = new Thread(RenderLoopSync); thr.Start();
@@ -297,7 +298,7 @@ namespace SimpleOsciloscope.UI
             while (true)
 			{
 				RenderShot();
-				this.TotalSmaples = UiState.Instance.CurrentRepo.Channel1.Sets + UiState.Instance.CurrentRepo.Channel2.Sets;// s.Sum(i => i.Sets);
+				this.TotalSmaples = UiState.Instance.CurrentRepo.Samples.Index;// s.Sum(i => i.Sets);
                 this.TotalSamplesStr = Utils.numStr(this.TotalSmaples);
 				Thread.Sleep((int)wait);
             }
@@ -305,8 +306,13 @@ namespace SimpleOsciloscope.UI
 
         void RenderShot()
 		{
-			var bmp = render.Render(0);
+			var sp = System.Diagnostics.Stopwatch.StartNew();
 
+			double freq;
+
+			var bmp = render.Render(out freq);
+
+			Trace.WriteLine(string.Format("Render took {0} ms", sp.ElapsedMilliseconds));
 			{
                 Application.Current.Dispatcher.Invoke(new Action(() =>
 				{
@@ -325,30 +331,6 @@ namespace SimpleOsciloscope.UI
             var h = dst.PixelHeight;
 
 			ImageUtil.CopyToBitmap(bmp, dst);
-
-			/*
-            using (var ctx = dst.GetBitmapContext())
-			{
-				var rct = new Int32Rect(0, 0, dst.PixelWidth, dst.PixelHeight);
-
-				//var l = ctx.Length;
-				//dst.WritePixels(rct, bmp.Data, bmp.Width * 4, 0);
-				//Natives.CopyMemory(dst.BackBuffer, prt, length);
-				//dst.AddDirtyRect();
-
-				for (int x = 0; x < w; x++)
-				{
-					for (int y = 0; y < h; y++)
-					{
-						var px = bmp.GetHashCode[]
-						dst.SetPixel(x,y,)
-					}
-				}
-				
-            }*/
-				
-
-			
 		}
 
 

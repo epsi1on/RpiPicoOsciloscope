@@ -18,7 +18,7 @@ namespace SimpleOsciloscope.UI
         {
             //start DAQ thread
 
-            var ifs = new FakeDaqInterface();
+            var ifs = new RpiPicoDaqInterface();
             ifs.TargetRepository = UiState.Instance.CurrentRepo;
             var thr = new Thread(ifs.StartSync);
             thr.Start();

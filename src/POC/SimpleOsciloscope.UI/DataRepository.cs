@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Accord;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +9,17 @@ namespace SimpleOsciloscope.UI
 {
     public class DataRepository
     {
-        public static readonly int RepoLength = 5_000_000 * 3;//1.5 M sample capacity, 3 sec for 500ksps
+
+        public static readonly int RepoLength =
+            //5_000_000 * 3;//1.5 M sample capacity, 3 sec for 500ksps
+            5_00_000;//1.5 M sample capacity, 3 sec for 500ksps
         //public static readonly int ChannelCount = 1;
-        public double SampleRate;
+        public int SampleRate=500_000;//Sps
         //public List<ChannelData> Channels = new List<ChannelData>();// [ChannelCount];
         
-        public ChannelData Channel1 = new ChannelData(RepoLength);
-        public ChannelData Channel2 = new ChannelData(RepoLength);
+        //public ChannelData Channel1 = new ChannelData(RepoLength);
+        //public ChannelData Channel2 = new ChannelData(RepoLength);
+        public FixedLengthList<short> Samples = new FixedLengthList<short>(RepoLength);
 
     }
 
@@ -24,35 +29,88 @@ namespace SimpleOsciloscope.UI
     }
 
 
-    public class ChannelData
+    public class ChannelData_old
     {
-        FixedLengthList<double> Xs;//time
-        FixedLengthList<double> Ys;//voltage
+        public double SampleRate;//Sample per second
+
+        //FixedLengthList<double> Xs;//time
+        FixedLengthList<short> Ys;//voltage
 
         public readonly int Length;
 
-        public ChannelData(int l)
+        public ChannelData_old(int l)
         {
-            Xs = new FixedLengthList<double>(l);
-            Ys = new FixedLengthList<double>(l);
+            //Xs = new FixedLengthList<double>(l);
+            Ys = new FixedLengthList<short>(l);
             Length= l;
         }
 
         internal void Add(double x, double y)
         {
-            lock(lc)
+            lock (lc)
             {
-                Xs.Add(x);
+                //Xs.Add(x);
+                Ys.Add((short)y);
+                Sets++;
+            }
+        }
+
+        internal void Add(short x, short y)
+        {
+            lock (lc)
+            {
+                //Xs.Add(x);
                 Ys.Add(y);
                 Sets++;
             }
         }
 
-        public void Copy(double[] xs,double[]ys)
+
+        internal void Add(double y)
         {
-            lock(lc)
+            lock (lc)
             {
-                Xs.CopyTo(xs);
+                //Xs.Add(x);
+                Ys.Add((short)y);
+                Sets++;
+            }
+        }
+
+        internal void Add(short y)
+        {
+            lock (lc)
+            {
+                //Xs.Add(x);
+                Ys.Add(y);
+                Sets++;
+            }
+        }
+
+        public void Copy(double[] xs, double[] ys)
+        {
+            lock (lc)
+            {
+                //Xs.CopyTo(xs);
+                Copy(ys);
+            }
+        }
+
+        public void Copy(double[] ys)
+        {
+
+            //throw new NotImplementedException();
+            lock (lc)
+            {
+                //Xs.CopyTo(xs);
+                //Ys.CopyTo(ys);
+            }
+        }
+
+        public void Copy(short[] ys)
+        {
+            lock (lc)
+            {
+                //Xs.CopyTo(xs);
                 Ys.CopyTo(ys);
             }
         }
@@ -68,12 +126,11 @@ namespace SimpleOsciloscope.UI
 
         public readonly int Count;
 
-        private long totalWrites;
+        long totalWrites;
 
-        public long TotalWrites { get => totalWrites; set => totalWrites = value; }
+        public long TotalWrites { get => totalWrites; private set => totalWrites = value; }
 
         private object lc = new object();
-
 
         private T[] arr;
 
@@ -83,8 +140,8 @@ namespace SimpleOsciloscope.UI
             Count= l;
         }
 
-        int Index = 0;
-
+        
+        public int Index = 0;
         
 
         public void Add(T item)
@@ -134,10 +191,7 @@ namespace SimpleOsciloscope.UI
                 {
                     other[i - t] = thisArr[i];
                 }
-
-               
             }
-
         }
 
         public T this[int index]
@@ -146,7 +200,7 @@ namespace SimpleOsciloscope.UI
             {
                 if(index < 0 )
                     throw new Exception();
-                return arr[(index + Index) % Count];
+                return arr[(index + this.Index) % Count];
             }
         }
     }

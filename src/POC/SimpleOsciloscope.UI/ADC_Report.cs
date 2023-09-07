@@ -28,11 +28,11 @@ namespace SimpleOsciloscope.UI
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 9, Pack = 1)]
-    public struct Command
+    public struct AdcCommand
     {
-        public static Command Default()
+        public static AdcCommand Default()
         {
-            var buf = new Command();
+            var buf = new AdcCommand();
             buf.message_type = 0x04;
             buf.channel_mask = 1;
             buf.blocksize = 1000;
@@ -45,7 +45,7 @@ namespace SimpleOsciloscope.UI
 
 
         [FieldOffset(0)]
-        public uint8_t message_type ; // FOR CURRENT FIRMWARE THIS IS 0x04
+        public uint8_t message_type ;      // FOR CURRENT FIRMWARE THIS IS 0x04
         [FieldOffset(1)]
         public uint8_t channel_mask;       // default=1		min=0		max=31 Masks 0x01, 0x02, 0x04 are GPIO26, 27, 28; mask 0x08 internal reference, 0x10 temperature sensor
         [FieldOffset(2)]
@@ -59,11 +59,22 @@ namespace SimpleOsciloscope.UI
 
     }
 
-
+    [StructLayout(LayoutKind.Explicit, Size = 6, Pack = 1)]
+    public struct PwmConfigPairCommand
+    {
+        [FieldOffset(0)]
+        uint8_t gpio;               // default=0		min=0		max=25
+        [FieldOffset(1)]
+        uint16_t wrap_value;        // default=999		min=1		max=65535
+        [FieldOffset(3)]
+        uint16_t clkdiv;            // default=1		min=1		max=255
+        [FieldOffset(5)]
+        uint8_t clkdiv_int_frac;	// default=0		min=0		max=15
+    }
 
     public static class SerializationHelper
     {
-        public static byte[] Serialize(Command obj)
+        public static byte[] Serialize(AdcCommand obj)
         {
             int size = 21;// Marshal.SizeOf(obj);
 

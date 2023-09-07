@@ -8,6 +8,19 @@ namespace SimpleOsciloscope.UI
 {
     public static class Utils
     {
+        public static bool SameSign(double num1, double num2)
+        {
+            //if both are negative, or positive then true
+            //if both are zero, then true
+            //if one positive, one negative, then false
+            //zero is assumed as positive! do not pass zero to this method
+
+            if (num1 == num2)
+                return true;
+
+            return ((num1 < 0) == (num2 < 0));
+        }
+
         static string[] prefixeSI = { "y", "z", "a", "f", "p", "n", "µ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y" };
         public static string numStr(double num)
         {

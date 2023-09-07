@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
 
@@ -21,7 +22,7 @@ namespace SimpleOsciloscope.UI
 		/// </summary>
 		/// <param name="data"></param>
 		/// <param name="sampleRate">sample per second</param>
-		public unsafe RgbBitmap Render(int channelId)
+		public unsafe RgbBitmap Render(out double frequency)
 		{
             var w = UiState.Instance.RenderBitmapWidth;
             var h = UiState.Instance.RenderBitmapHeight;
@@ -43,35 +44,45 @@ namespace SimpleOsciloscope.UI
 
 			var repo = UiState.Instance.CurrentRepo;
 
-            ChannelData chn;
+            var arr = repo.Samples;
 
-            switch(channelId)
+            if (arr.TotalWrites < arr.Count)
             {
-                case 0:
-                    chn = repo.Channel1;
-                    break;
-                case 1:
-                    chn = repo.Channel2;
-                    break;
-                default:
-                    throw new System.Exception();
+                frequency = -1;
+                return BMP;
+            }
+                
+
+            var ys = ArrayPool.Short(l);
+            var xs = ArrayPool.Double(l);
+
+            arr.CopyTo(ys);
+
+            {
+                var deltaT = 1.0 / repo.SampleRate;
+
+                for (int i = 0; i < l; i++)
+                {
+                    xs[i] = i * deltaT;
+                }
             }
 
 
-            if (chn.Sets < chn.Length)
-                return BMP;
+            double freq,shift;
 
-            var ys = ArrayPool.Double(l);
-            var xs = ArrayPool.Double(l);
+            var dtr = new CorrelationBasedFrequencyDetector();
+            dtr.MaxCrosses = 10;
 
-            chn.Copy(xs, ys);
+            if (!dtr.TryGetFrequency(ys, repo.SampleRate, out freq,out shift))
+                throw new System.Exception();
 
-            double freq;
+            if(freq< 0)
+            {
 
-            if (!new FrequencyDetector().TryGetFrequency(ys, out freq))
-                freq = (float)Temps.Temp;
+            }
+            //freq = 970;
 
-			var waveLength = 1 / freq;
+            var waveLength = 1 / freq;
 
 			var sp = 2;// cycles to show
 
@@ -109,17 +120,29 @@ namespace SimpleOsciloscope.UI
 
                 BMP.Clear();
 
-
                 var windowSize = l / 10000;
                 var windowStart = l / 2;
+
+                var dt = 1.0 / repo.SampleRate;
 
                 //using (var ctx = BMP.GetBitmapContext())
 				{
                     //var ww = ctx.Width;
 
-                    for (var i = windowStart; i < windowStart+windowSize; i++)
+                    var lamda = 1.0 / System.Math.Abs(freq);
+                    var lamdaCount = (int)(lamda/dt);//how many sample per lambda
+                    var drawWindowCount = 1000;//how many hoe signals drawn
+
+
+                    var st = 0;
+                    var en = l;// lamdaCount * drawWindowCount;
+
+                    if (en > l)
+                        en = l;
+
+                    for (var i = st; i < en; i++)
                     {
-                        var tx = xs[i];
+                        var tx = xs[i] + shift;
                         var ty = ys[i];
 
                         x = (int)trsX.Transform(tx);
@@ -135,6 +158,7 @@ namespace SimpleOsciloscope.UI
 
             ArrayPool.Return(xs);
             ArrayPool.Return(ys);
+            frequency = freq;
 
             return BMP;
 		}
