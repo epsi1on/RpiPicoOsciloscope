@@ -15,6 +15,11 @@ for detecting frequency:
 
 ## Finding frequency of signal
 
+https://www.edn.com/ffts-and-oscilloscopes-a-practical-guide/
+https://www.edn.com/know-the-limitations-of-your-scopes-fft-capabilities/
+https://www.edn.com/oscilloscope-articles-by-arthur-pini/
+
+
 FFT is good? maybe no. look at here https://stackoverflow.com/a/6288230
 what we need is find the autocorrelation: the interval at which the signal becomes most like itself
 
@@ -40,6 +45,15 @@ Maybe we do not want to snapshot 100K windows. Also need a method to prevent pha
 
 General method for autocorrelation can be : phi | int(Abs(f(x)-f(x+phi)))~=0 let call it eq1
 
+
+We can use multiple methods for finding the frequency. from fast to slow. it is possible that a fast method be able to find the frequency and no need to slow method.
+
+### Avg Correlation Method
+
+- step 1: find the average of sample points in Y direction
+- step 2: shift the signal aith -yAvg in a way that new avg of points be zero.
+- step 3: from start, go step by step and see if interpolation of signal from y[i] to y[i+1] crosses the y=0. if so add the X to xs list. at last all xs where signal hits the y=0 are found
+- step 4: we need to find a delay tau, where the xs repeats itself. i.e. frequency of xs.
 
 ## Rendering
 

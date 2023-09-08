@@ -45,7 +45,15 @@ MainWindowDataContext.Init start a thread with timer for rendering
 Which means there are periodic signals stored in `DataRepository`, first we need to find the frequency of each signal to show 1-2 cycle of it. User can also define it but if we find an acurate algorithm, then software can do it faster...
 
 Finding frequency of signal
-FFT is good? no. look at here https://stackoverflow.com/a/6288230
+FFT is good? seems no. look at here 
+
+https://stackoverflow.com/a/6288230
+https://pages.mtu.edu/~suits/autocorrelation.html
+http://www.appstate.edu/~grayro/comphys/lecture10c_11.pdf
+https://dsp.stackexchange.com/questions/8432/how-to-get-fundamental-frequency-of-a-signal-using-autocorrelation
+https://stackoverflow.com/questions/3949324/calculate-autocorrelation-using-fft-in-matlab
+https://stackoverflow.com/questions/51352890/is-this-autocorrelation-formula-correctly-programmed
+
 what we need is find the autocorrelation: the interval at which the signal becomes most like itself
 
 
