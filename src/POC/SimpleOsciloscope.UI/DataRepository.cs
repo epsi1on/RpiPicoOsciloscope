@@ -1,5 +1,4 @@
-﻿using Accord;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,17 +9,27 @@ namespace SimpleOsciloscope.UI
     public class DataRepository
     {
 
-        public static readonly int RepoLength =
+        public static readonly double RepoLengthSecs = 1;
+
+        //public static readonly int RepoLength =
             //5_000_000 * 3;//1.5 M sample capacity, 3 sec for 500ksps
-            5_00_000;//1.5 M sample capacity, 3 sec for 500ksps
+        //    5_00_000;//1.5 M sample capacity, 3 sec for 500ksps
         //public static readonly int ChannelCount = 1;
         public int SampleRate=500_000;//Sps
-        //public List<ChannelData> Channels = new List<ChannelData>();// [ChannelCount];
-        
+                                      //public List<ChannelData> Channels = new List<ChannelData>();// [ChannelCount];
+
         //public ChannelData Channel1 = new ChannelData(RepoLength);
         //public ChannelData Channel2 = new ChannelData(RepoLength);
-        public FixedLengthList<short> Samples = new FixedLengthList<short>(RepoLength);
+        public FixedLengthList<short> Samples;//= new FixedLengthList<short>(RepoLength);
 
+        public void Init(int sampleRate)
+        {
+            SampleRate = sampleRate;
+
+            var lng = (int)(SampleRate * RepoLengthSecs);
+
+            Samples = new FixedLengthList<short>(lng);
+        }
     }
 
     public class PointF

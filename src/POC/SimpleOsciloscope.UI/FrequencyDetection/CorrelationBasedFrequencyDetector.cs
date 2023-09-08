@@ -1,5 +1,4 @@
-﻿using Accord.MachineLearning;
-using HomographyNet;
+﻿using HomographyNet;
 using SimpleOsciloscope.UI.FrequencyDetection;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,4 @@
-﻿using Accord.Diagnostics;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;

@@ -10,6 +10,8 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace SimpleOsciloscope.TestConsole
 {
@@ -25,11 +27,22 @@ namespace SimpleOsciloscope.TestConsole
             //TestAdcRead();
             //TestDirect();
             //TestDaqInterface();
-            testFreq3();
-
+            //testFreq3();
+            TestBitmap();
             Console.ReadKey();
 
 
+        }
+
+        static void TestBitmap()
+        {
+            var w = 500;
+            var h = 500;
+
+            var bmp = new RgbBitmap(w,h);
+            var b2 = new WriteableBitmap(w, h, 96, 96, PixelFormats.Bgr24, null);
+
+            ImageUtil.CopyToBitmap(bmp, b2);
         }
 
         static void testFreq3()
@@ -171,7 +184,7 @@ namespace SimpleOsciloscope.TestConsole
         {
             var ifs = new RpiPicoDaqInterface();
 
-            ifs.AdcReadTest();
+            //ifs.AdcReadTest();
         }
 
         static void testSimpleCrossColl()
@@ -446,8 +459,8 @@ namespace SimpleOsciloscope.TestConsole
                 a2[i] = y;
             }
 
-            double t, phi;
-            var t2 = new FftFrequencyDetector().TryGetFrequency(a2, 1, out t, out phi);
+            double t=0, phi;
+            //var t2 = new FftFrequencyDetector().TryGetFrequency(a2, 1, out t, out phi);
 
             var tt = 1 / (t);
 

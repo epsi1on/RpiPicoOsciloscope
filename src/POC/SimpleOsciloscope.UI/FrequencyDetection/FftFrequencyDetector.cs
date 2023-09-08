@@ -1,4 +1,4 @@
-﻿using Accord.Math;
+﻿/*using Accord.Math;
 using MathNet.Numerics;
 using MathNet.Numerics.IntegralTransforms;
 using MathNet.Numerics.Statistics;
@@ -91,3 +91,5 @@ namespace SimpleOsciloscope.UI
         }
     }
 }
+
+*/

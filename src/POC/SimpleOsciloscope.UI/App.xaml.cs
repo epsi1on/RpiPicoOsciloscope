@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace SimpleOsciloscope.UI
 {
@@ -17,12 +18,20 @@ namespace SimpleOsciloscope.UI
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             //start DAQ thread
+            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            var ifs = new RpiPicoDaqInterface();
-            ifs.TargetRepository = UiState.Instance.CurrentRepo;
-            var thr = new Thread(ifs.StartSync);
-            thr.Start();
+        }
 
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.ExceptionObject.ToString());
+        }
+
+        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.Exception.ToString());
+            //e.Handled = true;
         }
     }
 }

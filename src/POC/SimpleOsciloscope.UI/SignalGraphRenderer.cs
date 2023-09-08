@@ -40,7 +40,7 @@ namespace SimpleOsciloscope.UI
 
 
 			
-			var l = DataRepository.RepoLength;
+			
 
 			var repo = UiState.Instance.CurrentRepo;
 
@@ -51,7 +51,8 @@ namespace SimpleOsciloscope.UI
                 frequency = -1;
                 return BMP;
             }
-                
+
+            var l = arr.Count;
 
             var ys = ArrayPool.Short(l);
             var xs = ArrayPool.Double(l);
@@ -76,10 +77,6 @@ namespace SimpleOsciloscope.UI
             if (!dtr.TryGetFrequency(ys, repo.SampleRate, out freq,out shift))
                 throw new System.Exception();
 
-            if(freq< 0)
-            {
-
-            }
             //freq = 970;
 
             var waveLength = 1 / freq;
@@ -106,6 +103,9 @@ namespace SimpleOsciloscope.UI
                     if (tmp > max) max = tmp;
                 }
             }
+
+            min = 0;
+            max = 4096;
 
 			{
                 var trsX = OneDTransformation.FromInOut(0, twl, Margin, w - Margin);
@@ -142,7 +142,7 @@ namespace SimpleOsciloscope.UI
 
                     for (var i = st; i < en; i++)
                     {
-                        var tx = xs[i] + shift;
+                        var tx = xs[i] - shift;
                         var ty = ys[i];
 
                         x = (int)trsX.Transform(tx);

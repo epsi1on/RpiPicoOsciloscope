@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO.Ports;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -28,8 +30,8 @@ namespace SimpleOsciloscope.UI
             InitializeComponent();
             this.DataContext = this.Context = new ContextClass();
             Context.Init();
-
         }
+
         ContextClass Context;
 
 
@@ -247,6 +249,110 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
+            #region AvailablePorts Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public ObservableCollection<string> AvailablePorts
+            {
+                get { return _AvailablePorts; }
+                set
+                {
+                    if (AreEqualObjects(_AvailablePorts, value))
+                        return;
+
+                    var _fieldOldValue = _AvailablePorts;
+
+                    _AvailablePorts = value;
+
+                    ContextClass.OnAvailablePortsChanged(this, new PropertyValueChangedEventArgs<ObservableCollection<string>>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("AvailablePorts");
+                }
+            }
+
+            private ObservableCollection<string> _AvailablePorts;
+
+            public EventHandler<PropertyValueChangedEventArgs<ObservableCollection<string>>> AvailablePortsChanged;
+
+            public static void OnAvailablePortsChanged(object sender, PropertyValueChangedEventArgs<ObservableCollection<string>> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.AvailablePortsChanged != null)
+                    obj.AvailablePortsChanged(obj, e);
+            }
+
+            #endregion
+
+            #region SelectedPort Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public string SelectedPort
+            {
+                get { return _SelectedPort; }
+                set
+                {
+                    if (AreEqualObjects(_SelectedPort, value))
+                        return;
+
+                    var _fieldOldValue = _SelectedPort;
+
+                    _SelectedPort = value;
+
+                    ContextClass.OnSelectedPortChanged(this, new PropertyValueChangedEventArgs<string>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("SelectedPort");
+                }
+            }
+
+            private string _SelectedPort;
+
+            public EventHandler<PropertyValueChangedEventArgs<string>> SelectedPortChanged;
+
+            public static void OnSelectedPortChanged(object sender, PropertyValueChangedEventArgs<string> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.SelectedPortChanged != null)
+                    obj.SelectedPortChanged(obj, e);
+            }
+
+            #endregion
+
+            #region IsNotConnected Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public bool IsNotConnected
+            {
+                get { return _IsNotConnected; }
+                set
+                {
+                    if (AreEqualObjects(_IsNotConnected, value))
+                        return;
+
+                    var _fieldOldValue = _IsNotConnected;
+
+                    _IsNotConnected = value;
+
+                    ContextClass.OnIsNotConnectedChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("IsNotConnected");
+                }
+            }
+
+            private bool _IsNotConnected;
+
+            public EventHandler<PropertyValueChangedEventArgs<bool>> IsNotConnectedChanged;
+
+            public static void OnIsNotConnectedChanged(object sender, PropertyValueChangedEventArgs<bool> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.IsNotConnectedChanged != null)
+                    obj.IsNotConnectedChanged(obj, e);
+            }
+
+            #endregion
 
 
             internal void Init()
@@ -254,20 +360,24 @@ namespace SimpleOsciloscope.UI
                 {
                     this.BitmapSource = new WriteableBitmap(UiState.Instance.RenderBitmapWidth, UiState.Instance.RenderBitmapHeight, 96, 96, pixelFormat: UiState.BitmapPixelFormat, null);
                     this.SampleRate = (long)UiState.Instance.CurrentRepo.SampleRate;
+                }
 
-                    var thr = new Thread(RenderLoopSync);
-                    thr.Priority = ThreadPriority.AboveNormal;
+                {
+                    this.AvailablePorts = new ObservableCollection<string>(SerialPort.GetPortNames());
+                    this.IsNotConnected = true;
+                }
 
-                    thr.Start();
+                {
+                    this.SampleRate = 500_000;
                 }
             }
+
 
             SignalGraphRenderer render = new SignalGraphRenderer();
 
 
             void RenderLoopSync()
             {
-
                 var wait = (1 / UiState.RenderFramerate) * 1000;
 
                 while (true)
@@ -277,6 +387,31 @@ namespace SimpleOsciloscope.UI
                     this.TotalSamplesStr = Utils.numStr(this.TotalSmaples);
                     Thread.Sleep((int)wait);
                 }
+            }
+
+            public void Connect()
+            {
+
+                UiState.Instance.CurrentRepo.Init((int)SampleRate);
+
+                {
+                    var thr = new Thread(RenderLoopSync);
+                    thr.Priority = ThreadPriority.AboveNormal;
+                    thr.Start();
+                }
+
+                {
+                    var ifs = new RpiPicoDaqInterface();
+                    ifs.PortName = this.SelectedPort;
+                    ifs.SampleRate = (int)SampleRate;
+                    ifs.TargetRepository = UiState.Instance.CurrentRepo;
+                    var thr = new Thread(ifs.StartSync);
+                    thr.Start();
+                }
+
+                UiState.Instance.CurrentRepo.SampleRate = (int)this.SampleRate;
+
+                this.IsNotConnected = false;
             }
 
 
@@ -297,8 +432,6 @@ namespace SimpleOsciloscope.UI
                         CopyBitmap(bmp);
                     }), System.Windows.Threading.DispatcherPriority.Render);
                 }
-
-
             }
 
 
@@ -314,6 +447,23 @@ namespace SimpleOsciloscope.UI
 
 
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(Context.SelectedPort))
+            {
+                MessageBox.Show("invalid port");
+                return;
+            }
+
+            if (Context.SampleRate <=0)
+            {
+                MessageBox.Show("invalid sample rate");
+                return;
+            }
+
+            Context.Connect();
         }
     }
 }
