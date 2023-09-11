@@ -77,10 +77,10 @@ namespace SimpleOsciloscope.UI
 
             int bitwidthCurr;
             var blockSize = 1000;//samples per block
-            var blockCount = 15;
+            var blockCount = 5000;
             var bitwidth = 12;
 
-            var sampleRate = (int)UiState.Instance.CurrentRepo.SampleRate;
+            var sampleRate = 384000;// (int)UiState.Instance.CurrentRepo.SampleRate;
 
 
             {//send command for ADC
@@ -91,12 +91,14 @@ namespace SimpleOsciloscope.UI
                     cmd.channel_mask = 0x01;
                     cmd.blocksize = (ushort)blockSize;
                     cmd.blocks_to_send = (ushort)blockCount;
-                    cmd.infinite = 1;
-                    cmd.clkdiv = (ushort)(48_000_000/SampleRate); //rate is 48MHz/clkdiv (e.g. 96 gives 500 ksps; 48000 gives 1000 sps etc.)
+                    cmd.infinite = 0;
+                    cmd.clkdiv = (ushort)(48_000_000/ sampleRate); //rate is 48MHz/clkdiv (e.g. 96 gives 500 ksps; 48000 gives 1000 sps etc.)
                 }
 
 
                 var cmdBin = StructTools.RawSerialize(cmd);//serialize into 9 byte binary
+
+                var tmp = BitConverter.ToString(cmdBin);
 
                 sport.Write(new byte[] { 0x0A }, cmdBin);
 
