@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="RPicoScope.Lib.SimpleBitmap" Collapsed="true">
+    <Position X="5.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAEAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>SimpleBitmap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPicoScope.Lib.AdcRepository" Collapsed="true">
+    <Position X="3.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AdcRepository.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPicoScope.Lib.FftHarmonicFrequencyDetector" Collapsed="true">
+    <Position X="7.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FftHarmonicFrequencyDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPicoScope.Lib.HarmonicScopeRenderer" Collapsed="true">
+    <Position X="3.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HarmonicScopeRenderer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPicoScope.Lib.RuntimeConfig" Collapsed="true">
+    <Position X="3.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Options.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPicoScope.Lib.HitBasedScopeRender" Collapsed="true">
+    <Position X="5.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HitBasedScopeRender.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPicoScope.Lib.RpiPicoDaqInterface" Collapsed="true">
+    <Position X="7.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RpiPicoDaqInterface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RPicoScope.Lib.ArduinoNaneDaqInterface" Collapsed="true">
+    <Position X="5.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ArduinoNaneDaqInterface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="RPicoScope.Lib.IHarmonicFrequencyDetector" Collapsed="true">
+    <Position X="5.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IHarmonicFrequencyDetector.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="RPicoScope.Lib.IScopeRenderer" Collapsed="true">
+    <Position X="7.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IScopeRenderer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="RPicoScope.Lib.IDaqInterface" Collapsed="true">
+    <Position X="3.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IAdcInterface.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
