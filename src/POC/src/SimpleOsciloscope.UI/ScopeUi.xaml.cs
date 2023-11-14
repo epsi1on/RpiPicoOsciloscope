@@ -451,7 +451,8 @@ namespace SimpleOsciloscope.UI
                 {
                     var ifs =
                         new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
-                    //new ArduinoInterface();
+                        //new ArduinoInterface();
+                        //new FakeDaqInterface();
 
                     UiState.AdcConfig.Set(ifs);
 
@@ -475,17 +476,25 @@ namespace SimpleOsciloscope.UI
 
                 double freq;
 
-                var bmp = render.Render(out freq);
+                var bmp = render.Render2(out freq);
 
-                this.Frequency = freq;
+                var t = bmp;// new WriteableBitmap(null);
 
-                Trace.WriteLine(string.Format("Render took {0} ms", sp.ElapsedMilliseconds));
+                using (var ctx = bmp.GetBitmapContext())
                 {
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    this.Frequency = freq;
+
+                    Trace.WriteLine(string.Format("Render took {0} ms", sp.ElapsedMilliseconds));
+
                     {
-                        CopyBitmap(bmp);
-                    }), System.Windows.Threading.DispatcherPriority.Render);
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            //CopyBitmap(bmp);
+                            CopyBitmap(ctx);
+                        }), System.Windows.Threading.DispatcherPriority.Render);
+                    }
                 }
+
             }
 
 
@@ -499,6 +508,46 @@ namespace SimpleOsciloscope.UI
                 ImageUtil.CopyToBitmap(bmp, dst);
             }
 
+            void CopyBitmap(BitmapContext ctx)
+            {
+                var dst = this.BitmapSource;
+
+                var w = dst.PixelWidth;
+                var h = dst.PixelHeight;
+
+                
+                using (var destCt = dst.GetBitmapContext(ReadWriteMode.ReadWrite))
+                {
+                    ImageUtil.Copy(ctx, destCt);
+                    dst.AddDirtyRect(new Int32Rect(0, 0, dst.PixelWidth, dst.PixelHeight));
+
+                    /*
+                    unsafe
+                    {
+
+                        var l = destCt.Length;
+
+                        var p1 = destCt.Pixels;
+                        var p2 = ctx.Pixels;
+
+                        for (int i = 0; i < l; i++)
+                        {
+                            *p1 = *p2;
+                            p1++;
+                            p2++;
+                        }
+                        //var srcPtr = new IntPtr(ct2.Pixels);
+
+                        //var arr = new Span
+                    }
+                    */
+
+                }
+
+                
+                //ImageUtil.CopyToBitmap(bmp, dst);
+            }
+
             internal void RefreshPorts()
             {
                 this.AvailablePorts = new ObservableCollection<string>(SerialPort.GetPortNames());
@@ -508,6 +557,7 @@ namespace SimpleOsciloscope.UI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            /**/
             if (string.IsNullOrEmpty(Context.SelectedPort))
             {
                 MessageBox.Show("invalid port");
@@ -519,6 +569,7 @@ namespace SimpleOsciloscope.UI
                 MessageBox.Show("invalid sample rate");
                 return;
             }
+            /**/
 
             Context.Connect();
         }

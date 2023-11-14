@@ -9,6 +9,40 @@ namespace SimpleOsciloscope.UI
 {
     public class ImageUtil
     {
+        public static void Copy(BitmapContext src, BitmapContext target)
+        {
+            if (target.Format != src.Format)
+                throw new Exception();
+
+            var length = src.Length * 4;
+            BitmapContext.BlockCopy(src, 0, target, 0, length);
+
+            /*
+            var h = src.Height;
+            var w = src.Width;
+
+            var buf = target;//
+                             //new WriteableBitmap(w, h, 96, 96, pixelFormat: PixelFormats.Rgb24, null);
+
+            var ctx = target;// using()
+
+            unsafe{
+                //Marshal.Copy()
+                Bitm
+                var srcPtr = new IntPtr(src.Pixels);
+                var dstPtr = new IntPtr(target.Pixels);
+
+                CopyMemory(srcPtr, dstPtr, (uint)length);
+            }
+
+            */
+        }
+
+        //https://stackoverflow.com/a/15976103
+        [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
+        public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
+
+
         public static void CopyToBitmap(RgbBitmap bmp, WriteableBitmap target)
         {
             if (target.Format != PixelFormats.Bgr24)
@@ -27,79 +61,9 @@ namespace SimpleOsciloscope.UI
                 var length = dt.Length;
                 Marshal.Copy(dt, 0, target.BackBuffer, length);
                 buf.AddDirtyRect(new System.Windows.Int32Rect(0, 0, w, h));
-                /*
-                var pixelCount = buf.PixelHeight * buf.BackBufferStride;
-                //sp = new System.Span<byte>(buf.BackBuffer.ToPointer(), pixelCount);
-
                 
-
-                var ourStride = w * 3;
-                var msStride = buf.BackBufferStride;
-
-                //var ourStart = new IntPtr(&dt);
-                //var msStart = buf.BackBuffer;
-
-                int ourStart, msStart, length;
-
-                length = ourStride;
-
-                unsafe
-                {
-                    
-                    for (var row = 0; row < h; row++)
-                    {
-                        ourStart = row * ourStride;
-                        msStart = row * msStride;
-
-                        for (var col = 0; col < w; col++)
-                        {
-                            var r = dt[ourStart + col];
-                            var g = dt[ourStart + col + 1];
-                            var b = dt[ourStart + col + 2];
-
-
-                            ctx.Pixels[msStart / 3 + col] = r << 16 + g << 8 + b;
-                        }
-                    }
-                }
-
-                */
             }
-            /*
-
-            buf.Lock();
-
-            //System.Span<byte> sp;
-
-            unsafe
-            {
-                var pixelCount = buf.PixelHeight * buf.BackBufferStride;
-                sp = new System.Span<byte>(buf.BackBuffer.ToPointer(), pixelCount);
-
-                var dt = bmp.Data;
-
-                var ourStride = w * 3;
-                var msStride = buf.BackBufferStride;
-
-                //var ourStart = new IntPtr(&dt);
-                //var msStart = buf.BackBuffer;
-
-                int ourStart, msStart, length;
-
-                length = ourStride;
-
-                for (var row = 0; row < h; row++)
-                {
-                    ourStart = row * ourStride;
-                    msStart = row * msStride;
-
-                    for (var col = 0; col < length; col++)
-                    {
-                        sp[msStart + col] = dt[ourStart + col];
-                    }
-                }
-            }
-            */
+            
             
         }
 

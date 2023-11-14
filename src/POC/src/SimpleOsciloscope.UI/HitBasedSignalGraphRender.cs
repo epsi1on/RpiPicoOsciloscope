@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace SimpleOsciloscope.UI
 {
@@ -190,6 +191,11 @@ namespace SimpleOsciloscope.UI
         {
             frequency = 0;
             return Render();
+        }
+
+        public WriteableBitmap Render2(out double frequency)
+        {
+            throw new NotImplementedException();
         }
     }
 }

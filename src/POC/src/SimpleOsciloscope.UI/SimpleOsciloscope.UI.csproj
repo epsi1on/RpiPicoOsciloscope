@@ -145,6 +145,7 @@
     </Compile>
     <Compile Include="UiState.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="WriteableBitmapEx.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

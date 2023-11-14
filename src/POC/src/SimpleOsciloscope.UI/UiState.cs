@@ -28,12 +28,12 @@ namespace SimpleOsciloscope.UI
 
         public static readonly double RenderFramerate = 10;
 
-        public static PixelFormat BitmapPixelFormat = PixelFormats.Bgr24;
+        public static readonly PixelFormat BitmapPixelFormat = PixelFormats.Bgra32;
 
         public DataRepository CurrentRepo;
 
-        public int RenderBitmapWidth = 500;
-        public int RenderBitmapHeight = 500;
+        public readonly int RenderBitmapWidth = 500;
+        public readonly int RenderBitmapHeight = 500;
 
 
         public static UiState Instance = new UiState();

@@ -19,7 +19,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         public DataRepository TargetRepository { get; set; }
 
         public int dataRate = 5;//sample per second
-        public double Frequency = 1000.234567;//frequency of generated signal
+        public double Frequency = 10.234567;//frequency of generated signal
 
         public void StartSync()
         {

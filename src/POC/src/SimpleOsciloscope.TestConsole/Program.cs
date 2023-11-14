@@ -70,7 +70,7 @@ namespace SimpleOsciloscope.TestConsole
             waveOut.Play();
             //waveOut.OutputWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channels);
 
-            waveOut.Volume = 0.15f;
+            waveOut.Volume = 1f;
             
             Console.ReadKey();
         }

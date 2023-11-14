@@ -14,7 +14,7 @@ Here is output for osciloscope for a PWM signal with 25% duty cycle
 
 2- Decompress the file, locate `rp2daq.uf2` in the extracted content
 
-3- unplug RPI pico from PC, hold the button on the RPI PICO and while pressing it down, connect the usb cable to PICO. copy the rp2daq.uf2 file from previous step into the drive shown in the explorer. keyword for search: "upload uf2 file to raspberrypi pico"
+3- Now we need to upload `rp2daq.uf2` to Pico. Unplug RPI pico from PC, hold the button on the RPI PICO and while pressing it down, connect the usb cable to PICO. copy the rp2daq.uf2 file from previous step into the drive shown in the explorer. keyword for search: "upload uf2 file to raspberrypi pico"
 
 4- The probe is GP26 of RPI PICO (pin #31 of 40 pins) also called ADC0 in datasheet ([pinout](https://www.raspberrypi.com/documentation/microcontrollers/images/pico-pinout.svg)). connect the probe to your signal source, also connect ground of signal to RPI Pico ground (pico ground pins: #3,#8,#13,#18,#23,#28,#33,#38) in order to have commonn ground
 
