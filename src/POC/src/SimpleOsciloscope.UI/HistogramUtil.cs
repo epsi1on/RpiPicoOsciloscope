@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -132,6 +133,7 @@ namespace SimpleOsciloscope.UI
         }
     }
 
+    [DebuggerDisplay("{MinGroup}-{MaxGroup}")]
     public struct HistogramRegion
     {
         public int MinGroup, MaxGroup;//both are included, floor(min) and ceiling(max)

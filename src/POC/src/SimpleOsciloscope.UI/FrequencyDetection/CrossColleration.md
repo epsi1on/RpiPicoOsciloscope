@@ -1,4 +1,8 @@
-﻿octave code
+﻿How to compute frequency of data using FFT?
+https://stackoverflow.com/questions/4225432/how-to-compute-frequency-of-data-using-fft
+
+
+octave code
 
 syms x1 x2 y1 y2
 dx=x2-x1

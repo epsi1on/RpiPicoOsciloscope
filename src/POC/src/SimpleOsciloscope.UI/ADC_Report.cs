@@ -1,8 +1,13 @@
 ﻿using System;
 using uint8_t = System.Byte;
 using uint16_t = System.UInt16;
+using uint32_t = System.UInt32;
 using uint64_t = System.UInt64;
 using System.Runtime.InteropServices;
+using int8_t = System.Byte;
+using NAudio.Gui;
+using System.Windows;
+using System.IO;
 
 namespace SimpleOsciloscope.UI
 {
@@ -27,35 +32,75 @@ namespace SimpleOsciloscope.UI
         public uint8_t block_delayed_by_usb;
     }
 
-    [StructLayout(LayoutKind.Explicit, Size = 9, Pack = 1)]
-    public struct AdcCommand
+    //[StructLayout(LayoutKind.Explicit, Size = 9, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct AdcConfig
     {
-        public static AdcCommand Default()
+        public static AdcConfig Default()
         {
-            var buf = new AdcCommand();
-            buf.message_type = 0x04;
+            var buf = new AdcConfig();
+            //buf.message_type = 0x04;
             buf.channel_mask = 1;
             buf.blocksize = 1000;
             buf.infinite = 0;
             buf.blocks_to_send = 1;
             buf.clkdiv = 96;
-
+            buf.trigger_gpio = 0xff;//default=-1		min=-1		max=24 GPIO number for start trigger (set to -1 to make ADC start w/o trigger)
+            //-1 int int8_t is 0xff in hex
             return buf;
         }
 
 
-        [FieldOffset(0)]
-        public uint8_t message_type ;      // FOR CURRENT FIRMWARE THIS IS 0x04
-        [FieldOffset(1)]
-        public uint8_t channel_mask;       // default=1		min=0		max=31 Masks 0x01, 0x02, 0x04 are GPIO26, 27, 28; mask 0x08 internal reference, 0x10 temperature sensor
-        [FieldOffset(2)]
-        public uint16_t blocksize;         // default=1000		min=1		max=8192 Number of sample points until a report is sent
-        [FieldOffset(4)]
-        public uint8_t infinite;           // default=0		min=0		max=1  Disables blocks_to_send countdown (reports keep coming until explicitly stopped)
-        [FieldOffset(5)]
-        public uint16_t blocks_to_send;    // default=1		min=0		         Number of reports to be sent (if not infinite)
-        [FieldOffset(7)]
-        public uint16_t clkdiv;            // default=96		min=96		max=65535 Sampling rate is 48MHz/clkdiv (e.g. 96 gives 500 ksps; 48000 gives 1000 sps etc.)
+
+        public byte[] ToArray()
+        {
+            using(var str = new MemoryStream())
+            {
+                var rwtr = new BinaryWriter(str);
+
+                rwtr.Write(channel_mask);
+                rwtr.Write(blocksize);
+                rwtr.Write(infinite);
+                rwtr.Write(blocks_to_send);
+                rwtr.Write(clkdiv);
+                rwtr.Write(trigger_gpio);
+                rwtr.Write(trigger_on_falling_edge);
+
+                rwtr.Flush();
+
+                return str.ToArray();
+            }
+        }
+
+        public uint8_t channel_mask;
+        public uint8_t infinite;
+        public uint16_t blocksize;
+        public uint32_t blocks_to_send;
+        public uint16_t clkdiv;
+        public uint64_t start_time_us;
+        public uint64_t end_time_us;
+        public uint8_t waits_for_usb;
+        public uint8_t waits_for_trigger;
+        public uint8_t block_delayed_by_usb;
+        public int8_t trigger_gpio;
+        public uint8_t trigger_on_falling_edge;
+
+
+
+        //[FieldOffset(0)]
+        //public uint8_t channel_mask;       // default=1		min=0		max=31 Masks 0x01, 0x02, 0x04 are GPIO26, 27, 28; mask 0x08 internal reference, 0x10 temperature sensor
+        
+        //[FieldOffset(1)]
+        //public uint8_t infinite;           // default=0		min=0		max=1  Disables blocks_to_send countdown (reports keep coming until explicitly stopped)
+
+        //[FieldOffset(2)]
+        //public uint16_t blocksize;         // default=1000		min=1		max=8192 Number of sample points until a report is sent
+
+        //public UInt32
+        //[FieldOffset(5)]
+        //public uint16_t blocks_to_send;    // default=1		min=0		         Number of reports to be sent (if not infinite)
+        //[FieldOffset(7)]
+        //public uint16_t clkdiv;            // default=96		min=96		max=65535 Sampling rate is 48MHz/clkdiv (e.g. 96 gives 500 ksps; 48000 gives 1000 sps etc.)
 
     }
 
@@ -72,24 +117,10 @@ namespace SimpleOsciloscope.UI
         uint8_t clkdiv_int_frac;	// default=0		min=0		max=15
     }
 
-    public static class SerializationHelper
-    {
-        public static byte[] Serialize(AdcCommand obj)
-        {
-            int size = 21;// Marshal.SizeOf(obj);
 
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(obj, ptr, true);
 
-            var buf = new byte[size];
 
-            Marshal.Copy(ptr, buf, 0, size);
-            Marshal.FreeHGlobal(ptr);
-
-            return buf;
-        }
-    }
-
+    //https://stackoverflow.com/a/14125895
     public static class StructTools
     {
         /// <summary>

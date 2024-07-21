@@ -92,11 +92,22 @@ namespace SimpleOsciloscope.UI
             return res;
         }
 
+
+        public double? preferredFreq;
+
         public bool TryGetFrequency(double[] ys, double samplingRate, out double freq, out double phaseShift)
         {
-            if (!TryGetAvgCrossFrequency(ys, samplingRate, out freq, out phaseShift))
-                return false;
 
+            return TryGetShiftedCrossFrequency(ys, samplingRate, out freq, out phaseShift, this.MaxCrosses, this.preferredFreq);
+
+            if (preferredFreq != null)
+            {
+                freq = preferredFreq.Value;
+                phaseShift = phaseShift;
+            }
+            return true;
+
+            
             var F = freq;
 
             //should check for F/N and find minimum cross correlation
@@ -163,25 +174,20 @@ namespace SimpleOsciloscope.UI
 
 
                 if (first == -1)
-                    //throw new NotImplementedException();
                     first = 1;
 
 
                 mult = first;
             }
 
-
             var lambda2 = mult * lambda;
 
             freq = 1 / lambda2;
 
             return true;
-
-            throw new NotImplementedException();
-
         }
 
-        public bool TryGetAvgCrossFrequency( double[] ys, double samplingRate, out double freq, out double phaseShift)
+        public static bool TryGetShiftedCrossFrequency( double[] ys, double samplingRate, out double freq, out double phaseShift,int MaxCrosses,double? preferedFreq=null)
         {
             var n = ys.Length;
             var k = 100;
@@ -190,19 +196,18 @@ namespace SimpleOsciloscope.UI
             var avg = HpVectorOperation.Sum(ys, n) / n;
 
             Trace.WriteLine("AVG: " + avg);
-            var xs = ArrayPool.Double(n);
+            var xs = ArrayPool.Double(n);//where signal do cross the y=avg
 
             var dt = 1 / samplingRate;
 
             var crosses = Cross(ys, -avg, xs, n, dt);
 
-            var bs = ArrayPool.Double(n);
-            var bsc = 0;
+            var bs = ArrayPool.Double(n);//bs[i] = xs[i+1] - xs[i]
+
+            var bsc = 0;//count of bs
 
             {//fill bs
                 bs.Clear();
-
-
 
                 for (var i = 0; i < crosses - 1; i++)
                 {
@@ -221,6 +226,9 @@ namespace SimpleOsciloscope.UI
 
 
             double[] xbs, wbs;
+
+            double accurateFreq;
+
 
             HistogramData bsHistogram;
 
@@ -287,7 +295,68 @@ namespace SimpleOsciloscope.UI
                 }
             }
 
+            {
+                var lt = dt * ys.Length;//in sec
+                var m = preferedFreq.Value / lt;
 
+                Array.Sort(wbs, xbs);
+                Array.Sort(wbs);
+
+                Array.Reverse(xbs);
+                Array.Reverse(wbs);
+
+
+                {
+                    var lc = 0.0;
+
+                    var thres = 0.95;
+
+                    int i;
+
+                    for (i = 0; i < xbs.Length; i++)
+                    {
+                        var li = xbs[i] * wbs[i];
+
+                        lc += li;
+
+                        if (lc / lt > thres)
+                            break;
+                    }
+
+                    var ers = wbs.Select(ii => ii / m).ToArray();
+
+                    var thres2 = 0.95;
+
+                    var l2 = 0.0;
+
+                    var m2 = 0;
+
+
+                    if(wbs.Length >= i) {
+
+                        freq = -1;
+                        phaseShift= 0;
+                        return false;
+                    }
+
+
+                    for (var j = 0; j <= i; j++)
+                    {
+                        var ni = wbs[j] / m;
+                        var li = xbs[j];
+
+                        ni = Math.Round(ni);
+
+                        l2 += ni * m * li;
+                    }
+
+                    accurateFreq = m / l2;
+                }
+
+                
+
+                
+            }
             
 
             double[,] mtx;
@@ -399,7 +468,8 @@ namespace SimpleOsciloscope.UI
 
             freq = 1 / lambda;
 
-            
+            freq = accurateFreq;
+
             phaseShift = phaseShift % lambda;
 
            

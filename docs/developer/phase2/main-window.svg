@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.1 (9b9bdc1480, 2023-11-25, custom)"
+   sodipodi:docname="main-window.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.74079554"
+     inkscape:cx="350.29909"
+     inkscape:cy="511.61215"
+     inkscape:window-width="2484"
+     inkscape:window-height="1376"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showgrid="false" />
+  <defs
+     id="defs1">
+    <marker
+       style="overflow:visible"
+       id="Triangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker5"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Diamond"
+       markerWidth="3"
+       markerHeight="3"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.45)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         d="M 0,-7.0710768 -7.0710894,0 0,7.0710589 7.0710462,0 Z"
+         id="path5" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.105833"
+       id="rect1"
+       width="189.69542"
+       height="150.39511"
+       x="6.9372606"
+       y="9.1727314"
+       ry="0.62520808" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.105833"
+       id="rect2"
+       width="147.11984"
+       height="56.541832"
+       x="42.428574"
+       y="29.338335"
+       ry="0.62520808" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.105833"
+       id="rect3"
+       width="147.22566"
+       height="63.092373"
+       x="42.375656"
+       y="93.385674"
+       ry="0.62520808" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.170514"
+       id="rect4"
+       width="189.63074"
+       height="113.87135"
+       x="6.969605"
+       y="178.3886"
+       ry="1.2591258" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker5)"
+       d="M 14.703596,237.84997 H 192.04454"
+       id="path4" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.31143px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.132786"
+       x="-244.12146"
+       y="9.4885826"
+       id="text5"
+       transform="rotate(-90.614426)"><tspan
+         sodipodi:role="line"
+         id="tspan5"
+         style="stroke-width:0.132786"
+         x="-244.12146"
+         y="9.4885826">GND</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.103012"
+       id="rect5"
+       width="171.69298"
+       height="97.044884"
+       x="17.962675"
+       y="185.41612"
+       ry="0.59230697" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.31143px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.132786"
+       x="190.1356"
+       y="187.41968"
+       id="text6"
+       transform="rotate(-0.614426)"><tspan
+         sodipodi:role="line"
+         id="tspan6"
+         style="stroke-width:0.132786"
+         x="190.1356"
+         y="187.41968">i</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="-54.767159"
+       y="338.61139"
+       id="text7"><tspan
+         sodipodi:role="line"
+         id="tspan7"
+         style="stroke-width:0.264583"
+         x="-54.767159"
+         y="338.61139">comboish box</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="-54.767159"
+         y="351.84052"
+         id="tspan13">max</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="-54.767159"
+         y="365.06964"
+         id="tspan8">median</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="-54.767159"
+         y="378.29877"
+         id="tspan10">avg</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="-54.767159"
+         y="391.52789"
+         id="tspan9">min voltage</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="-54.767159"
+         y="404.75702"
+         id="tspan11">max voltage</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="-54.767159"
+         y="417.98615"
+         id="tspan15">duty cycle</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 37.137824,202.37919 28.060787,0.21013 5.43478,71.6949 7.4907,0.47255 2.375559,-71.38612 40.09149,0.83658 3.64226,70.39169 7.31017,0.36206 4.13848,-70.02372 27.34358,-0.68169"
+       id="path12" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 189.65424,203.69719 -15.90703,0.74878 15.90703,2.79976 -2.61607,64.30098 -22.3564,1.55107 23.79743,2.00181 z"
+       id="path13" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="187.02686"
+       y="313.82474"
+       id="text18"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="187.02686"
+         y="313.82474"
+         id="tspan18">پیکسلهای تجمعی</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 185.20267,314.64914 c -1.09451,-1.10496 -8.62219,-40.55047 -8.62219,-40.55047"
+       id="path23" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.204969px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 102.13068,273.43842 -7.088521,7.28767"
+       id="path24" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.204969px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 102.13068,280.72609 -7.088519,-7.28767"
+       id="path25" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 108.13824,323.08777 C 107.04373,321.98281 99.516048,282.5373 99.516048,282.5373"
+       id="path26" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="28.102186"
+       y="335.83203"
+       id="text26"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="28.102186"
+         y="335.83203"
+         id="tspan26">کرسر ماوس ضربدری (مربعی نباشد)</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.865;stroke-miterlimit:4.1;stroke-dasharray:0.529167, 0.529167"
+       id="rect6"
+       width="28.853315"
+       height="5.3298616"
+       x="11.317193"
+       y="284.49521"
+       ry="0.62520808" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.865;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Triangle)"
+       d="M 11.317193,289.82508 C -10.263643,318.9357 -7.5883687,324.58133 -7.5883687,324.58133"
+       id="path6" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="-144.77171"
+       y="434.00336"
+       id="text16"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="-144.77171"
+         y="434.00336"
+         id="tspan16">اینها در چیزی شبیه به کمبو هستن و تیک دارن و وقتی انتخاب میشن </tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="-144.77171"
+         y="447.23248"
+         id="tspan17">توی پایین نشون داده میشن. شبیه به اکسل وقتی چند سلول رو انتخاب میکنی و ماکس و مین </tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="-144.77171"
+         y="460.46161"
+         id="tspan19">و ... اشون رو میبینی</tspan></text>
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.865;stroke-miterlimit:4.1"
+       id="path1"
+       cx="15.517759"
+       cy="17.535685"
+       rx="4.9148889"
+       ry="4.8754754" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 16.592294,15.49378 c 0,4.062009 0.04447,4.166123 0.04447,4.166123"
+       id="path2" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 14.028513,15.49378 v 4.454747"
+       id="path3" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="-96.054535"
+       y="-17.149738"
+       id="text3"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         style="stroke-width:0.264583"
+         x="-96.054535"
+         y="-17.149738">دکمه پاز سیگنال روی تصویر رو نگه میداره</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="-96.054535"
+         y="-3.9206152"
+         id="tspan4">در حین اینکه پاز هست چراغی چشمک میزنه روی تصویر</tspan></text>
+  </g>
+</svg>

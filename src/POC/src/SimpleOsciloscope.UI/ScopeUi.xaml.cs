@@ -450,9 +450,10 @@ namespace SimpleOsciloscope.UI
 
                 {
                     var ifs =
-                        new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
-                        //new ArduinoInterface();
-                        //new FakeDaqInterface();
+                    new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
+                    //new Stm32Interface(this.SelectedPort, SampleRate);
+                    //new ArduinoInterface();
+                    //new FakeDaqInterface();
 
                     UiState.AdcConfig.Set(ifs);
 

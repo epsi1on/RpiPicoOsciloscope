@@ -15,7 +15,7 @@ namespace SimpleOsciloscope.UI
         //    5_00_000;//1.5 M sample capacity, 3 sec for 500ksps
         //public static readonly int ChannelCount = 1;
         //public int AdcSampleRate = 500_000;//Sps
-                                        //public List<ChannelData> Channels = new List<ChannelData>();// [ChannelCount];
+        //public List<ChannelData> Channels = new List<ChannelData>();// [ChannelCount];
 
         //public int AdcMaxValue = 4096;//rpi pico: 4096, arduino nano 1024
         //public double AdcMaxVoltage = 3.3;//rpi pico: 3.3, arduino nano 1024
@@ -24,6 +24,7 @@ namespace SimpleOsciloscope.UI
         //public ChannelData Channel1 = new ChannelData(RepoLength);
         //public ChannelData Channel2 = new ChannelData(RepoLength);
         public ISampleRepository<short> Samples;//= new FixedLengthList<short>(RepoLength);
+        //public ISampleRepository<short> Samples;//= new FixedLengthList<short>(RepoLength);
 
         public void Init(int sampleRate)
         {

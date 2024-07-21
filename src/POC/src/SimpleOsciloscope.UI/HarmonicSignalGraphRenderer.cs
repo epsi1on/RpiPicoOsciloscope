@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using SimpleOsciloscope.UI.FrequencyDetection;
+using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Media;
@@ -32,7 +33,8 @@ namespace SimpleOsciloscope.UI
         static readonly IntThickness Margin = new IntThickness(40,30,20,10);
         static readonly int MarginLeft = 30;
 
-        static readonly int CyclesToShow = 2;
+        static readonly int CyclesToShow = 2;//how many full cycles in scope UI, mor of it, more tooth in UI
+        static readonly int NumberOfCyclesToRender = 4;//how many full cycles in scope UI?, more of it denser lines in UI
 
         public unsafe RgbBitmap Render()
         {
@@ -46,7 +48,7 @@ namespace SimpleOsciloscope.UI
         {
             var trsY = OneDTransformation.FromInOut(minY, maxY, Margin.Top, bmp.Height - Margin.Bottom);
 
-            var count = 4;
+            var count = 10;
 
             byte r = 128;
             byte b = 128;
@@ -89,7 +91,7 @@ namespace SimpleOsciloscope.UI
         {
             var trsY = OneDTransformation.FromInOut(minY, maxY, Margin.Top, bmp.Height - Margin.Bottom);
 
-            var count = 4;
+            var count = 10;
 
             byte r = 128;
             byte b = 128;
@@ -334,7 +336,8 @@ namespace SimpleOsciloscope.UI
             var sampleRate = UiState.AdcConfig.SampleRate;
 
             {
-                var deltaT = 1.0 / sampleRate;// repo.AdcSampleRate;
+                var deltaT = 1.0 / sampleRate;
+
 
                 for (int i = 0; i < l; i++)
                 {
@@ -345,8 +348,8 @@ namespace SimpleOsciloscope.UI
 
             double freq, shift;
 
-            var dtr = new CorrelationBasedFrequencyDetector();
-            dtr.MaxCrosses = 10;
+            var dtr = new HybridFrequencyDetector();
+            
 
             if (!dtr.TryGetFrequency(ys, sampleRate, out freq, out shift))
                 throw new System.Exception();
@@ -358,27 +361,6 @@ namespace SimpleOsciloscope.UI
             var sp = CyclesToShow;// cycles to show
 
             var twl = sp * waveLength;
-
-            //var xs = ArrayPool.Float(l);
-            //var ys = arr;// ArrayPool.Float(l);
-
-            //var min = short.MinValue;
-            //var max = short.MaxValue;
-
-            /** /
-            {
-                //short tmp;
-
-                for (var i = 0; i < l; i++)
-                {
-                    //xs[i] = xs[i] % twl;
-                    //tmp = ys[i];
-
-                    //if (tmp < min) min = tmp;
-                    //if (tmp > max) max = tmp;
-                }
-            }
-            /**/
 
             var min = 0;
             var max = MathUtil.MaxValueForBits(UiState.AdcConfig.ResolutionBits);//.Instance.CurrentRepo.AdcMaxValue;
@@ -416,6 +398,19 @@ namespace SimpleOsciloscope.UI
                     var st = 0;
                     var en = l;// lamdaCount * drawWindowCount;
 
+                    
+
+
+                    var oCnt = NumberOfCyclesToRender;//oCnt x oscilations
+
+
+                    var samples = oCnt * waveLength * sampleRate;
+
+
+                    st = 0;
+                    en = (int)samples;
+
+
                     if (en > l)
                         en = l;
 
@@ -436,8 +431,6 @@ namespace SimpleOsciloscope.UI
 
                             x = (int)trsX.Transform(xi);
                             y = (int)trsY.Transform(ty);
-
-                            //var idx = (y * ww) + x;
 
                             if (x > 0 && y > 0 && x < w && y < h)
                                 WriteableBitmapEx.SetPixel(ctx, x, y, r, g, b);

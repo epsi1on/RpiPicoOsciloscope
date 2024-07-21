@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RPicoScope.Lib
 {
-    public class AdcRepository
+    public class AdcSampleRepository
     {
     }
 }

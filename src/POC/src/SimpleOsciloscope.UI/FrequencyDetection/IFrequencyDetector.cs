@@ -2,7 +2,7 @@
 {
     public interface IFrequencyDetector
     {
-        bool TryGetFrequency( double[] ys, double samplingRate, out double freq,out double phaseShift);
+        bool TryGetFrequency( short[] ys, double samplingRate, out double freq,out double phaseShift);
     }
 
 

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="drawing.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.2623761"
+     inkscape:cx="332.30985"
+     inkscape:cy="797.70207"
+     inkscape:window-width="1920"
+     inkscape:window-height="1057"
+     inkscape:window-x="-8"
+     inkscape:window-y="181"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.233554;stroke-linejoin:round;stroke-opacity:1"
+       id="rect234"
+       width="150.98949"
+       height="91.787529"
+       x="13.017538"
+       y="37.915737" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:5.75339px;font-family:IRANSans;-inkscape-font-specification:'IRANSans, Bold';fill:#000000;stroke:none;stroke-width:0.28231;stroke-linejoin:round;stroke-opacity:1;fill-opacity:1"
+       x="23.055069"
+       y="48.834824"
+       id="text1629"><tspan
+         sodipodi:role="line"
+         id="tspan1627"
+         style="stroke-width:0.28231;stroke:none;fill:#000000;fill-opacity:1"
+         x="23.055069"
+         y="48.834824">Calibration</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:5.75339px;font-family:IRANSans;-inkscape-font-specification:'IRANSans, Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231;stroke-linejoin:round;stroke-opacity:1"
+       x="38.355251"
+       y="64.135002"
+       id="text1744"><tspan
+         sodipodi:role="line"
+         id="tspan1742"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231"
+         x="38.355251"
+         y="64.135002">Calibrate: Channel1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:5.75339px;font-family:IRANSans;-inkscape-font-specification:'IRANSans, Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231;stroke-linejoin:round;stroke-opacity:1"
+       x="151.95386"
+       y="125.75492"
+       id="text1757"><tspan
+         sodipodi:role="line"
+         id="tspan1755"
+         style="stroke-width:0.28231"
+         x="151.95386"
+         y="125.75492">Go</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.156133;stroke-linejoin:round;stroke-opacity:1"
+       id="rect1759"
+       width="120.46655"
+       height="51.413784"
+       x="12.978827"
+       y="146.23584" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:5.75339px;font-family:IRANSans;-inkscape-font-specification:'IRANSans, Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231;stroke-linejoin:round;stroke-opacity:1"
+       x="22.426294"
+       y="158.87038"
+       id="text1767"><tspan
+         sodipodi:role="line"
+         id="tspan1765"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231"
+         x="22.426294"
+         y="158.87038">Calibrating Channel 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:5.75339px;font-family:IRANSans;-inkscape-font-specification:'IRANSans, Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231;stroke-linejoin:round;stroke-opacity:1"
+       x="104.63479"
+       y="185.27892"
+       id="text1771"><tspan
+         sodipodi:role="line"
+         id="tspan1769"
+         style="stroke-width:0.28231"
+         x="104.63479"
+         y="185.27892">Let's Go</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:5.75339px;font-family:IRANSans;-inkscape-font-specification:'IRANSans, Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231;stroke-linejoin:round;stroke-opacity:1"
+       x="31.857914"
+       y="177.31444"
+       id="text1825"><tspan
+         sodipodi:role="line"
+         id="tspan1823"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231"
+         x="31.857914"
+         y="177.31444">Connect probe to ground</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.156133;stroke-linejoin:round;stroke-opacity:1"
+       id="rect1827"
+       width="120.46655"
+       height="51.413784"
+       x="12.978827"
+       y="205.13106" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:5.75339px;font-family:IRANSans;-inkscape-font-specification:'IRANSans, Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231;stroke-linejoin:round;stroke-opacity:1"
+       x="22.426294"
+       y="217.76559"
+       id="text1831"><tspan
+         sodipodi:role="line"
+         id="tspan1829"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231"
+         x="22.426294"
+         y="217.76559">Calibrating Channel 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:5.75339px;font-family:IRANSans;-inkscape-font-specification:'IRANSans, Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231;stroke-linejoin:round;stroke-opacity:1"
+       x="104.63479"
+       y="244.17413"
+       id="text1835"><tspan
+         sodipodi:role="line"
+         id="tspan1833"
+         style="stroke-width:0.28231"
+         x="104.63479"
+         y="244.17413">Let's Go</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:5.75339px;font-family:IRANSans;-inkscape-font-specification:'IRANSans, Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231;stroke-linejoin:round;stroke-opacity:1"
+       x="31.857914"
+       y="236.20966"
+       id="text1839"><tspan
+         sodipodi:role="line"
+         id="tspan1837"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.28231"
+         x="31.857914"
+         y="236.20966">Connect probe to 3.3v</tspan></text>
+  </g>
+</svg>

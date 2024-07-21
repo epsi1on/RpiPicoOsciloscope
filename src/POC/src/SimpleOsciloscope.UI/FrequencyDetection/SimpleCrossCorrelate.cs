@@ -9,10 +9,10 @@ namespace SimpleOsciloscope.UI.FrequencyDetection
 {
     public class SimpleCrossCorrelate
     {
-        public double[] ys;
-        public int n;
-        public double Tau;
-        public double Dx = 1;
+        public double[] ys;//signal shape
+        public int n;//samples to use
+        public double Tau;//input time delay for signal self correlate
+        public double Dx = 1;//each interval of i and i+1
 
         public double CrossCollerate()
         {

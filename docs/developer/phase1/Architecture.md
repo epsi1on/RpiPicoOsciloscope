@@ -16,7 +16,11 @@ These threads do use same data, but not work much together. they work independen
 
 ## DAQ Thread
 
+~~
 this thread is initialized on `App.StartUp()` (App.xaml.cs file) which a new instance of `DaqInterface` is created and `DaqInterface.StartSync` called in new thread. `DaqInterface.StartSync` in a infinite loop will get data from `DAQ` hardware and do process like bit shifting, etc, and finally will put the data into `UiState.CurrentRepo` which is an instance of `DataRepository` class. This way only one thread is engaged with details of interfacing the hardware.
+~~
+
+daq thread runs on main window RUN click.
 
 `DaqInterface` takes care of details of hardware, like serial connection, baud rate, comunication protocol, bit shifting (from RPIPico 12 bit data to .NET's 16 bit data - `short` data type) etc.
 
@@ -32,6 +36,8 @@ the fixed length list uses a circular array to store data. the `FixedLengthList`
 `DataRepository` is the common class which is used by all threads.
 
 `DataRepository` have a property of `double SampleRate` which is set by `DaqInterface` once, it is sample rate of samples stored in the array in sample per second.
+
+Edit: `DataRepository` keeps samples in `double` or `float` format not in `short` (10x attenuation button are automatically detected via gpio)
 
 ## Rendering
 

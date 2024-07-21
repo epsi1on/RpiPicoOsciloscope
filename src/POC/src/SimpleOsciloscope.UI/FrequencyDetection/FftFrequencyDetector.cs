@@ -1,8 +1,7 @@
-﻿/*using Accord.Math;
-using MathNet.Numerics;
-using MathNet.Numerics.IntegralTransforms;
-using MathNet.Numerics.Statistics;
-using MathNet.Numerics.Statistics.Mcmc;
+﻿/**/
+
+using FFTW.NET;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +15,8 @@ namespace SimpleOsciloscope.UI
 {
     public class FftFrequencyDetector : IFrequencyDetector
     {
+        public Complex[] tmp1,tmp2;
+
         /// <summary>
         /// calculates the frequency from input array
         /// </summary>
@@ -23,73 +24,137 @@ namespace SimpleOsciloscope.UI
         /// <param name="ys">volt</param>
         /// <param name="freq">[output] calculated frequency</param>
         /// <returns>true, if freq found, false otherwise</returns>
-        public bool TryGetFrequency(double[] ys, double samplingRate, out double fre, out double phaseShift)
+        public bool TryGetFrequency(short[] ys, double samplingRate, out double fre, out double phaseShift)
         {
+
+            
+
             //https://stackoverflow.com/questions/3949324/calculate-autocorrelation-using-fft-in-matlab
             //https://stackoverflow.com/questions/59265603/how-to-find-period-of-signal-autocorrelation-vs-fast-fourier-transform-vs-power
+
+
+            //https://stackoverflow.com/a/7675171
             var n = ys.Length;
             phaseShift = 0;
             //double result = MCMCDiagnostics.ACF(ys, 20, x => x );
 
-            var crs = Correlation.Auto(ys);
+            if (tmp1 == null)
+                tmp1 = new Complex[ys.Length];
 
-            var cpx = ArrayPool.Complex(n);
-            var tmp = ArrayPool.Double(n);
+            if (tmp2 == null)
+                tmp2 = new Complex[ys.Length];
 
-            for (var i = 0; i < n; i++)
+
+            var sum = ys.Sum(i => (long)i);
+            var avg = sum / (double)ys.Length;
+
+            for (int i = 0; i < ys.Length; i++)
             {
-                cpx[i] = new Complex(ys[i], 0);
+                tmp1[i] = new Complex(ys[i]-avg, 0);
             }
 
-            //var sampleRate = 1;
+            using (var pinIn = new PinnedArray<Complex>(tmp1))
+            using (var pinOut = new PinnedArray<Complex>(tmp2))
+            {
+                DFT.FFT(pinIn, pinOut);
+                //DFT.IFFT(pinOut, pinOut);
+            }
 
-            Fourier.Forward(cpx);
 
-            var freq = Fourier.FrequencyScale(ys.Length, samplingRate);
+
+            var maxIdx = 0;
+
+
+            for (int i = 1; i < tmp1.Length / 2; i++)
+            {
+                if (Math.Abs(tmp2[i].Magnitude) > Math.Abs(tmp2[maxIdx].Magnitude))
+                    maxIdx = i;
+            }
+
+            var freq = maxIdx * samplingRate / tmp1.Length;
+
+
+            for (int i = 1; i < tmp2.Length; i++)
+            {
+                tmp2[i] = new Complex(tmp2[i].Magnitude, 0);
+
+                //if (Math.Abs(tmp2[i].Magnitude) > Math.Abs(tmp2[maxIdx].Magnitude))
+                //    maxIdx = i;
+            }
 
             
-            var omega = cpx;
 
-            for (var i = 0; i < n; i++)
+            var phs = tmp1[maxIdx].Phase;
+
+
+            using (var pinIn = new PinnedArray<Complex>(tmp1))
+            using (var pinOut = new PinnedArray<Complex>(tmp2))
             {
-                var c = cpx[i];
-
-                tmp[i] = c.Real * c.Real + c.Imaginary * c.Imaginary;//as stackof answer
+                //DFT.FFT(pinIn, pinOut);
+                DFT.IFFT(pinOut, pinIn);
             }
 
 
-            var img1 = ArrayGraphPlotter.Plot(tmp);
-
-            Fourier.InverseReal(tmp, tmp.Length-2);
-
-            var img2 = ArrayGraphPlotter.Plot(tmp);
-
-           
-            var ft = tmp;
-            var mags = ft.Select(Math.Abs).ToArray();
-
-            var max = double.MinValue;
-            var maxIndex = -1;
-
-            for (var i = 0;i<n/2;i++)
+            for (int i = 1; i < tmp2.Length/2; i++)
             {
-                if (Math.Abs(mags[i]) > max)
-                {
-                    maxIndex= i;
-                    max = Math.Abs(mags[i]);
-                }
+                //tmp2[i] = new Complex(tmp2[i].Magnitude, 0);
+
+                if (Math.Abs(tmp1[i].Magnitude) > Math.Abs(tmp1[maxIdx].Magnitude))
+                    maxIdx = i;
             }
 
-            var mx = mags.Max();
+            var vw = 1 / freq;
 
-            var signal_freq = 1/freq[(int)max];
+            //phaseShift = (  phs/( 2*Math.PI)) * vw;
 
 
-            fre = signal_freq;
+            var tt = tmp2[maxIdx];
+
+            fre = freq;// Math.Abs(tt.Imaginary);
+
+            //Console.WriteLine(tmp1[i] / tmp2[i]);
+
+            //FFTW.NET.DFT.FFT(tmp1, tmp2, PlannerFlags.Default, 1);
+
 
             return true;
+        }
+
+        private int[] FindKBiggestNumbersM(int[] testArray, int k)
+        {
+            int[] result = new int[k];
+            int indexMin = 0;
+            result[indexMin] = testArray[0];
+            int min = result[indexMin];
+
+            for (int i = 1; i < testArray.Length; i++)
+            {
+                if (i < k)
+                {
+                    result[i] = testArray[i];
+                    if (result[i] < min)
+                    {
+                        min = result[i];
+                        indexMin = i;
+                    }
+                }
+                else if (testArray[i] > min)
+                {
+                    min = testArray[i];
+                    result[indexMin] = min;
+                    for (int r = 0; r < k; r++)
+                    {
+                        if (result[r] < min)
+                        {
+                            min = result[r];
+                            indexMin = r;
+                        }
+                    }
+                }
+            }
+            return result;
         }
     }
 }
 
-*/
+/**/
