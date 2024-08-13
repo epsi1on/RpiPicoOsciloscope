@@ -19,6 +19,8 @@ using System;
 using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security;
+using System.Windows;
 
 namespace SimpleOsciloscope.TestConsole
 {
@@ -64,6 +66,7 @@ namespace SimpleOsciloscope.TestConsole
 
     internal class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             //TestInterpolate();
@@ -83,10 +86,20 @@ namespace SimpleOsciloscope.TestConsole
             //testFreq4();
             //testFreq3();
             //ReadDirect();
-            TestAdcRead();
+            //TestAdcRead();
+            //TestAdcRead2();
+            TestAdcSamplerGui();
             Console.ReadKey();
 
 
+        }
+
+
+        static void TestAdcSamplerGui()
+        {
+            new Application();
+            
+            var res = AdcSampler.GetAdcMedian("COM10");
         }
 
         static void TestBlackpillUsbFft()
@@ -388,16 +401,84 @@ namespace SimpleOsciloscope.TestConsole
         }
 
 
+        static void TestAdcRead2()
+        {
+            var rate = 100_000;
+
+            var ifs = new RpiPicoDaqInterface("COM10",rate);
+
+            RpiPicoDaqInterface.ChannelMask = 4;
+            //RpiPicoDaqInterface.blockSize = 100;
+            //RpiPicoDaqInterface.blocksToSend = 10;
+            //RpiPicoDaqInterface.infiniteBlocks = false;
+
+            var repo = new DataRepository();
+
+            //repo.Samples = new FixedLengthListRepo<short>(rate*5);
+
+            ifs.TargetRepository = repo;
+
+            repo.Init(rate);
+            //ifs.PortName = "Com10";
+            //ifs.AdcSampleRate = rate;
+
+
+            //ifs.StartSync();
+
+
+            new Thread(ifs.StartSync).Start();
+
+            Task.Run(() =>
+            {
+
+                var arr = new short[rate];
+
+                while(true)
+                {
+
+                    
+                    Thread.Sleep(1000);
+
+                    var tmp = repo.Samples as FixedLengthListRepo<short>;
+
+                    if (tmp.TotalWrites < rate)
+                        continue;
+
+                    tmp.CopyTo(arr);
+
+
+                    var sum = 0l;
+
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        sum += arr[i];
+                    }
+
+                    var avg = sum / (double)(arr.Length);
+
+                    var volt = avg * 3.3 / 4096;
+                    //var lastVal = tmp[(int)tmp.TotalWrites - 1];
+
+                    Console.WriteLine("{0:0.000000} V, (ADC: {1:0.000000}, !ADC: {2:0.000000})", volt, avg, 4096 - avg);
+                }
+               
+            });
+
+            Console.ReadKey();
+
+        }
+
         static void TestAdcRead()
         {
             var rate = 50_000;
 
-            var ifs = new RpiPicoDaqInterface("COM10",rate);
+            var ifs = new RpiPicoDaqInterface("COM10", rate);
 
-            
+
             var repo = new DataRepository();
 
-            repo.Samples = new FixedLengthListRepo<short>(rate*5);
+            //repo.Samples = new FixedLengthListRepo<short>(rate*5);
+
             ifs.TargetRepository = repo;
 
             repo.Init(rate);
@@ -408,12 +489,12 @@ namespace SimpleOsciloscope.TestConsole
 
             Task.Run(() =>
             {
-                while(true)
+                while (true)
                 {
                     Thread.Sleep(1);
                     Console.WriteLine(repo.Samples.TotalWrites);
                 }
-               
+
             });
 
             Console.ReadKey();

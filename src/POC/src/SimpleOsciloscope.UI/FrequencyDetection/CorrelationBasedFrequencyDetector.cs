@@ -195,7 +195,7 @@ namespace SimpleOsciloscope.UI
 
             var avg = HpVectorOperation.Sum(ys, n) / n;
 
-            Trace.WriteLine("AVG: " + avg);
+            //Trace.WriteLine("AVG: " + avg);
             var xs = ArrayPool.Double(n);//where signal do cross the y=avg
 
             var dt = 1 / samplingRate;

@@ -26,7 +26,7 @@ namespace SimpleOsciloscope.UI
             }
         }
 
-        public static readonly double RenderFramerate = 10;
+        public static readonly double RenderFramerate = 15;
 
         public static readonly PixelFormat BitmapPixelFormat = PixelFormats.Bgra32;
 

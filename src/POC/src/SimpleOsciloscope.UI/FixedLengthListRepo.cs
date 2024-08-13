@@ -16,6 +16,7 @@ namespace SimpleOsciloscope.UI
 
         private T[] arr;
 
+
         public FixedLengthListRepo(int l)
         {
             arr = new T[l];

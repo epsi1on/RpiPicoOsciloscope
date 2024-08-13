@@ -24,6 +24,9 @@ namespace SimpleOsciloscope.UI
         //public ChannelData Channel1 = new ChannelData(RepoLength);
         //public ChannelData Channel2 = new ChannelData(RepoLength);
         public ISampleRepository<short> Samples;//= new FixedLengthList<short>(RepoLength);
+
+        public ISampleRepository<float> SamplesF;//= new FixedLengthList<short>(RepoLength);
+
         //public ISampleRepository<short> Samples;//= new FixedLengthList<short>(RepoLength);
 
         public void Init(int sampleRate)
@@ -34,6 +37,7 @@ namespace SimpleOsciloscope.UI
             var lng = (int)(sampleRate * RepoLengthSecs);
 
             Samples = new FixedLengthListRepo<short>(lng);
+            SamplesF = new FixedLengthListRepo<float>(lng);
         }
     }
 

@@ -54,15 +54,25 @@ namespace SimpleOsciloscope.UI
 
         public byte[] ToArray()
         {
-            using(var str = new MemoryStream())
+            //acording to https://github.com/FilipDominec/rp2daq/blob/09a00b00b7f1d8f63583e23a4ced26a01f095c3d/include/adc_builtin.c#L49
+
+            using (var str = new MemoryStream())
             {
                 var rwtr = new BinaryWriter(str);
 
                 rwtr.Write(channel_mask);
+
                 rwtr.Write(blocksize);
                 rwtr.Write(infinite);
+                
                 rwtr.Write(blocks_to_send);
                 rwtr.Write(clkdiv);
+                //rwtr.Write(start_time_us);
+                //rwtr.Write(end_time_us);
+                //rwtr.Write(waits_for_usb);
+                //rwtr.Write(waits_for_trigger);
+
+                //rwtr.Write(block_delayed_by_usb);
                 rwtr.Write(trigger_gpio);
                 rwtr.Write(trigger_on_falling_edge);
 
@@ -73,15 +83,16 @@ namespace SimpleOsciloscope.UI
         }
 
         public uint8_t channel_mask;
-        public uint8_t infinite;
+        
         public uint16_t blocksize;
+        public uint8_t infinite;
         public uint32_t blocks_to_send;
         public uint16_t clkdiv;
-        public uint64_t start_time_us;
-        public uint64_t end_time_us;
-        public uint8_t waits_for_usb;
-        public uint8_t waits_for_trigger;
-        public uint8_t block_delayed_by_usb;
+        //public uint64_t start_time_us;
+        //public uint64_t end_time_us;
+        //public uint8_t waits_for_usb;
+        //public uint8_t waits_for_trigger;
+        //public uint8_t block_delayed_by_usb;
         public int8_t trigger_gpio;
         public uint8_t trigger_on_falling_edge;
 

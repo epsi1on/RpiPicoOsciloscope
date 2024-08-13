@@ -1,28 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace SimpleOsciloscope.UI
+namespace SimpleOsciloscope.UI.HardwareInterface
 {
-    public class SnifferSerial : SerialPort
+    public static class SerialExtensions
     {
+        public static bool LogToConsole = true;
 
-        public bool LogToConsole = false;
-
-        public SnifferSerial(string portName, int baudRate) : base(portName, baudRate)
+        public static byte[] ReadAvailable(this SerialPort port)
         {
+            return ReadExplicitLength(port, port.BytesToRead);
         }
 
-        public byte[] ReadAvailable()
-        {
-            return ReadExplicitLength(this.BytesToRead);
-        }
-
-        public byte[] ReadExplicitLength(int length)
+        public static byte[] ReadExplicitLength(this SerialPort port, int length)
         {
             var buf = new byte[length];
-
 
             var counter = 0;
 
@@ -32,12 +28,12 @@ namespace SimpleOsciloscope.UI
             {
                 var remain = l - counter;
 
-                var rdr = this.Read(buf, counter, remain);
+                var rdr = port.Read(buf, counter, remain);
                 counter += rdr;
             }
 
 
-            if(LogToConsole)
+            if (LogToConsole)
             {
                 var sb = new StringBuilder();
 
@@ -52,7 +48,7 @@ namespace SimpleOsciloscope.UI
             return buf;
         }
 
-        public void ReadExplicitLength(int length, byte[] data)
+        public static void ReadExplicitLength(this SerialPort port, int length, byte[] data)
         {
             var buf = data;
 
@@ -64,28 +60,13 @@ namespace SimpleOsciloscope.UI
             {
                 var remain = l - counter;
 
-                var rdr = this.Read(buf, counter, remain);
+                var rdr = port.Read(buf, counter, remain);
                 counter += rdr;
             }
-
-            /*
-            if (LogToConsole)
-            {
-                var sb = new StringBuilder();
-
-                for (var i = 0; i < length; i++)
-                    sb.AppendFormat(" {0:x2}", buf[i]);
-
-                Console.WriteLine("Reading {0} bytes: {1}", length, sb.ToString());
-            }*/
-
-            // Array.Resize(ref buf, length);
-
-//            return buf;
         }
 
 
-        public void Write(params byte[][] data)
+        public static void Write(this SerialPort port, params byte[][] data)
         {
             var sb = new StringBuilder();
 
@@ -100,12 +81,11 @@ namespace SimpleOsciloscope.UI
                 cnt += item.Length;
             }
 
-            this.Write(buf, 0, buf.Length);
+            port.Write(buf, 0, buf.Length);
 
             if (LogToConsole)
             {
-                foreach (var b in buf)
-                    sb.AppendFormat(" {0:x2}", b);
+                foreach (var b in buf) sb.AppendFormat(" {0:x2}", b);
 
                 Console.WriteLine("Writing {0} bytes: {1}", l, sb.ToString());
             }

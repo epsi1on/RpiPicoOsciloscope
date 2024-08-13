@@ -138,10 +138,27 @@ namespace SimpleOsciloscope.UI
                 array[index2] = temp;
             }
 
-            #endregion
-        
+        #endregion
 
-       
+
+
+        public static int FindFirstIndexOf<T>(this T[] data, Predicate<T> finder)
+        {
+            for (int i = 0; i < data.Length; i++)
+                if (finder(data[i]))
+                    return i;
+
+            return -1;
+        }
+
+        public static int FindLastIndexOf<T>(this T[] data, Predicate<T> finder)
+        {
+            for (int i = data.Length - 1; i >= 0; i--)
+                if (finder(data[i]))
+                    return i;
+
+            return -1;
+        }
 
         public static double KahanSum(this IEnumerable<double> data, int n)
         {

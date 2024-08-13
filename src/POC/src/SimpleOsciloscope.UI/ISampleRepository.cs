@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleOsciloscope.UI
 {
-    public interface ISampleRepository<T>
+    public interface ISampleRepository<T> 
     {
         void Add(T item);
 

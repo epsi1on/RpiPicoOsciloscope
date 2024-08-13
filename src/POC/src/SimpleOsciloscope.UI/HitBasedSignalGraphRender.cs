@@ -197,5 +197,14 @@ namespace SimpleOsciloscope.UI
         {
             throw new NotImplementedException();
         }
+
+        public void Clear()
+        {
+        }
+
+        public WriteableBitmap Render2(out double frequency, out double min, out double max)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

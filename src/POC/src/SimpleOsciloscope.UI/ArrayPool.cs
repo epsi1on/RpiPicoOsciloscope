@@ -81,6 +81,7 @@ namespace SimpleOsciloscope.UI
         private static Pooll<float> Pfloat = new Pooll<float>();
         private static Pooll<short> Pshort = new Pooll<short>();
         private static Pooll<int> Pint = new Pooll<int>();
+        private static Pooll<long> Plong = new Pooll<long>();
         private static Pooll<bool> Pbool = new Pooll<bool>();
         private static Pooll<byte> Pbyte = new Pooll<byte>();
         private static Pooll<Complex> PComplex = new Pooll<Complex>();
@@ -167,6 +168,19 @@ namespace SimpleOsciloscope.UI
             return Pint.Rent(lengh);
         }
 
+        public static long[] Long(int lengh)
+        {
+            //Nearest(ref lengh);
+            //ArrayPool<int>.Shared.Rent(lengh);
+            //return new int[lengh];
+            return Plong.Rent(lengh);
+        }
+
+        public static void Return(long[] arr)
+        {
+            //ArrayPool<int>.Shared.Return(arr);
+            Plong.Return(arr);
+        }
 
         public static void Return(int[] arr)
         {

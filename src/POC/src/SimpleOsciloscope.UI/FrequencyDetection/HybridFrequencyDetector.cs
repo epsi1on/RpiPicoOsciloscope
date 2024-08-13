@@ -29,6 +29,12 @@ namespace SimpleOsciloscope.UI.FrequencyDetection
 
                     return false;
                 }
+
+
+                freq = f;
+                phaseShift = d;
+
+                return true;
             }
 
 

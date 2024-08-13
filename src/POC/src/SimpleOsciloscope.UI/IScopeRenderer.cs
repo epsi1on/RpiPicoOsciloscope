@@ -7,7 +7,11 @@ namespace SimpleOsciloscope.UI
         RgbBitmap Render(out double frequency);
         WriteableBitmap Render2(out double frequency);
 
+        WriteableBitmap Render2(out double frequency,out double min,out double max);
+
         RgbBitmap Render();
+
+        void Clear();
 
     }
 }

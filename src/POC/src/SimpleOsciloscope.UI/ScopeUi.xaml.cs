@@ -1,4 +1,5 @@
-﻿using SimpleOsciloscope.UI.HardwareInterface;
+﻿using NAudio.Mixer;
+using SimpleOsciloscope.UI.HardwareInterface;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -356,6 +357,40 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
+            #region MinMaxP2p Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public string MinMaxP2p
+            {
+                get { return _MinMaxP2p; }
+                set
+                {
+                    if (AreEqualObjects(_MinMaxP2p, value))
+                        return;
+
+                    var _fieldOldValue = _MinMaxP2p;
+
+                    _MinMaxP2p = value;
+
+                    ContextClass.OnMinMaxP2pChanged(this, new PropertyValueChangedEventArgs<string>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("MinMaxP2p");
+                }
+            }
+
+            private string _MinMaxP2p;
+
+            public EventHandler<PropertyValueChangedEventArgs<string>> MinMaxP2pChanged;
+
+            public static void OnMinMaxP2pChanged(object sender, PropertyValueChangedEventArgs<string> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.MinMaxP2pChanged != null)
+                    obj.MinMaxP2pChanged(obj, e);
+            }
+
+            #endregion
 
             #region ListenToAudio Property and field
 
@@ -431,6 +466,9 @@ namespace SimpleOsciloscope.UI
 
                 while (true)
                 {
+                    if (this.IsNotConnected)
+                        return;
+
                     RenderShot();
                     //this.TotalSmaples = UiState.Instance.CurrentRepo.Samples.Index;// s.Sum(i => i.Sets);
                     //this.TotalSamplesStr = Utils.numStr(this.TotalSmaples);
@@ -441,6 +479,8 @@ namespace SimpleOsciloscope.UI
             public void Connect()
             {
                 UiState.Instance.CurrentRepo.Init((int)SampleRate);
+
+                this.IsNotConnected = false;
 
                 {
                     var thr = new Thread(RenderLoopSync);
@@ -460,14 +500,48 @@ namespace SimpleOsciloscope.UI
                     //ifs.PortName = this.SelectedPort;
                     //ifs.AdcSampleRate = (int)SampleRate;
                     ifs.TargetRepository = UiState.Instance.CurrentRepo;
-                    var thr = new Thread(ifs.StartSync);
+                    //var thr = new Thread(ifs.StartSync);
+
+                    //https://stackoverflow.com/a/42988729
+
+                    /*
+                    ifs.OnPacketLoss += (a, b) =>
+                    {
+                        this.IsNotConnected = true;
+                    };
+                    */
+
+
+                    var thr = new Thread(() =>
+                      {
+                          try
+                          {
+                              ifs.StartSync();
+                          }
+                          catch(Exception ex)
+                          {
+                              this.IsNotConnected = true;
+
+                              ifs.DisConnect();
+
+                              MessageBox.Show(ex.Message);
+                          }
+                          finally
+                          {
+                              this.IsNotConnected = true;
+
+                              render.Clear();
+                          }
+                      });
+
                     thr.Start();
+
                 }
 
                 //UiState.Instance.CurrentRepo.AdcSampleRate = (int)this.SampleRate;
                 UiState.AdcConfig.SampleRate = (int)SampleRate;
 
-                this.IsNotConnected = false;
+                
             }
 
 
@@ -477,7 +551,12 @@ namespace SimpleOsciloscope.UI
 
                 double freq;
 
-                var bmp = render.Render2(out freq);
+                double min, max;
+
+                var bmp = render.Render2(out freq, out min, out max);
+
+                this.MinMaxP2p = string.Format("{0:0.00},{1:0.00},{2:0}mv", min, max, (max - min) * 1000);
+
 
                 var t = bmp;// new WriteableBitmap(null);
 
@@ -485,7 +564,7 @@ namespace SimpleOsciloscope.UI
                 {
                     this.Frequency = freq;
 
-                    Trace.WriteLine(string.Format("Render took {0} ms", sp.ElapsedMilliseconds));
+                    //Trace.WriteLine(string.Format("Render took {0} ms", sp.ElapsedMilliseconds));
 
                     {
                         Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -495,7 +574,6 @@ namespace SimpleOsciloscope.UI
                         }), System.Windows.Threading.DispatcherPriority.Render);
                     }
                 }
-
             }
 
 
@@ -578,6 +656,11 @@ namespace SimpleOsciloscope.UI
         private void BtnRefreshPorts_Click(object sender, RoutedEventArgs e)
         {
             Context.RefreshPorts();
+        }
+
+        private void BtnCalib_Click(object sender, RoutedEventArgs e)
+        {
+            Calibration.Calibrate(0, Context.SelectedPort);
         }
     }
 }

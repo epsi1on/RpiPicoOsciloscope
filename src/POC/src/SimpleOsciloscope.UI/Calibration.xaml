@@ -1,0 +1,55 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:local="clr-namespace:SimpleOsciloscope.UI"
+        xmlns:Converters="clr-namespace:SimpleOsciloscope.UI.Converters" x:Class="SimpleOsciloscope.UI.Calibration"
+        mc:Ignorable="d"
+        Title="Calibration" SizeToContent="Height" Height="auto" Width="281">
+    <Window.Resources>
+        <Converters:ParametricBooleanToVisibilityConverter x:Key="ParametricBooleanToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="129*"/>
+            <ColumnDefinition Width="152*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Margin="5,5,5,5" Text="Calibrating Channel" Grid.Row="0" />
+        <TextBlock Margin="5,5,5,5" Text="{Binding TargetChannel}" Grid.Column="1" />
+
+        <TextBlock Margin="5,5,5,5" Text="10x Button status" Grid.Row="1" />
+        <TextBlock Margin="5,5,5,5" Text="{Binding Status10xBtn}" Grid.Row="1" Grid.Column="1"/>
+
+        <TextBlock Margin="5,5,5,5" Text="10x Button target" Grid.Row="2"/>
+        <TextBlock Margin="5,5,5,5" Text="{Binding Target10xBtn}" Grid.Row="2" Grid.Column="1"/>
+        <StackPanel x:Name="toggle" Grid.ColumnSpan="2" Margin="5,5,5,5" Orientation="Horizontal" Grid.Row="3" Visibility="{Binding Toggle10xBtn, Converter={StaticResource ParametricBooleanToVisibilityConverter}}">
+            <iconPacks:PackIconMaterialDesign Kind="Error" Foreground="Red"/>
+
+            <TextBlock Text="Try Toggle Button"  Height="20" Width="271"/>
+        </StackPanel>
+        <StackPanel x:Name="toggleNot" Grid.ColumnSpan="2" Margin="5,5,5,5" Orientation="Horizontal" Grid.Row="3" Visibility="{Binding Toggle10xBtn, ConverterParameter=1, Converter={StaticResource ParametricBooleanToVisibilityConverter}}">
+            <TextBlock Text="Do not change the Button"  Height="20" Width="271"/>
+        </StackPanel>
+
+        <TextBlock Margin="5,5,5,5" Text="Connect probe to" Grid.Row="4" Grid.ColumnSpan="2"/>
+
+        <TextBlock Margin="5,5,5,5" Text="AGND" Grid.Row="5" Grid.ColumnSpan="2" Visibility="{Binding ConnectProbeGnd, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
+        <TextBlock Margin="5,5,5,5" Text="AVcc" Grid.Row="5" Grid.ColumnSpan="2" Visibility="{Binding ConnectProbeVcc, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
+
+        <Button Grid.Column="1" Content="Vala!" Margin="5" Grid.Row="6" Click="BtnNext_Click" IsEnabled="{Binding CanContinue}" />
+        <Button Grid.Column="1" Content="Re Check!" HorizontalAlignment="Right" Margin="5" Grid.Row="3" Click="Refresh_Click" />
+    </Grid>
+</Window>

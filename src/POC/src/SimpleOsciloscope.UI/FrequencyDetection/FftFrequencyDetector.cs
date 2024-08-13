@@ -24,19 +24,15 @@ namespace SimpleOsciloscope.UI
         /// <param name="ys">volt</param>
         /// <param name="freq">[output] calculated frequency</param>
         /// <returns>true, if freq found, false otherwise</returns>
-        public bool TryGetFrequency(short[] ys, double samplingRate, out double fre, out double phaseShift)
+        public bool TryGetFrequency(short[] ys, double samplingRate, out double fre, out double phaseRadian)
         {
-
-            
-
             //https://stackoverflow.com/questions/3949324/calculate-autocorrelation-using-fft-in-matlab
             //https://stackoverflow.com/questions/59265603/how-to-find-period-of-signal-autocorrelation-vs-fast-fourier-transform-vs-power
 
 
             //https://stackoverflow.com/a/7675171
             var n = ys.Length;
-            phaseShift = 0;
-            //double result = MCMCDiagnostics.ACF(ys, 20, x => x );
+            phaseRadian = 0;
 
             if (tmp1 == null)
                 tmp1 = new Complex[ys.Length];
@@ -72,7 +68,7 @@ namespace SimpleOsciloscope.UI
             }
 
             var freq = maxIdx * samplingRate / tmp1.Length;
-
+            var phs = phaseRadian = tmp2[maxIdx].Phase;
 
             for (int i = 1; i < tmp2.Length; i++)
             {
@@ -84,7 +80,7 @@ namespace SimpleOsciloscope.UI
 
             
 
-            var phs = tmp1[maxIdx].Phase;
+            
 
 
             using (var pinIn = new PinnedArray<Complex>(tmp1))

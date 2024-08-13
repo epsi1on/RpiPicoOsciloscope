@@ -281,6 +281,7 @@ namespace SimpleOsciloscope.UI
 
 				this.FreqExponent = 4;
 				this.FreqBase = 10;
+				
             }
 
 			

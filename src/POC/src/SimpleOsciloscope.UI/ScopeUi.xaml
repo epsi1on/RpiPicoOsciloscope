@@ -4,13 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleOsciloscope.UI"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         Title="Scope POC" Height="450" Width="992">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="23*"/>
-            <ColumnDefinition Width="107*"/>
+            <ColumnDefinition Width="149*"/>
+            <ColumnDefinition Width="313*"/>
+            <ColumnDefinition Width="380*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -19,18 +21,20 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <Border Margin="5,5,5,5" Grid.ColumnSpan="3" BorderBrush="Gray" BorderThickness="2" >
+        <Border Margin="5,5,5,5" Grid.ColumnSpan="4" BorderBrush="Gray" BorderThickness="2" >
             <Image Source="{Binding BitmapSource}" Cursor="Cross" />
         </Border>
 
         <TextBlock Text="Signal Frequency:" Grid.Column="0" Margin="5,5,5,5" Grid.Row="1"/>
-        <TextBlock Text="{Binding Frequency}" Grid.Column="1" Margin="5,5,5,5" Grid.Row="1" Grid.ColumnSpan="2">
-              
-              
-        </TextBlock>
+        <TextBlock Text="{Binding Frequency}" Grid.Column="1" Margin="5,5,5,5" Grid.Row="1" />
+
+        <TextBlock Text="Min/Max/peak2peak:" Grid.Column="2" Margin="5,5,5,5" Grid.Row="1" />
+        <TextBlock Text="{Binding MinMaxP2p}" Grid.Column="3" Margin="5,5,5,5" Grid.Row="1" />
+
+
         <TextBlock Text="Sample Rate (Sps):" Grid.Column="0" Margin="5,5,5,5" Grid.Row="2"/>
         <TextBox Text="{Binding SampleRate}" Grid.Column="1" Margin="5,5,5,5" Grid.Row="2" IsEnabled="{Binding IsNotConnected}"/>
-        <CheckBox Grid.Column="2" Visibility="Collapsed" Content="Listen to audio" Margin="5,5,5,5" Grid.Row="2" IsChecked="{Binding ListenToAudio}"/>
+        <CheckBox Grid.Column="2" Visibility="Collapsed" Content="Listen to audio" Margin="5,5,5,5" Grid.Row="2" IsChecked="{Binding ListenToAudio}" Grid.ColumnSpan="2"/>
         <TextBlock Text="Com Port:" Grid.Column="0" Margin="5,5,5,5" Grid.Row="3" />
         <StackPanel Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,0,0" Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Center">
             <Button Content="⟳" Click="BtnRefreshPorts_Click"/>
@@ -38,6 +42,9 @@
         </StackPanel>
         <StackPanel Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Center" IsEnabled="{Binding IsNotConnected}">
             <Button Content="Connect" Click="Button_Click"/>
+
+
+            <Button Content="Calibrate" Click="BtnCalib_Click"/>
         </StackPanel>
 
 
