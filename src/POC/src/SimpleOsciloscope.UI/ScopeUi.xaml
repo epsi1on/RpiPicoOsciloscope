@@ -6,45 +6,68 @@
         xmlns:local="clr-namespace:SimpleOsciloscope.UI"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
-        Title="Scope POC" Height="450" Width="992">
+        Title="Scope POC (Beta)" Height="450" Width="1000">
+    <Window.Resources>
+        <DataTemplate x:Key="ComboBoxItemTemplate1">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Title}"/>
+                <TextBlock Text="   "/>
+                <TextBlock  Foreground="LightGray">
+                    <Run Text="("/>
+                    <Run Text="{Binding Description}"/>
+                    <Run Text=")"/>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="149*"/>
-            <ColumnDefinition Width="313*"/>
-            <ColumnDefinition Width="380*"/>
+            <ColumnDefinition Width="150*"/>
+            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="300*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
+            <RowDefinition/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <Border Margin="5,5,5,5" Grid.ColumnSpan="4" BorderBrush="Gray" BorderThickness="2" >
+        <Border Margin="5,5,5,5" Grid.ColumnSpan="4" BorderBrush="Gray" BorderThickness="2" Grid.Column="1" >
             <Image Source="{Binding BitmapSource}" Cursor="Cross" />
         </Border>
 
-        <TextBlock Text="Signal Frequency:" Grid.Column="0" Margin="5,5,5,5" Grid.Row="1"/>
-        <TextBlock Text="{Binding Frequency}" Grid.Column="1" Margin="5,5,5,5" Grid.Row="1" />
+        <Expander ExpandDirection="Right">
+            <local:SignalPropertiesVisualizer SignalInfo="{Binding SignalInfo}">
+                
+            </local:SignalPropertiesVisualizer>
+        </Expander>
+        <TextBlock Text="Signal Frequency:" Grid.Column="1" Margin="5,5,5,5" Grid.Row="1"/>
+        <TextBlock Text="{Binding Frequency}" Grid.Column="2" Margin="5,5,5,5" Grid.Row="1" />
 
-        <TextBlock Text="Min/Max/peak2peak:" Grid.Column="2" Margin="5,5,5,5" Grid.Row="1" />
-        <TextBlock Text="{Binding MinMaxP2p}" Grid.Column="3" Margin="5,5,5,5" Grid.Row="1" />
 
-
-        <TextBlock Text="Sample Rate (Sps):" Grid.Column="0" Margin="5,5,5,5" Grid.Row="2"/>
-        <TextBox Text="{Binding SampleRate}" Grid.Column="1" Margin="5,5,5,5" Grid.Row="2" IsEnabled="{Binding IsNotConnected}"/>
-        <CheckBox Grid.Column="2" Visibility="Collapsed" Content="Listen to audio" Margin="5,5,5,5" Grid.Row="2" IsChecked="{Binding ListenToAudio}" Grid.ColumnSpan="2"/>
-        <TextBlock Text="Com Port:" Grid.Column="0" Margin="5,5,5,5" Grid.Row="3" />
-        <StackPanel Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,0,0" Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Center">
+        <TextBlock Text="Sample Rate (Sps):" Grid.Column="1" Margin="5,5,5,5" Grid.Row="2"/>
+        <TextBox Text="{Binding SampleRate}" Grid.Column="2" Margin="5,5,5,5" Grid.Row="2" IsEnabled="{Binding IsNotConnected}"/>
+        <CheckBox Grid.Column="3" Visibility="Collapsed" Content="Listen to audio" Margin="5,5,5,5" Grid.Row="2" IsChecked="{Binding ListenToAudio}" Grid.ColumnSpan="2"/>
+        <TextBlock Text="Com Port:" Grid.Column="1" Margin="5,5,5,5" Grid.Row="3" />
+        <StackPanel Grid.Column="2" HorizontalAlignment="Left" Margin="5,0,0,0" Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Center" IsEnabled="{Binding IsNotConnected}">
             <Button Content="⟳" Click="BtnRefreshPorts_Click"/>
-            <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" Width="100" IsEnabled="{Binding IsNotConnected}"/>
+            <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" Width="100" />
         </StackPanel>
-        <StackPanel Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Center" IsEnabled="{Binding IsNotConnected}">
+        <StackPanel Grid.Column="3" HorizontalAlignment="Left" Margin="10,0,0,0" Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Center" IsEnabled="{Binding IsNotConnected}">
             <Button Content="Connect" Click="Button_Click"/>
 
 
             <Button Content="Calibrate" Click="BtnCalib_Click"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Column="3"  Orientation="Horizontal" Grid.Row="1">
+            <TextBlock Text="Channel:" Grid.Column="3" Margin="5" Grid.Row="1"/>
+            <ComboBox ItemTemplate="{DynamicResource ComboBoxItemTemplate1}" IsEnabled="{Binding IsNotConnected}" ItemsSource="{Binding AvailableChannels}" SelectedItem="{Binding SelectedChannel}" MinWidth="150"/>
+
+
         </StackPanel>
 
 

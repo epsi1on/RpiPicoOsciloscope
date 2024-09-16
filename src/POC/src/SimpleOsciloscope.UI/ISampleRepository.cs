@@ -16,6 +16,8 @@ namespace SimpleOsciloscope.UI
 
         long TotalWrites { get; }
 
+        
+
 
         int Read(T[] arr, int offset, int length);
 

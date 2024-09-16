@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -427,6 +428,155 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
+            #region DutyCycle Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public double DutyCycle
+            {
+                get { return _DutyCycle; }
+                set
+                {
+                    if (AreEqualObjects(_DutyCycle, value))
+                        return;
+
+                    var _fieldOldValue = _DutyCycle;
+
+                    _DutyCycle = value;
+
+                    ContextClass.OnDutyCycleChanged(this, new PropertyValueChangedEventArgs<double>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("DutyCycle");
+                }
+            }
+
+            private double _DutyCycle;
+
+            public EventHandler<PropertyValueChangedEventArgs<double>> DutyCycleChanged;
+
+            public static void OnDutyCycleChanged(object sender, PropertyValueChangedEventArgs<double> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.DutyCycleChanged != null)
+                    obj.DutyCycleChanged(obj, e);
+            }
+
+            #endregion
+
+
+            #region AvailableChannels Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public ObservableCollection<ChannelInfo> AvailableChannels
+            {
+                get { return _AvailableChannels; }
+                set
+                {
+                    if (AreEqualObjects(_AvailableChannels, value))
+                        return;
+
+                    var _fieldOldValue = _AvailableChannels;
+
+                    _AvailableChannels = value;
+
+                    ContextClass.OnAvailableChannelsChanged(this, new PropertyValueChangedEventArgs<ObservableCollection<ChannelInfo>>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("AvailableChannels");
+                }
+            }
+
+            private ObservableCollection<ChannelInfo> _AvailableChannels;
+
+            public EventHandler<PropertyValueChangedEventArgs<ObservableCollection<ChannelInfo>>> AvailableChannelsChanged;
+
+            public static void OnAvailableChannelsChanged(object sender, PropertyValueChangedEventArgs<ObservableCollection<ChannelInfo>> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.AvailableChannelsChanged != null)
+                    obj.AvailableChannelsChanged(obj, e);
+            }
+
+            #endregion
+
+            #region SelectedChannel Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public ChannelInfo SelectedChannel
+            {
+                get { return _SelectedChannel; }
+                set
+                {
+                    if (AreEqualObjects(_SelectedChannel, value))
+                        return;
+
+                    var _fieldOldValue = _SelectedChannel;
+
+                    _SelectedChannel = value;
+
+                    ContextClass.OnSelectedChannelChanged(this, new PropertyValueChangedEventArgs<ChannelInfo>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("SelectedChannel");
+                }
+            }
+
+            private ChannelInfo _SelectedChannel;
+
+            public EventHandler<PropertyValueChangedEventArgs<ChannelInfo>> SelectedChannelChanged;
+
+            public static void OnSelectedChannelChanged(object sender, PropertyValueChangedEventArgs<ChannelInfo> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.SelectedChannelChanged != null)
+                    obj.SelectedChannelChanged(obj, e);
+            }
+
+            #endregion
+
+            #region SignalInfo Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public SignalPropertyList SignalInfo
+            {
+                get {
+                    return _SignalInfo; }
+                set
+                {
+                    if (AreEqualObjects(_SignalInfo, value))
+                        return;
+
+                    var _fieldOldValue = _SignalInfo;
+
+                    _SignalInfo = value;
+
+                    ContextClass.OnSignalInfoChanged(this, new PropertyValueChangedEventArgs<SignalPropertyList>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("SignalInfo");
+                }
+            }
+
+            private SignalPropertyList _SignalInfo;
+
+            public EventHandler<PropertyValueChangedEventArgs<SignalPropertyList>> SignalInfoChanged;
+
+            public static void OnSignalInfoChanged(object sender, PropertyValueChangedEventArgs<SignalPropertyList> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.SignalInfoChanged != null)
+                    obj.SignalInfoChanged(obj, e);
+            }
+
+            #endregion
+
+
+            public class ChannelInfo
+            {
+                public RpiPicoDaqInterface.Rp2040AdcChannels ChannelId { get; set; }
+                public string Title { get; set; }
+                public string Description { get; set; }
+            }
 
             internal void Init()
             {
@@ -442,10 +592,57 @@ namespace SimpleOsciloscope.UI
 
                 {
                     //this.SampleRate = 500_000;
-
                 }
 
                 this.ListenToAudioChanged += AudioChanged;
+
+                {
+                    
+
+                    var lst = new List<ChannelInfo>();
+                    var ids = new RpiPicoDaqInterface.Rp2040AdcChannels[]{
+                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio26,
+                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio27,
+                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio28,
+                    RpiPicoDaqInterface.Rp2040AdcChannels.InternalReference,
+                    RpiPicoDaqInterface.Rp2040AdcChannels.InternalTempratureSensor
+                    };
+
+
+                    var g26 = RpiPicoDaqInterface.AdcPins.FindFirstIndexOf(i => i == 26);
+                    var g27 = RpiPicoDaqInterface.AdcPins.FindFirstIndexOf(i => i == 27);
+                    var g28 = RpiPicoDaqInterface.AdcPins.FindFirstIndexOf(i => i == 28);
+
+                    var titles = new string[] {
+                        (g26 + 1).ToString(),
+                        (g27 + 1).ToString(),
+                        (g28 + 1).ToString(),
+                                    "VRef ",
+                        "Tmpr"
+                    };
+
+                    var descs = new string[] { 
+                        "ADC Probe", 
+                        "ADC Probe", 
+                        "ADC Probe", 
+                        "Internal Voltage Reference", 
+                        "Internal Temprature Sensor" };
+
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        var inf = new ChannelInfo();
+                        inf.ChannelId = ids[i];
+                        inf.Title = titles[i];
+                        inf.Description = descs[i];
+                        lst.Add(inf);
+                    }
+
+
+
+
+                    this.AvailableChannels = new ObservableCollection<ChannelInfo>(lst.OrderBy(i => i.Title).ToArray());
+                }
             }
 
 
@@ -478,6 +675,13 @@ namespace SimpleOsciloscope.UI
 
             public void Connect()
             {
+
+                if (this.SelectedChannel == null)
+                {
+                    MessageBox.Show("Select Channel");
+                    return;
+                }
+                    
                 UiState.Instance.CurrentRepo.Init((int)SampleRate);
 
                 this.IsNotConnected = false;
@@ -494,6 +698,9 @@ namespace SimpleOsciloscope.UI
                     //new Stm32Interface(this.SelectedPort, SampleRate);
                     //new ArduinoInterface();
                     //new FakeDaqInterface();
+
+
+                    ifs.ChannelMask = RpiPicoDaqInterface.GetChannelMask(this.SelectedChannel.ChannelId);
 
                     UiState.AdcConfig.Set(ifs);
 
@@ -553,18 +760,29 @@ namespace SimpleOsciloscope.UI
 
                 double min, max;
 
-                var bmp = render.Render2(out freq, out min, out max);
+                var prps = SignalPropertyCalculator.Calculate();
 
-                this.MinMaxP2p = string.Format("{0:0.00},{1:0.00},{2:0}mv", min, max, (max - min) * 1000);
+                this.SignalInfo = prps;
+
+                this.DutyCycle = prps.PwmDutyCycle;
 
 
-                var t = bmp;// new WriteableBitmap(null);
+                //var bmp = render.Render2(out freq, out min, out max);
+                var bmp = render.Render3(prps);
+
+
+                {
+                    var minF = prps.Min * prps.alpha + prps.beta;
+                    var maxF = prps.Max * prps.alpha + prps.beta;
+
+                    this.MinMaxP2p = string.Format("{0:0.00},{1:0.00},{2:0}mv", minF, maxF, (minF - maxF) * 1000);
+                }
+
+                var t = bmp;
 
                 using (var ctx = bmp.GetBitmapContext())
                 {
-                    this.Frequency = freq;
-
-                    //Trace.WriteLine(string.Format("Render took {0} ms", sp.ElapsedMilliseconds));
+                    this.Frequency = prps.Frequency;
 
                     {
                         Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -660,7 +878,7 @@ namespace SimpleOsciloscope.UI
 
         private void BtnCalib_Click(object sender, RoutedEventArgs e)
         {
-            Calibration.Calibrate(0, Context.SelectedPort);
+            Calibration.Calibrate(Context.SelectedPort);
         }
     }
 }

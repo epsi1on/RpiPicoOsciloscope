@@ -1,6 +1,7 @@
 ﻿using SimpleOsciloscope.UI.HardwareInterface;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
@@ -34,12 +35,13 @@ namespace SimpleOsciloscope.UI
         }
 
 
-		public static void Calibrate(int channel, string portname)
+		public static void Calibrate(string portname)
 		{
 			var wnd = new Calibration();
 
 			wnd.Context.Init(portname,false);
 
+			//wnd.Context.Channel = channel;
 			wnd.ShowDialog();
 
 
@@ -57,7 +59,7 @@ namespace SimpleOsciloscope.UI
 					MessageBox.Show("Seems the AC/DC switch is in ON mode.\r\nToggle the AC/DC switch and try again...");
 					return;
 				}
-            }
+			}
 
             double a1, a2, b1, b2;
 
@@ -73,28 +75,29 @@ namespace SimpleOsciloscope.UI
 			xml.Load(fl);
 
 
-
+			//foreach (var chn in RpiPicoDaqInterface.Channels)
 			{
-                //Can ConfigurationManager retain XML comments on Save()?
+				//Can ConfigurationManager retain XML comments on Save()?
 				//short answer is no!
-                //https://stackoverflow.com/questions/1954358/can-configurationmanager-retain-xml-comments-on-save
+				//https://stackoverflow.com/questions/1954358/can-configurationmanager-retain-xml-comments-on-save
 				//have to write it ourself
 
+				var id = wnd.Context.Channel;
 
-                var na1 = xml.SelectSingleNode("configuration/appSettings/add[@key='ch1_alpha_off']");
-                na1.Attributes["value"].Value = a1.ToString();
+				var na1 = xml.SelectSingleNode("configuration/appSettings/add[@key='ch" + id + "_alpha_off']");
+				na1.Attributes["value"].Value = a1.ToString();
 
-                var nb1 = xml.SelectSingleNode("configuration/appSettings/add[@key='ch1_beta_off']");
-                nb1.Attributes["value"].Value = b1.ToString();
+				var nb1 = xml.SelectSingleNode("configuration/appSettings/add[@key='ch" + id + "_beta_off']");
+				nb1.Attributes["value"].Value = b1.ToString();
 
-                var na2 = xml.SelectSingleNode("configuration/appSettings/add[@key='ch1_alpha_on']");
-                na2.Attributes["value"].Value = a2.ToString();
+				var na2 = xml.SelectSingleNode("configuration/appSettings/add[@key='ch" + id + "_alpha_on']");
+				na2.Attributes["value"].Value = a2.ToString();
 
-                var nb2 = xml.SelectSingleNode("configuration/appSettings/add[@key='ch1_beta_on']");
-                nb2.Attributes["value"].Value = b2.ToString();
+				var nb2 = xml.SelectSingleNode("configuration/appSettings/add[@key='ch" + id + "_beta_on']");
+				nb2.Attributes["value"].Value = b2.ToString();
 
 				xml.Save(fl);
-            }
+			}
            
 
         }
@@ -144,28 +147,42 @@ namespace SimpleOsciloscope.UI
 
 			public string PortName;
 
-			public void Init(string portName,bool gnd)
-            {
+			public CalibrationContext()
+			{
+				this.AvailableChannels = new ObservableCollection<int>() { 0, 1, 2 };
+
+				this.ChannelChanged += (a, b) => RefreshGpioStatus();
+			}
+
+            public void Init(string portName, bool gnd)
+			{
 				PortName = portName;
 				Intfs = new HardwareInterface.RpiPicoDaqInterface(portName, 0);
 
-                Intfs.Connect();
+				Intfs.Connect();
 				Intfs.StopAdc();
 
 				RefreshGpioStatus();
 
 				ConnectProbeVcc = !(ConnectProbeGnd = gnd);
 
-
 				Target10xBtn = false;
-                ConnectProbeGnd = true;
-                ConnectProbeVcc = false;
-            }
+				ConnectProbeGnd = true;
+				ConnectProbeVcc = false;
+			}
 
 
 			public void RefreshGpioStatus()
 			{
-				var pins = new byte[] { 19, 20 };
+                var x10 = RpiPicoDaqInterface.Channels[Channel].Pin10x;
+				var acdc = RpiPicoDaqInterface.Channels[Channel].PinAcDc;
+
+				var pins = new byte[] { (byte)x10 };
+
+
+				if (acdc != -1)
+					pins = new byte[] { (byte)x10, (byte)acdc };
+
 
 				if (!Intfs.IsConnected)
 				{
@@ -183,10 +200,11 @@ namespace SimpleOsciloscope.UI
 
 
                 this.Status10xBtn = vals[0];
-                this.StatusAcdcBtn = vals[1];
+
+				this.StatusAcdcBtn = vals.Length == 2 ? vals[1] : false;
 
 				this.Toggle10xBtn = Status10xBtn != Target10xBtn;
-				this.ToggleAcdcBtn = StatusAcdcBtn;
+				//this.ToggleAcdcBtn = StatusAcdcBtn;
 
 				this.CanContinue = !this.Toggle10xBtn;
             }
@@ -542,10 +560,80 @@ namespace SimpleOsciloscope.UI
 					obj.CanContinueChanged(obj, e);
 			}
 
-            #endregion
+			#endregion
+
+			#region Channel Property and field
+
+			[Obfuscation(Exclude = true, ApplyToMembers = false)]
+			public int Channel
+			{
+				get { return _Channel; }
+				set
+				{
+					if (AreEqualObjects(_Channel, value))
+						return;
+
+					var _fieldOldValue = _Channel;
+
+					_Channel = value;
+
+					CalibrationContext.OnChannelChanged(this, new PropertyValueChangedEventArgs<int>(_fieldOldValue, value));
+
+					this.OnPropertyChanged("Channel");
+				}
+			}
+
+			private int _Channel;
+
+			public EventHandler<PropertyValueChangedEventArgs<int>> ChannelChanged;
+
+			public static void OnChannelChanged(object sender, PropertyValueChangedEventArgs<int> e)
+			{
+				var obj = sender as CalibrationContext;
+
+				if (obj.ChannelChanged != null)
+					obj.ChannelChanged(obj, e);
+			}
+
+			#endregion
+
+			#region AvailableChannels Property and field
+
+			[Obfuscation(Exclude = true, ApplyToMembers = false)]
+			public ObservableCollection<int> AvailableChannels
+			{
+				get { return _AvailableChannels; }
+				set
+				{
+					if (AreEqualObjects(_AvailableChannels, value))
+						return;
+
+					var _fieldOldValue = _AvailableChannels;
+
+					_AvailableChannels = value;
+
+					CalibrationContext.OnAvailableChannelsChanged(this, new PropertyValueChangedEventArgs<ObservableCollection<int>>(_fieldOldValue, value));
+
+					this.OnPropertyChanged("AvailableChannels");
+				}
+			}
+
+			private ObservableCollection<int> _AvailableChannels;
+
+			public EventHandler<PropertyValueChangedEventArgs<ObservableCollection<int>>> AvailableChannelsChanged;
+
+			public static void OnAvailableChannelsChanged(object sender, PropertyValueChangedEventArgs<ObservableCollection<int>> e)
+			{
+				var obj = sender as CalibrationContext;
+
+				if (obj.AvailableChannelsChanged != null)
+					obj.AvailableChannelsChanged(obj, e);
+			}
+
+			#endregion
 
 
-            public double _10xLwVcc;//adc value when 10x btn is low, and probe connected to vcc
+			public double _10xLwVcc;//adc value when 10x btn is low, and probe connected to vcc
             public double _10xLwGnd;
 
             public double _10xHiVcc;
@@ -557,7 +645,33 @@ namespace SimpleOsciloscope.UI
         {
 			this.Context.Intfs.DisConnect();
 
-			var center = AdcSampler.GetAdcMedian(Context.Intfs.PortName);
+			var chn = this.Context.Channel;
+
+
+			RpiPicoDaqInterface.Rp2040AdcChannels gpio;
+
+			{
+				var gpioId = RpiPicoDaqInterface.AdcPins[chn];
+
+				switch (gpioId)
+				{
+					case 28:
+						gpio = RpiPicoDaqInterface.Rp2040AdcChannels.Gpio28;
+						break;
+					case 27:
+                        gpio = RpiPicoDaqInterface.Rp2040AdcChannels.Gpio27;
+                        break;
+					case 26:
+                        gpio = RpiPicoDaqInterface.Rp2040AdcChannels.Gpio26;
+                        break;
+					default:
+						throw new NotImplementedException();
+				}
+			}
+
+			var mask = RpiPicoDaqInterface.GetChannelMask(gpio);
+
+			var center = AdcSampler.GetAdcMedian(Context.Intfs.PortName, (byte)mask);
 
             if (Context.Status10xBtn == true)//high
             {

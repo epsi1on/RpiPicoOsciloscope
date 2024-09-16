@@ -98,8 +98,8 @@ namespace SimpleOsciloscope.TestConsole
         static void TestAdcSamplerGui()
         {
             new Application();
-            
-            var res = AdcSampler.GetAdcMedian("COM10");
+
+            var res = AdcSampler.GetAdcMedian("COM10", 0);
         }
 
         static void TestBlackpillUsbFft()
@@ -407,7 +407,7 @@ namespace SimpleOsciloscope.TestConsole
 
             var ifs = new RpiPicoDaqInterface("COM10",rate);
 
-            RpiPicoDaqInterface.ChannelMask = 4;
+            //RpiPicoDaqInterface.ChannelMask = 4;
             //RpiPicoDaqInterface.blockSize = 100;
             //RpiPicoDaqInterface.blocksToSend = 10;
             //RpiPicoDaqInterface.infiniteBlocks = false;

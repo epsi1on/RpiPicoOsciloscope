@@ -382,6 +382,7 @@
     <Compile Include="Math.cs" />
     <Compile Include="Natives.cs" />
     <Compile Include="OneDTransformation.cs" />
+    <Compile Include="PwmDsCalculator.cs" />
     <Compile Include="RgbBitmap.cs" />
     <Compile Include="ScopeUi.xaml.cs">
       <DependentUpon>ScopeUi.xaml</DependentUpon>
@@ -392,6 +393,11 @@
     <Compile Include="HardwareInterface\SnifferSerial.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SignalPropertiesVisualizer.xaml.cs">
+      <DependentUpon>SignalPropertiesVisualizer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SignalPropertyCalculator.cs" />
+    <Compile Include="SignalPropertyList.cs" />
     <Compile Include="UiState.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="WriteableBitmapEx.cs" />
@@ -418,6 +424,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ScopeUi.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SignalPropertiesVisualizer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

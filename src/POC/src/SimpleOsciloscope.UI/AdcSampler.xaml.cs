@@ -34,28 +34,28 @@ namespace SimpleOsciloscope.UI
         }
 
 
-		public static double GetAdcMedian(string portName)
+		public static double GetAdcMedian(string portName, byte channelMask)
 		{
 			var wnd = new AdcSampler();
 
 			wnd.Context.SerialPortName = portName;
 
 			wnd.Context.Init();
-            
-            wnd.Context.StartAdcAsync();
-            wnd.Context.StartRenderAsync();
+			wnd.Context.ChannelMask = channelMask;
+			wnd.Context.StartAdcAsync();
+			wnd.Context.StartRenderAsync();
 
-            var res = wnd.ShowDialog();
+			var res = wnd.ShowDialog();
 
 			wnd.Context.TakeSamples = false;
 			//wnd.Context.intfs.StopAdc();
-            //wnd.Context.intfs.DisConnect();
+			//wnd.Context.intfs.DisConnect();
 
-            Thread.Sleep(100);
+			Thread.Sleep(100);
 
 			wnd.Context.intfs.DisConnect();
 
-			if(res.HasValue && res.Value) 
+			if (res.HasValue && res.Value)
 			{
 				return wnd.Context.Center;
 			}
@@ -421,6 +421,41 @@ namespace SimpleOsciloscope.UI
 
 			#endregion
 
+			#region ChannelMask Property and field
+
+			[Obfuscation(Exclude = true, ApplyToMembers = false)]
+			public int ChannelMask
+			{
+				get { return _ChannelMask; }
+				set
+				{
+					if (AreEqualObjects(_ChannelMask, value))
+						return;
+
+					var _fieldOldValue = _ChannelMask;
+
+					_ChannelMask = value;
+
+					AdcSamplerDataContext.OnChannelMaskChanged(this, new PropertyValueChangedEventArgs<int>(_fieldOldValue, value));
+
+					this.OnPropertyChanged("ChannelMask");
+				}
+			}
+
+			private int _ChannelMask;
+
+			public EventHandler<PropertyValueChangedEventArgs<int>> ChannelMaskChanged;
+
+			public static void OnChannelMaskChanged(object sender, PropertyValueChangedEventArgs<int> e)
+			{
+				var obj = sender as AdcSamplerDataContext;
+
+				if (obj.ChannelMaskChanged != null)
+					obj.ChannelMaskChanged(obj, e);
+			}
+
+			#endregion
+
 
 			private DataRepository _Repository;
 
@@ -674,6 +709,7 @@ namespace SimpleOsciloscope.UI
 			{
 				var hw = intfs;
 
+				hw.ChannelMask = this.ChannelMask;
                 hw.Connect();
 				hw.StopAdc();
 

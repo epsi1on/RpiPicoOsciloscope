@@ -30,8 +30,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
     /// </summary>
     public class AdcChannelConfig
     {
-
-
+        public readonly int Id = -1;
         public readonly int Pin10x = -1;//gpio# for 10x button
         public readonly int PinAcDc = -1;//ac coupling cap button
         public readonly int PinAdc = -1;//gpio# for adc
@@ -55,8 +54,9 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
         
 
-        public AdcChannelConfig(int pin10x, int pinAcDc, int pinAdc, double normalAlpha, double normalBeta, double _10xAlpha, double _10xBeta)
+        public AdcChannelConfig(int id, int pin10x, int pinAcDc, int pinAdc, double normalAlpha, double normalBeta, double _10xAlpha, double _10xBeta)
         {
+            Id = id;
             Pin10x = pin10x;
             PinAcDc = pinAcDc;
             PinAdc = pinAdc;
@@ -69,6 +69,59 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
     public class RpiPicoDaqInterface: IDaqInterface
     {
+        public static AdcChannelConfig[] Channels = InitChannels();
+
+        //static readonly int[] AdcPins = new int[] { 28, 27, 29 };//adc pin for each channel
+        //static readonly int[] SwPins = new int[] { 19, 21, 22 };//switch pin for each channel
+        //static readonly int[] AcDcPins = new int[] { 20, -1, -1 };//switch pin for each channel
+
+        private static AdcChannelConfig[] InitChannels()
+        {
+            var lst = new List<AdcChannelConfig>();
+
+            for (var i = 0; i < 3; i++)
+                lst.Add(InitChannel(i));
+
+            return lst.ToArray();
+        }
+
+
+        public static byte[] AdcPins
+        {
+            get
+            {
+                return new byte[] { 28, 26, 27 };
+            }
+        }
+
+        private static AdcChannelConfig InitChannel(int chn)
+        {
+            //var AdcPins = new int[] { 26, 27, 28 };
+            var SwPins = new int[] { 19, 21, 18 };
+            var AcDcPins = new int[] { 20, -1, -1 };
+
+            double normalAlpha, normalBeta;
+            double _10xAlpha, _10xBeta;
+
+            normalAlpha = double.Parse(ConfigurationManager.AppSettings["ch" + (chn + 1) + "_alpha_off"]);
+            normalBeta = double.Parse(ConfigurationManager.AppSettings["ch" + (chn + 1) + "_beta_off"]);
+
+            _10xAlpha = double.Parse(ConfigurationManager.AppSettings["ch" + (chn + 1) + "_alpha_on"]);
+            _10xBeta = double.Parse(ConfigurationManager.AppSettings["ch" + (chn + 1) + "_beta_on"]);
+
+            var adcPin = AdcPins[chn];
+            var swPin = SwPins[chn];
+            var acdcPin = AcDcPins[chn];
+
+
+            var ch1 = new AdcChannelConfig(chn,swPin,acdcPin, adcPin, 
+                normalAlpha, normalBeta,
+                _10xAlpha, _10xBeta);
+
+            return ch1;
+        }
+
+
         [Flags]
         public enum Rp2040AdcChannels
         {
@@ -89,7 +142,6 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             var buf = gpios.Sum(i => (int)i);
 
             return buf;
-
         }
 
         /// <summary>
@@ -120,7 +172,6 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             alpha = m;
             beta = b;
 
-
             var d0 = m * x0 + b - y0;
         }
         /*
@@ -143,45 +194,20 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
         public bool IsConnected = false;
 
-        static RpiPicoDaqInterface()
-        {
-            //SampleRate = (int)UiState.Instance.CurrentRepo.SampleRate;
-        }
+        
 
         public RpiPicoDaqInterface(string portName, long adcSampleRate)
         {
             //AdcResolutionBits = adcResolutionBits;
             AdcSampleRate = adcSampleRate;
             PortName = portName;
-
-            InitChannels();
         }
 
 
         
+        
 
-
-        private void InitChannels()
-        {
-            double normalAlpha, normalBeta;
-            double _10xAlpha, _10xBeta;
-
-            normalAlpha = double.Parse(ConfigurationManager.AppSettings["ch1_alpha_off"]);
-            normalBeta = double.Parse(ConfigurationManager.AppSettings["ch1_beta_off"]);
-
-            _10xAlpha = double.Parse(ConfigurationManager.AppSettings["ch1_alpha_on"]);
-            _10xBeta = double.Parse(ConfigurationManager.AppSettings["ch1_beta_on"]);
-
-
-            //GetCalibrationParameters(3.3, 2626, 0, 1345, out normalAlpha, out normalBeta);
-            //GetCalibrationParameters(3.3, 3853, 0, 78.9, out _10xAlpha, out _10xBeta);
-
-            var ch1 = new AdcChannelConfig(19, 20, 28, normalAlpha, normalBeta, _10xAlpha, _10xBeta);
-
-            this.Channels = new AdcChannelConfig[] { ch1 };
-        }
-
-        AdcChannelConfig[] Channels;
+        
 
         public double AdcMaxVoltage { get { return 3.3; } }
         public int AdcResolutionBits
@@ -210,7 +236,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         public static ushort blockSize = 1_000;
         public static ushort blocksToSend = 10;
         public static bool infiniteBlocks = true;
-        public static int ChannelMask = 4;
+        public int ChannelMask = 4;
 
 
         public bool Stopped = false;
@@ -365,7 +391,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
         public void HandleGpioChange(byte pin,bool newValue)
         {
-            foreach (var ch in this.Channels)
+            foreach (var ch in Channels)
             {
                 if (pin == ch.Pin10x)
                 {
@@ -379,6 +405,8 @@ namespace SimpleOsciloscope.UI.HardwareInterface
                     return;
                 }
             }
+
+
 
 
             if (OnGpioChange != null)
@@ -426,7 +454,10 @@ namespace SimpleOsciloscope.UI.HardwareInterface
                 alpha = ch.NormalAlpha;
                 beta = ch.NormalBeta;
             }
-                
+
+            UiState.Instance.CurrentRepo.LastAlpha = alpha;
+            UiState.Instance.CurrentRepo.LastBeta = beta;
+
 
             for (var j = 0; j < arrLength; j += 3)
             {
@@ -526,13 +557,24 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
         public void ReadGpioInitialValues()
         {
-            var pins = new byte[] { 19 };
+            var pinsList = new List<byte>();
 
-            var vals = GetGpioValues(pins);
-
-            for (int i = 0; i < pins.Length; i++)
+            foreach (var item in Channels)
             {
-                byte pin = pins[i];
+                var x10 = item.Pin10x;
+                var acdc = item.PinAcDc;
+
+                pinsList.Add((byte)x10);
+
+                if (acdc != null)
+                    pinsList.Add((byte)acdc);
+            }
+
+            var vals = GetGpioValues(pinsList.ToArray());
+
+            for (var i = 0; i < pinsList.Count; i++)
+            {
+                byte pin = pinsList[i];
                 var val = vals[i];
 
                 HandleGpioChange(pin, val);

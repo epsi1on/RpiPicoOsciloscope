@@ -29,6 +29,9 @@ namespace SimpleOsciloscope.UI
 
         //public ISampleRepository<short> Samples;//= new FixedLengthList<short>(RepoLength);
 
+
+        public double LastAlpha, LastBeta;
+
         public void Init(int sampleRate)
         {
             UiState.AdcConfig.SampleRate = sampleRate;
