@@ -22,18 +22,22 @@ using System.Windows.Markup.Localizer;
 using uint8_t = System.Byte;
 using uint16_t = System.UInt16;
 using System.Configuration;
+using System.Net.NetworkInformation;
 
 namespace SimpleOsciloscope.UI.HardwareInterface
 {
     /// <summary>
     /// config in UI level (no firmware) for channel
     /// </summary>
-    public class AdcChannelConfig
+    public class AdcChannelInfo
     {
         public readonly int Id = -1;
         public readonly int Pin10x = -1;//gpio# for 10x button
         public readonly int PinAcDc = -1;//ac coupling cap button
         public readonly int PinAdc = -1;//gpio# for adc
+
+        public readonly RpiPicoDaqInterface.Rp2040AdcChannels RpChannel;
+
 
         //public double NormalPullupResistor = double.MaxValue;
         //public double NormalPulldownResistor = double.MaxValue;
@@ -47,81 +51,41 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         public readonly double _10xAlpha = double.NaN;
         public readonly double _10xBeta = double.NaN;
 
+        public string Title { get; set; }
+        public string Description{ get; set; }
+
 
         public bool AcDcMode { get; set; }// ac/dc button is pressed
         public bool _10xMode { get; set; }// 10x button is active
 
-
-        
-
-        public AdcChannelConfig(int id, int pin10x, int pinAcDc, int pinAdc, double normalAlpha, double normalBeta, double _10xAlpha, double _10xBeta)
+        public AdcChannelInfo(int id, int pin10x, int pinAcDc, double normalAlpha, double normalBeta, double _10xAlpha, double _10xBeta, RpiPicoDaqInterface.Rp2040AdcChannels rpChannel)
         {
             Id = id;
             Pin10x = pin10x;
             PinAcDc = pinAcDc;
-            PinAdc = pinAdc;
+            //PinAdc = pinAdc;
             NormalAlpha = normalAlpha;
             NormalBeta = normalBeta;
             this._10xAlpha = _10xAlpha;
             this._10xBeta = _10xBeta;
+            RpChannel = rpChannel;
         }
+    }
+
+    public class Channels
+    {
+
     }
 
     public class RpiPicoDaqInterface: IDaqInterface
     {
-        public static AdcChannelConfig[] Channels = InitChannels();
+        //public static AdcChannelInfo[] Channels;//= InitChannels();
 
         //static readonly int[] AdcPins = new int[] { 28, 27, 29 };//adc pin for each channel
         //static readonly int[] SwPins = new int[] { 19, 21, 22 };//switch pin for each channel
         //static readonly int[] AcDcPins = new int[] { 20, -1, -1 };//switch pin for each channel
 
-        private static AdcChannelConfig[] InitChannels()
-        {
-            var lst = new List<AdcChannelConfig>();
-
-            for (var i = 0; i < 3; i++)
-                lst.Add(InitChannel(i));
-
-            return lst.ToArray();
-        }
-
-
-        public static byte[] AdcPins
-        {
-            get
-            {
-                return new byte[] { 28, 26, 27 };
-            }
-        }
-
-        private static AdcChannelConfig InitChannel(int chn)
-        {
-            //var AdcPins = new int[] { 26, 27, 28 };
-            var SwPins = new int[] { 19, 21, 18 };
-            var AcDcPins = new int[] { 20, -1, -1 };
-
-            double normalAlpha, normalBeta;
-            double _10xAlpha, _10xBeta;
-
-            normalAlpha = double.Parse(ConfigurationManager.AppSettings["ch" + (chn + 1) + "_alpha_off"]);
-            normalBeta = double.Parse(ConfigurationManager.AppSettings["ch" + (chn + 1) + "_beta_off"]);
-
-            _10xAlpha = double.Parse(ConfigurationManager.AppSettings["ch" + (chn + 1) + "_alpha_on"]);
-            _10xBeta = double.Parse(ConfigurationManager.AppSettings["ch" + (chn + 1) + "_beta_on"]);
-
-            var adcPin = AdcPins[chn];
-            var swPin = SwPins[chn];
-            var acdcPin = AcDcPins[chn];
-
-
-            var ch1 = new AdcChannelConfig(chn,swPin,acdcPin, adcPin, 
-                normalAlpha, normalBeta,
-                _10xAlpha, _10xBeta);
-
-            return ch1;
-        }
-
-
+       
         [Flags]
         public enum Rp2040AdcChannels
         {
@@ -143,6 +107,8 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
             return buf;
         }
+
+        public AdcChannelInfo Channel;
 
         /// <summary>
         /// 
@@ -236,7 +202,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         public static ushort blockSize = 1_000;
         public static ushort blocksToSend = 10;
         public static bool infiniteBlocks = true;
-        public int ChannelMask = 4;
+        //public int ChannelMask = 4;
 
 
         public bool Stopped = false;
@@ -345,7 +311,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         public void SetupAdc()
         {
             //var blockSize = blockSize;//samples per block
-            var blockCount = blocksToSend;
+            var blockCount = 0;
             var bitwidth = this.BitWidth;
             var sampleRate = (int)this.AdcSampleRate;
             Stopped = false;
@@ -354,7 +320,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
             {
                 //https://github.com/FilipDominec/rp2daq/blob/main/docs/PYTHON_REFERENCE.md#adc
-                cmd.channel_mask = (byte)ChannelMask;
+                cmd.channel_mask = (byte)GetChannelMask(Channel.RpChannel);
                 cmd.blocksize = (ushort)blockSize;
                 cmd.blocks_to_send = (ushort)blockCount;
                 cmd.infinite = infiniteBlocks ? (byte)1 : (byte)0;
@@ -391,7 +357,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
         public void HandleGpioChange(byte pin,bool newValue)
         {
-            foreach (var ch in Channels)
+            foreach (var ch in UiState.Instance.Channels)
             {
                 if (pin == ch.Pin10x)
                 {
@@ -405,9 +371,6 @@ namespace SimpleOsciloscope.UI.HardwareInterface
                     return;
                 }
             }
-
-
-
 
             if (OnGpioChange != null)
                 OnGpioChange(this, EventArgs.Empty);
@@ -433,7 +396,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             var arrLength = buff.Length;
 
             byte a, b, c;
-            int v1, v2,newVal;
+            int v1, v2, newVal;
             float volt1, volt2;
 
             var arr = TargetRepository.Samples;
@@ -441,7 +404,8 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             //this is only single channel
 
 
-            var ch = Channels[0];
+            var ch = this.Channel;// UiState.Instance.Channels[0];
+
             double alpha, beta;
 
             if (ch._10xMode)
@@ -559,7 +523,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         {
             var pinsList = new List<byte>();
 
-            foreach (var item in Channels)
+            foreach (var item in UiState.Instance.Channels)
             {
                 var x10 = item.Pin10x;
                 var acdc = item.PinAcDc;
@@ -772,7 +736,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
             string ver = GetDeviceIdentifier();
 
-            if (ver != "rp2daq_240715_E662588817786A23")
+            if (!ver.StartsWith("rp2daq_240715"))
                 throw new Exception("Invalid firmware version");
 
 

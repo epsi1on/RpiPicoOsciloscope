@@ -13,6 +13,7 @@ namespace SimpleOsciloscope.UI
 
         public short Max { get; set; }
         public short Min { get; set; }
+        public double Avg { get; set; }
         public short Domain{ get; set; }
 
         public short MinPercentile1 { get; set; }

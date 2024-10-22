@@ -27,11 +27,29 @@ namespace SimpleOsciloscope.UI
             buf.alpha = alpha;
             buf.beta = beta;
 
-            buf.Min = ys.Min();
-            buf.Max = ys.Max();
+            {
+                var min = short.MinValue;
+                var max = short.MinValue;
+                long sum = 0;
+
+                short y;
+
+                for (var i = 0; i < ys.Length; i++)
+                {
+                    y = ys[i];
+
+                    if (y > max) max = y;
+                    if (y < min) min = y;
+                    sum += y;
+                }
+
+                buf.Min = min;
+                buf.Max = max;
+                buf.Avg = ((double)sum) / ys.Length;
+            }
 
 
-            if(buf.Min==buf.Max)
+            if (buf.Min == buf.Max)
             {
                 buf.Frequency = 0;
 

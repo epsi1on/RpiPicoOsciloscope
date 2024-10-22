@@ -182,6 +182,12 @@ namespace SimpleOsciloscope.UI
             Plong.Return(arr);
         }
 
+        public static void Return(Complex[] arr)
+        {
+            //ArrayPool<int>.Shared.Return(arr);
+            PComplex.Return(arr);
+        }
+
         public static void Return(int[] arr)
         {
             //ArrayPool<int>.Shared.Return(arr);

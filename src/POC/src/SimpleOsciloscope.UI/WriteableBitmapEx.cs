@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using FftSharp;
+using System.Windows.Media.Media3D;
 
 namespace SimpleOsciloscope.UI
 {
@@ -92,10 +94,18 @@ namespace SimpleOsciloscope.UI
         /// <param name="x">The x-coordinate of the text origin</param>
         /// <param name="y">The y-coordinate of the text origin</param>
         /// <param name="color">the color.</param>
-        public static void FillText(this WriteableBitmap bmp, FormattedText formattedText, int x, int y, Color color)
+        public static void FillText(this WriteableBitmap bmp, FormattedText formattedText, int x, int y, Color color,double angle = 0)
         {
             var _textGeometry = formattedText.BuildGeometry(new System.Windows.Point(x, y));
-            FillGeometry(bmp, _textGeometry, color);
+
+            var trs = new RotateTransform(angle);
+            trs.CenterX = _textGeometry.Bounds.Left;
+            trs.CenterY = _textGeometry.Bounds.Top;
+
+            PathGeometry geometryTransformed = Geometry.Combine(Geometry.Empty, _textGeometry, GeometryCombineMode.Union, trs);
+
+
+            FillGeometry(bmp, geometryTransformed, color);
         }
 
         /// <summary>
@@ -139,10 +149,17 @@ namespace SimpleOsciloscope.UI
         /// <param name="x">The x-coordinate of the text origin</param>
         /// <param name="y">The y-coordinate of the text origin</param>
         /// <param name="color">the color.</param>
-        public static void DrawText(this WriteableBitmap bmp, FormattedText formattedText, int x, int y, Color col)
+        public static void DrawText(this WriteableBitmap bmp, FormattedText formattedText, int x, int y, Color col, double angle = 0)
         {
             var _textGeometry = formattedText.BuildGeometry(new System.Windows.Point(x, y));
-            DrawGeometry(bmp, _textGeometry, col);
+
+            var trs = new RotateTransform(angle);
+            trs.CenterX = _textGeometry.Bounds.Left;
+            trs.CenterY = _textGeometry.Bounds.Top;
+
+            PathGeometry geometryTransformed = Geometry.Combine(Geometry.Empty, _textGeometry, GeometryCombineMode.Union, trs);
+
+            DrawGeometry(bmp, geometryTransformed, col);
         }
 
 

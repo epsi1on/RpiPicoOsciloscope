@@ -357,7 +357,9 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FixedLengthListRepo.cs" />
     <None Include="FrequencyDetection\CorrelationBasedFrequencyDetector.md" />
+    <Compile Include="FrequencyDetection\FftUtil.cs" />
     <Compile Include="FrequencyDetection\HybridFrequencyDetector.cs" />
+    <Compile Include="FriendlyStringUtil.cs" />
     <Compile Include="HardwareInterface\CalibrationUtil.cs" />
     <Compile Include="HardwareInterface\SerialExtensions.cs" />
     <Compile Include="HardwareInterface\FakeDaqInterface.cs" />
@@ -373,7 +375,8 @@
     <Compile Include="HardwareInterface\IDaqInterface.cs" />
     <Compile Include="HardwareInterface\Stm32Interface.cs" />
     <Compile Include="HistogramUtil.cs" />
-    <Compile Include="HitBasedSignalGraphRender.cs" />
+    <Compile Include="Render\FftRender.cs" />
+    <Compile Include="Render\HitBasedSignalGraphRender.cs" />
     <Compile Include="HpVectorOperation.cs" />
     <Compile Include="ISampleRepository.cs" />
     <Compile Include="ImageUtil.cs" />
@@ -387,7 +390,7 @@
     <Compile Include="ScopeUi.xaml.cs">
       <DependentUpon>ScopeUi.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HarmonicSignalGraphRenderer.cs" />
+    <Compile Include="Render\HarmonicSignalGraphRenderer.cs" />
     <Compile Include="MainWindowDataContext.cs" />
     <Compile Include="PropertyValueChangedEventArgs.cs" />
     <Compile Include="HardwareInterface\SnifferSerial.cs">

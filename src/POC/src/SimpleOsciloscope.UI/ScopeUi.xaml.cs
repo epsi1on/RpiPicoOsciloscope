@@ -1,5 +1,7 @@
 ﻿using NAudio.Mixer;
 using SimpleOsciloscope.UI.HardwareInterface;
+using SimpleOsciloscope.UI.Properties;
+using SimpleOsciloscope.UI.Render;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,6 +22,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ChannelInfo = SimpleOsciloscope.UI.HardwareInterface.AdcChannelInfo;
+
 
 namespace SimpleOsciloscope.UI
 {
@@ -463,7 +467,6 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
-
             #region AvailableChannels Property and field
 
             [Obfuscation(Exclude = true, ApplyToMembers = false)]
@@ -570,13 +573,14 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
-
+            /*
             public class ChannelInfo
             {
                 public RpiPicoDaqInterface.Rp2040AdcChannels ChannelId { get; set; }
                 public string Title { get; set; }
                 public string Description { get; set; }
             }
+            */
 
             internal void Init()
             {
@@ -597,8 +601,7 @@ namespace SimpleOsciloscope.UI
                 this.ListenToAudioChanged += AudioChanged;
 
                 {
-                    
-
+                    /*
                     var lst = new List<ChannelInfo>();
                     var ids = new RpiPicoDaqInterface.Rp2040AdcChannels[]{
                     RpiPicoDaqInterface.Rp2040AdcChannels.Gpio26,
@@ -608,10 +611,10 @@ namespace SimpleOsciloscope.UI
                     RpiPicoDaqInterface.Rp2040AdcChannels.InternalTempratureSensor
                     };
 
-
-                    var g26 = RpiPicoDaqInterface.AdcPins.FindFirstIndexOf(i => i == 26);
-                    var g27 = RpiPicoDaqInterface.AdcPins.FindFirstIndexOf(i => i == 27);
-                    var g28 = RpiPicoDaqInterface.AdcPins.FindFirstIndexOf(i => i == 28);
+                    var pins = RpiPicoDaqInterface.AdcPins();
+                    var g26 = pins.FindFirstIndexOf(i => i == 26);
+                    var g27 = pins.FindFirstIndexOf(i => i == 27);
+                    var g28 = pins.FindFirstIndexOf(i => i == 28);
 
                     var titles = new string[] {
                         (g26 + 1).ToString(),
@@ -639,17 +642,32 @@ namespace SimpleOsciloscope.UI
                     }
 
 
+                    */
 
+                    this.AvailableChannels =
+                        //new ObservableCollection<ChannelInfo>(lst.OrderBy(i => i.Title).ToArray());
+                        new ObservableCollection<ChannelInfo>(UiState.Instance.Channels);
+                }
 
-                    this.AvailableChannels = new ObservableCollection<ChannelInfo>(lst.OrderBy(i => i.Title).ToArray());
+                {
+                    var lastPort = Settings.Default.lastPort;
+                    var lastChnIdx = Settings.Default.lastChannelIndex;
+                    var lastSrate = Settings.Default.lastSampleRate;
+
+                    if (AvailablePorts.Contains(lastPort))
+                        SelectedPort = lastPort;
+
+                    SelectedChannel = AvailableChannels[lastChnIdx];
+
+                    SampleRate = lastSrate;
                 }
             }
 
 
-            IScopeRenderer render 
-                = new HarmonicSignalGraphRenderer();
-                //= new HitBasedSignalGraphRender();
-
+            IScopeRenderer render =
+                //new HarmonicSignalGraphRenderer();
+                //new HitBasedSignalGraphRender();
+                new FftRender();
 
             void AudioChanged(object sender, PropertyValueChangedEventArgs<bool> e)
             {
@@ -673,7 +691,7 @@ namespace SimpleOsciloscope.UI
                 }
             }
 
-            public void Connect()
+            public void StartAdc()
             {
 
                 if (this.SelectedChannel == null)
@@ -693,14 +711,14 @@ namespace SimpleOsciloscope.UI
                 }
 
                 {
-                    var ifs =
-                    new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
+                    var ifs = new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
                     //new Stm32Interface(this.SelectedPort, SampleRate);
                     //new ArduinoInterface();
                     //new FakeDaqInterface();
 
+                    ifs.Channel = this.SelectedChannel;
 
-                    ifs.ChannelMask = RpiPicoDaqInterface.GetChannelMask(this.SelectedChannel.ChannelId);
+                    //ifs.ChannelMask = RpiPicoDaqInterface.GetChannelMask(this.SelectedChannel.RpChannel);
 
                     UiState.AdcConfig.Set(ifs);
 
@@ -852,7 +870,7 @@ namespace SimpleOsciloscope.UI
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             /**/
             if (string.IsNullOrEmpty(Context.SelectedPort))
@@ -868,7 +886,13 @@ namespace SimpleOsciloscope.UI
             }
             /**/
 
-            Context.Connect();
+
+            Settings.Default.lastChannelIndex = Context.AvailableChannels.IndexOf(Context.SelectedChannel);
+            Settings.Default.lastSampleRate = Context.SampleRate;
+            Settings.Default.lastPort = Context.SelectedPort;
+            Settings.Default.Save();
+
+            Context.StartAdc();
         }
 
         private void BtnRefreshPorts_Click(object sender, RoutedEventArgs e)

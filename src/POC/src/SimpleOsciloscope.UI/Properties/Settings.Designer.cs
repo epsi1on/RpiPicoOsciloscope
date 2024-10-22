@@ -22,5 +22,41 @@ namespace SimpleOsciloscope.UI.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public long lastSampleRate {
+            get {
+                return ((long)(this["lastSampleRate"]));
+            }
+            set {
+                this["lastSampleRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int lastChannelIndex {
+            get {
+                return ((int)(this["lastChannelIndex"]));
+            }
+            set {
+                this["lastChannelIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lastPort {
+            get {
+                return ((string)(this["lastPort"]));
+            }
+            set {
+                this["lastPort"] = value;
+            }
+        }
     }
 }

@@ -103,6 +103,8 @@ namespace SimpleOsciloscope.UI
 
                 this.AbsMax = AdcToVolt(prp.Max, alpha, beta);
                 this.AbsMin = AdcToVolt(prp.Min, alpha, beta);
+                this.Avg = AdcToVolt(prp.Avg, alpha, beta);
+
                 this.AbsDomain = DeltaAdcToVolt(Math.Abs(prp.Max - prp.Min), alpha, beta);
 
                 this.Prc1Max = AdcToVolt(prp.MaxPercentile1, alpha, beta);
@@ -122,7 +124,7 @@ namespace SimpleOsciloscope.UI
 
             }
 
-            private string AdcToVolt(int adc,double alpha, double beta)
+            private string AdcToVolt(double adc,double alpha, double beta)
             {
                 var volt = alpha * adc + beta;
                 return VoltToString(volt);
@@ -274,6 +276,41 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
+
+            #region Avg Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public string Avg
+            {
+                get { return _Avg; }
+                set
+                {
+                    if (AreEqualObjects(_Avg, value))
+                        return;
+
+                    var _fieldOldValue = _Avg;
+
+                    _Avg = value;
+
+                    ParentClass.OnAvgChanged(this, new PropertyValueChangedEventArgs<string>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("Avg");
+                }
+            }
+
+            private string _Avg;
+
+            public EventHandler<PropertyValueChangedEventArgs<string>> AvgChanged;
+
+            public static void OnAvgChanged(object sender, PropertyValueChangedEventArgs<string> e)
+            {
+                var obj = sender as ParentClass;
+
+                if (obj.AvgChanged != null)
+                    obj.AvgChanged(obj, e);
+            }
+
+            #endregion
 
 
             #region Prc1Max Property and field

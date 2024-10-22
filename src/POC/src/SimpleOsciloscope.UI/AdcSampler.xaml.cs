@@ -34,17 +34,19 @@ namespace SimpleOsciloscope.UI
         }
 
 
-		public static double GetAdcMedian(string portName, byte channelMask)
+		public static double GetAdcMedian(string portName, AdcChannelInfo inf)
 		{
 			var wnd = new AdcSampler();
 
 			wnd.Context.SerialPortName = portName;
 
 			wnd.Context.Init();
-			wnd.Context.ChannelMask = channelMask;
+			wnd.Context.ChannelMask = RpiPicoDaqInterface.GetChannelMask(inf.RpChannel);
+            wnd.Context.Chn = inf; 
+			
 			wnd.Context.StartAdcAsync();
 			wnd.Context.StartRenderAsync();
-
+			
 			var res = wnd.ShowDialog();
 
 			wnd.Context.TakeSamples = false;
@@ -457,7 +459,12 @@ namespace SimpleOsciloscope.UI
 			#endregion
 
 
+			public AdcChannelInfo Chn;
+
+
 			private DataRepository _Repository;
+
+
 
             int sampleRate = 500_000;
 
@@ -516,24 +523,17 @@ namespace SimpleOsciloscope.UI
 				var firstNnz = Extensions.FindFirstIndexOf(hist, ii => ii != 0);
                 var lastNnz = Extensions.FindLastIndexOf(hist, ii => ii != 0);
 
-				
-
                 if (firstNnz == -1)
                     firstNnz = 0;
 
                 if (lastNnz == -1)
                     lastNnz = 4095;
 
-
 				double avg, stdev2;
-
-				
-
 
 				{
                     var momentSum = 0l;
                     var wightSum = 0l;
-
 
                     for (var i = 0; i < histLength; i++)
                     {
@@ -559,8 +559,6 @@ namespace SimpleOsciloscope.UI
 
 					stdev2 = tmp/hist.Sum();
                 }
-
-				
 
                 this.Minimum = firstNnz;
                 this.Maximum = lastNnz;
@@ -605,7 +603,6 @@ namespace SimpleOsciloscope.UI
 						var y1 = (int)ysc.Transform(hist[i]);
 
 						WriteableBitmapExtensions.FillRectangle(_HistogramImage, x0, y0, x1, y1, foreGround);
-
 
 						{
 							var xc = (int)xsc.Transform(avg);
@@ -709,7 +706,8 @@ namespace SimpleOsciloscope.UI
 			{
 				var hw = intfs;
 
-				hw.ChannelMask = this.ChannelMask;
+				hw.Channel = this.Chn;// RpiPicoDaqInterface.GetChannelMask();
+
                 hw.Connect();
 				hw.StopAdc();
 

@@ -10,6 +10,18 @@
         Title="Calibration" SizeToContent="Height" Height="auto" Width="281">
     <Window.Resources>
         <Converters:ParametricBooleanToVisibilityConverter x:Key="ParametricBooleanToVisibilityConverter"/>
+
+        <DataTemplate x:Key="ComboBoxItemTemplate1">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Title}"/>
+                <TextBlock Text="   "/>
+                <TextBlock  Foreground="LightGray">
+                    <Run Text="("/>
+                    <Run Text="{Binding Description}"/>
+                    <Run Text=")"/>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -27,8 +39,13 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Margin="5,5,5,5" Text="Calibrating Channel" Grid.Row="0" />
-        <ComboBox Margin="5,5,5,5" ItemsSource="{Binding AvailableChannels}" SelectedItem="{Binding Channel}" Grid.Column="1" />
+        <TextBlock Margin="5,5,5,5" Text="Target Channel" Grid.Row="0" />
+        <ComboBox Margin="5,5,5,5" 
+                  ItemsSource="{Binding AvailableChannels}"
+                  SelectedItem="{Binding SelectedChannel}" 
+                  Grid.Column="1"
+                  ItemTemplate="{DynamicResource ComboBoxItemTemplate1}"
+                  />
 
         <TextBlock Margin="5,5,5,5" Text="10x Button status" Grid.Row="1" />
         <TextBlock Margin="5,5,5,5" Text="{Binding Status10xBtn}" Grid.Row="1" Grid.Column="1"/>
@@ -44,12 +61,15 @@
             <TextBlock Text="Do not change the Button"  Height="20" Width="271"/>
         </StackPanel>
 
-        <TextBlock Margin="5,5,5,5" Text="Connect probe to" Grid.Row="4" Grid.ColumnSpan="2"/>
+        <TextBlock Margin="5,5,5,5" Text="Connect probe to" Grid.Row="4" Grid.ColumnSpan="2" Visibility="{Binding Level2Visibility, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
 
-        <TextBlock Margin="5,5,5,5" Text="AGND" Grid.Row="5" Grid.ColumnSpan="2" Visibility="{Binding ConnectProbeGnd, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
-        <TextBlock Margin="5,5,5,5" Text="AVcc" Grid.Row="5" Grid.ColumnSpan="2" Visibility="{Binding ConnectProbeVcc, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
+        <TextBlock Margin="5,5,5,5" Text="AGND" Grid.Row="4" Grid.Column="1" Visibility="{Binding ConnectProbeGnd, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
+        <TextBlock Margin="5,5,5,5" Text="AVcc" Grid.Row="4" Grid.Column="1" Visibility="{Binding ConnectProbeVcc, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
 
-        <Button Grid.Column="1" Content="Vala!" Margin="5" Grid.Row="6" Click="BtnNext_Click" IsEnabled="{Binding CanContinue}" />
-        <Button Grid.Column="1" Content="Re Check!" HorizontalAlignment="Right" Margin="5" Grid.Row="3" Click="Refresh_Click" />
+        <Button Grid.Column="1" Content="Vala!" Margin="5" Grid.Row="6" Click="BtnNext_Click"
+                IsEnabled="{Binding CanContinue}" Visibility="{Binding Level2Visibility, Converter={StaticResource ParametricBooleanToVisibilityConverter}}" />
+        
+        <Button Grid.Column="1" Content="Re Check!" HorizontalAlignment="Right" Margin="5" Grid.Row="3" 
+                Click="Refresh_Click" />
     </Grid>
 </Window>

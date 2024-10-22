@@ -26,31 +26,34 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        
-        
+
+
         <TextBlock Grid.Row="0" Margin="5" Text="ABS pk-pk" />
         <TextBlock Grid.Row="1" Margin="5" Text="ABS Max" />
         <TextBlock Grid.Row="2" Margin="5" Text="ABS Min" />
-        <TextBlock Grid.Row="3" Margin="5" Text="0.1% pk-pk" />
-        <TextBlock Grid.Row="4" Margin="5" Text="0.1% max" />
-        <TextBlock Grid.Row="5" Margin="5" Text="0.1% min" />
-        <TextBlock Grid.Row="6" Margin="5" Text="Frequency" />
-        <TextBlock Grid.Row="7" Margin="5" Text="PWM Duty cycle" />
-        <TextBlock Grid.Row="8" Margin="5" Text="Min Measurable" />
-        <TextBlock Grid.Row="9" Margin="5" Text="Max Measurable" />
+        <TextBlock Grid.Row="3" Margin="5" Text="AVG" />
+        <TextBlock Grid.Row="4" Margin="5" Text="0.1% pk-pk" />
+        <TextBlock Grid.Row="5" Margin="5" Text="0.1% max" />
+        <TextBlock Grid.Row="6" Margin="5" Text="0.1% min" />
+        <TextBlock Grid.Row="7" Margin="5" Text="Frequency" />
+        <TextBlock Grid.Row="8" Margin="5" Text="PWM Duty cycle" />
+        <TextBlock Grid.Row="9" Margin="5" Text="Min Measurable" />
+        <TextBlock Grid.Row="10" Margin="5" Text="Max Measurable" />
 
 
         <TextBlock Grid.Column="1" Grid.Row="0" Margin="5" Text="{Binding AbsDomain}" />
         <TextBlock Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding AbsMax}" />
         <TextBlock Grid.Column="1" Grid.Row="2" Margin="5" Text="{Binding AbsMin}" />
-        <TextBlock Grid.Column="1" Grid.Row="3" Margin="5" Text="{Binding Prc1Domain}" />
-        <TextBlock Grid.Column="1" Grid.Row="4" Margin="5" Text="{Binding Prc1Max}" />
-        <TextBlock Grid.Column="1" Grid.Row="5" Margin="5" Text="{Binding Prc1Min}" />
-        <TextBlock Grid.Column="1" Grid.Row="6" Margin="5" Text="{Binding Frequency}" />
-        <TextBlock Grid.Column="1" Grid.Row="7" Margin="5" Text="{Binding PwmDutyCycle}" />
-        <TextBlock Grid.Column="1" Grid.Row="8" Margin="5" Text="{Binding MinMeasurable}" />
-        <TextBlock Grid.Column="1" Grid.Row="9" Margin="5" Text="{Binding MaxMeasurable}" />
+        <TextBlock Grid.Column="1" Grid.Row="4" Margin="5" Text="{Binding Prc1Domain}" />
+        <TextBlock Grid.Column="1" Grid.Row="5" Margin="5" Text="{Binding Prc1Max}" />
+        <TextBlock Grid.Column="1" Grid.Row="6" Margin="5" Text="{Binding Prc1Min}" />
+        <TextBlock Grid.Column="1" Grid.Row="7" Margin="5" Text="{Binding Frequency}" />
+        <TextBlock Grid.Column="1" Grid.Row="8" Margin="5" Text="{Binding PwmDutyCycle}" />
+        <TextBlock Grid.Column="1" Grid.Row="9" Margin="5" Text="{Binding MinMeasurable}" />
+        <TextBlock Grid.Column="1" Grid.Row="10" Margin="5" Text="{Binding MaxMeasurable}" />
+        <TextBlock Grid.Column="1" Grid.Row="3" Margin="5" Text="{Binding Avg}" />
 
 
     </Grid>

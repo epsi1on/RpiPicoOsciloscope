@@ -137,7 +137,7 @@ namespace SimpleOsciloscope.UI
 
                 var ctx = new BitmapContext();
 
-                WriteableBitmapEx.FillText(bmp, formattedText, 5, (int)(yp - textSize / 2), Colors.Blue);
+                WriteableBitmapEx.FillText(bmp, formattedText, 5, (int)(yp - textSize / 2), Colors.Blue, -90);
             }
 
             bmp.DrawLine(Margin.Left, Margin.Top, Margin.Left, h-Margin.Bottom, col);
@@ -266,7 +266,7 @@ namespace SimpleOsciloscope.UI
             if (!dtr.TryGetFrequency(ys, sampleRate, out freq, out shift))
                 throw new System.Exception();
 
-            //freq = 970;
+            //freq = 96;
 
             var waveLength = 1 / freq;
 
@@ -642,6 +642,9 @@ namespace SimpleOsciloscope.UI
             double freq, shiftRadian;
 
             freq = properties.Frequency;
+
+            //freq = 50;
+
             shiftRadian = properties.PhaseRadian;
 
             var waveLength = 1 / freq;

@@ -99,7 +99,7 @@ namespace SimpleOsciloscope.TestConsole
         {
             new Application();
 
-            var res = AdcSampler.GetAdcMedian("COM10", 0);
+            //var res = AdcSampler.GetAdcMedian("COM10", 0);
         }
 
         static void TestBlackpillUsbFft()

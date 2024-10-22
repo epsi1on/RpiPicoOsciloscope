@@ -82,7 +82,7 @@ namespace SimpleOsciloscope.UI
 				//https://stackoverflow.com/questions/1954358/can-configurationmanager-retain-xml-comments-on-save
 				//have to write it ourself
 
-				var id = wnd.Context.Channel;
+				var id = wnd.Context.SelectedChannel.Id;
 
 				var na1 = xml.SelectSingleNode("configuration/appSettings/add[@key='ch" + id + "_alpha_off']");
 				na1.Attributes["value"].Value = a1.ToString();
@@ -149,9 +149,9 @@ namespace SimpleOsciloscope.UI
 
 			public CalibrationContext()
 			{
-				this.AvailableChannels = new ObservableCollection<int>() { 0, 1, 2 };
+				this.AvailableChannels = new ObservableCollection<AdcChannelInfo>(UiState.Instance.Channels);// new ObservableCollection<int>() { 0, 1, 2 };
 
-				this.ChannelChanged += (a, b) => RefreshGpioStatus();
+				this.SelectedChannelChanged += (a, b) => RefreshGpioStatus();
 			}
 
             public void Init(string portName, bool gnd)
@@ -174,8 +174,20 @@ namespace SimpleOsciloscope.UI
 
 			public void RefreshGpioStatus()
 			{
-                var x10 = RpiPicoDaqInterface.Channels[Channel].Pin10x;
-				var acdc = RpiPicoDaqInterface.Channels[Channel].PinAcDc;
+				Level1Visiblity = Level2Visibility = false;
+
+                if (SelectedChannel == null)
+				{
+					Level1Visiblity = false;
+                    return;
+                }
+
+				Level1Visiblity = true;
+
+                var chId = this.SelectedChannel.Id;
+
+                var x10 = UiState.Instance.Channels[chId].Pin10x;
+				var acdc = UiState.Instance.Channels[chId].PinAcDc;
 
 				var pins = new byte[] { (byte)x10 };
 
@@ -207,6 +219,8 @@ namespace SimpleOsciloscope.UI
 				//this.ToggleAcdcBtn = StatusAcdcBtn;
 
 				this.CanContinue = !this.Toggle10xBtn;
+
+				Level2Visibility = CanContinue;
             }
 
 			public HardwareInterface.RpiPicoDaqInterface Intfs;
@@ -562,41 +576,149 @@ namespace SimpleOsciloscope.UI
 
 			#endregion
 
-			#region Channel Property and field
+			#region SelectedChannel Property and field
 
 			[Obfuscation(Exclude = true, ApplyToMembers = false)]
-			public int Channel
+			public AdcChannelInfo SelectedChannel
 			{
-				get { return _Channel; }
+				get { return _SelectedChannel; }
 				set
 				{
-					if (AreEqualObjects(_Channel, value))
+					if (AreEqualObjects(_SelectedChannel, value))
 						return;
 
-					var _fieldOldValue = _Channel;
+					var _fieldOldValue = _SelectedChannel;
 
-					_Channel = value;
+					_SelectedChannel = value;
 
-					CalibrationContext.OnChannelChanged(this, new PropertyValueChangedEventArgs<int>(_fieldOldValue, value));
+					CalibrationContext.OnSelectedChannelChanged(this, new PropertyValueChangedEventArgs<AdcChannelInfo>(_fieldOldValue, value));
 
-					this.OnPropertyChanged("Channel");
+					this.OnPropertyChanged("SelectedChannel");
 				}
 			}
 
-			private int _Channel;
+			private AdcChannelInfo _SelectedChannel;
 
-			public EventHandler<PropertyValueChangedEventArgs<int>> ChannelChanged;
+			public EventHandler<PropertyValueChangedEventArgs<AdcChannelInfo>> SelectedChannelChanged;
 
-			public static void OnChannelChanged(object sender, PropertyValueChangedEventArgs<int> e)
+			public static void OnSelectedChannelChanged(object sender, PropertyValueChangedEventArgs<AdcChannelInfo> e)
 			{
 				var obj = sender as CalibrationContext;
 
-				if (obj.ChannelChanged != null)
-					obj.ChannelChanged(obj, e);
+				if (obj.SelectedChannelChanged != null)
+					obj.SelectedChannelChanged(obj, e);
 			}
 
 			#endregion
 
+			#region AvailableChannels Property and field
+
+			[Obfuscation(Exclude = true, ApplyToMembers = false)]
+			public ObservableCollection<AdcChannelInfo> AvailableChannels
+			{
+				get { return _AvailableChannels; }
+				set
+				{
+					if (AreEqualObjects(_AvailableChannels, value))
+						return;
+
+					var _fieldOldValue = _AvailableChannels;
+
+					_AvailableChannels = value;
+
+					CalibrationContext.OnAvailableChannelsChanged(this, new PropertyValueChangedEventArgs<ObservableCollection<AdcChannelInfo>>(_fieldOldValue, value));
+
+					this.OnPropertyChanged("AvailableChannels");
+				}
+			}
+
+			private ObservableCollection<AdcChannelInfo> _AvailableChannels;
+
+			public EventHandler<PropertyValueChangedEventArgs<ObservableCollection<AdcChannelInfo>>> AvailableChannelsChanged;
+
+			public static void OnAvailableChannelsChanged(object sender, PropertyValueChangedEventArgs<ObservableCollection<AdcChannelInfo>> e)
+			{
+				var obj = sender as CalibrationContext;
+
+				if (obj.AvailableChannelsChanged != null)
+					obj.AvailableChannelsChanged(obj, e);
+			}
+
+			#endregion
+
+
+			#region Level1Visiblity Property and field
+
+			[Obfuscation(Exclude = true, ApplyToMembers = false)]
+			public bool Level1Visiblity
+			{
+				get { return _Level1Visiblity; }
+				set
+				{
+					if (AreEqualObjects(_Level1Visiblity, value))
+						return;
+
+					var _fieldOldValue = _Level1Visiblity;
+
+					_Level1Visiblity = value;
+
+					CalibrationContext.OnLevel1VisiblityChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
+
+					this.OnPropertyChanged("Level1Visiblity");
+				}
+			}
+
+			private bool _Level1Visiblity;
+
+			public EventHandler<PropertyValueChangedEventArgs<bool>> Level1VisiblityChanged;
+
+			public static void OnLevel1VisiblityChanged(object sender, PropertyValueChangedEventArgs<bool> e)
+			{
+				var obj = sender as CalibrationContext;
+
+				if (obj.Level1VisiblityChanged != null)
+					obj.Level1VisiblityChanged(obj, e);
+			}
+
+			#endregion
+
+			#region Level2Visibility Property and field
+
+			[Obfuscation(Exclude = true, ApplyToMembers = false)]
+			public bool Level2Visibility
+			{
+				get { return _Level2Visibility; }
+				set
+				{
+					if (AreEqualObjects(_Level2Visibility, value))
+						return;
+
+					var _fieldOldValue = _Level2Visibility;
+
+					_Level2Visibility = value;
+
+					CalibrationContext.OnLevel2VisibilityChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
+
+					this.OnPropertyChanged("Level2Visibility");
+				}
+			}
+
+			private bool _Level2Visibility;
+
+			public EventHandler<PropertyValueChangedEventArgs<bool>> Level2VisibilityChanged;
+
+			public static void OnLevel2VisibilityChanged(object sender, PropertyValueChangedEventArgs<bool> e)
+			{
+				var obj = sender as CalibrationContext;
+
+				if (obj.Level2VisibilityChanged != null)
+					obj.Level2VisibilityChanged(obj, e);
+			}
+
+			#endregion
+
+
+			/*
 			#region AvailableChannels Property and field
 
 			[Obfuscation(Exclude = true, ApplyToMembers = false)]
@@ -631,6 +753,7 @@ namespace SimpleOsciloscope.UI
 			}
 
 			#endregion
+			*/
 
 
 			public double _10xLwVcc;//adc value when 10x btn is low, and probe connected to vcc
@@ -645,13 +768,15 @@ namespace SimpleOsciloscope.UI
         {
 			this.Context.Intfs.DisConnect();
 
-			var chn = this.Context.Channel;
+			var chn = this.Context.SelectedChannel.Id;
 
 
 			RpiPicoDaqInterface.Rp2040AdcChannels gpio;
 
 			{
-				var gpioId = RpiPicoDaqInterface.AdcPins[chn];
+				var pns = UiState.AdcPins();
+
+                var gpioId = pns[chn];
 
 				switch (gpioId)
 				{
@@ -671,7 +796,7 @@ namespace SimpleOsciloscope.UI
 
 			var mask = RpiPicoDaqInterface.GetChannelMask(gpio);
 
-			var center = AdcSampler.GetAdcMedian(Context.Intfs.PortName, (byte)mask);
+			var center = AdcSampler.GetAdcMedian(Context.Intfs.PortName, this.Context.SelectedChannel);
 
             if (Context.Status10xBtn == true)//high
             {

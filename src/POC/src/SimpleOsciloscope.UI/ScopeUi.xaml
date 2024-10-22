@@ -57,7 +57,7 @@
             <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" Width="100" />
         </StackPanel>
         <StackPanel Grid.Column="3" HorizontalAlignment="Left" Margin="10,0,0,0" Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Center" IsEnabled="{Binding IsNotConnected}">
-            <Button Content="Connect" Click="Button_Click"/>
+            <Button Content="Connect" Click="BtnStart_Click"/>
 
 
             <Button Content="Calibrate" Click="BtnCalib_Click"/>
