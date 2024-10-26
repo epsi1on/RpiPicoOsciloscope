@@ -91,8 +91,8 @@ namespace SimpleOsciloscope.UI.Render
 
             var sampleRate = UiState.AdcConfig.SampleRate;
 
-            var d = 20;
-            var ct = 96;
+            var d = 50;
+            var ct = 150;
 
             var minFreq = ct-d;
             var maxFreq = ct+d;

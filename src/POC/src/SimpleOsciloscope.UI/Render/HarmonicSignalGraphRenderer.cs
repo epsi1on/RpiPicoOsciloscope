@@ -643,7 +643,7 @@ namespace SimpleOsciloscope.UI
 
             freq = properties.Frequency;
 
-            //freq = 50;
+            //freq = 150;
 
             shiftRadian = properties.PhaseRadian;
 
