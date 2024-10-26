@@ -218,7 +218,9 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
         public void DisConnect(bool log = false)
         {
-            Port.Close();
+            if (Port != null)
+                Port.Close();
+
             this.IsConnected= false;
         }
 

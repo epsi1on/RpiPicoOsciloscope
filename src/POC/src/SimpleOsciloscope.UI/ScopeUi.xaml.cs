@@ -573,6 +573,92 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
+
+            #region ShowFft Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public bool ShowFft
+            {
+                get { return _ShowFft; }
+                set
+                {
+                    if (AreEqualObjects(_ShowFft, value))
+                        return;
+
+                    var _fieldOldValue = _ShowFft;
+
+                    _ShowFft = value;
+
+                    ContextClass.OnShowFftChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("ShowFft");
+
+                    ShowHarmonic = !value;
+                }
+            }
+
+            private bool _ShowFft;
+
+            public EventHandler<PropertyValueChangedEventArgs<bool>> ShowFftChanged;
+
+            public static void OnShowFftChanged(object sender, PropertyValueChangedEventArgs<bool> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.ShowFftChanged != null)
+                    obj.ShowFftChanged(obj, e);
+            }
+
+            #endregion
+
+            #region ShowHarmonic Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public bool ShowHarmonic
+            {
+                get { return _ShowHarmonic; }
+                set
+                {
+                    if (AreEqualObjects(_ShowHarmonic, value))
+                        return;
+
+                    var _fieldOldValue = _ShowHarmonic;
+
+                    _ShowHarmonic = value;
+
+                    ContextClass.OnShowHarmonicChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("ShowHarmonic");
+
+                    ShowFft = !value;
+                }
+            }
+
+            private bool _ShowHarmonic;
+
+            public EventHandler<PropertyValueChangedEventArgs<bool>> ShowHarmonicChanged;
+
+            public static void OnShowHarmonicChanged(object sender, PropertyValueChangedEventArgs<bool> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.ShowHarmonicChanged != null)
+                    obj.ShowHarmonicChanged(obj, e);
+            }
+
+            #endregion
+
+
+
+            private void updateRenderType()
+            {
+                if (this.ShowFft)
+                    render = new FftRender();
+
+                if(this.ShowHarmonic)
+                    render = new HarmonicSignalGraphRenderer();
+            }
+
             /*
             public class ChannelInfo
             {
@@ -584,6 +670,11 @@ namespace SimpleOsciloscope.UI
 
             internal void Init()
             {
+                {
+                    this.ShowFftChanged += (a, b) => updateRenderType();
+                    this.ShowHarmonicChanged += (a, b) => updateRenderType();
+                }
+
                 {
                     this.BitmapSource = new WriteableBitmap(UiState.Instance.RenderBitmapWidth, UiState.Instance.RenderBitmapHeight, 96, 96, pixelFormat: UiState.BitmapPixelFormat, null);
                     this.SampleRate = 500_000;// (long)UiState.AdcConfig.SampleRate;
@@ -663,11 +754,11 @@ namespace SimpleOsciloscope.UI
                 }
             }
 
-
+            
             IScopeRenderer render =
-                //new HarmonicSignalGraphRenderer();
+                new HarmonicSignalGraphRenderer();
                 //new HitBasedSignalGraphRender();
-                new FftRender();
+                //new FftRender();
 
             void AudioChanged(object sender, PropertyValueChangedEventArgs<bool> e)
             {
