@@ -15,5 +15,14 @@ namespace SimpleOsciloscope.UI
 
         void Clear();
 
+
+        void Zoom(double delta, int x, int y);
+
+
+        void ReSetZoom();
+
+        string GetPointerValue(double x, double y);
+
+        //void SetEnabled(bool enabled);
     }
 }

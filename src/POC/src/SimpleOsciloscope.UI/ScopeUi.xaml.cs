@@ -573,6 +573,7 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
+            /**/
 
             #region ShowFft Property and field
 
@@ -648,15 +649,156 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
+            #region ShowHitBased Property and field
 
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public bool ShowHitBased
+            {
+                get { return _ShowHitBased; }
+                set
+                {
+                    if (AreEqualObjects(_ShowHitBased, value))
+                        return;
+
+                    var _fieldOldValue = _ShowHitBased;
+
+                    _ShowHitBased = value;
+
+                    ContextClass.OnShowHitBasedChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("ShowHitBased");
+                }
+            }
+
+            private bool _ShowHitBased;
+
+            public EventHandler<PropertyValueChangedEventArgs<bool>> ShowHitBasedChanged;
+
+            public static void OnShowHitBasedChanged(object sender, PropertyValueChangedEventArgs<bool> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.ShowHitBasedChanged != null)
+                    obj.ShowHitBasedChanged(obj, e);
+            }
+
+            #endregion
+
+            /**/
+
+            #region RenderType Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public RenderTypes RenderType
+            {
+                get { return _RenderType; }
+                set
+                {
+                    if (AreEqualObjects(_RenderType, value))
+                        return;
+
+                    var _fieldOldValue = _RenderType;
+
+                    _RenderType = value;
+
+                    ContextClass.OnRenderTypeChanged(this, new PropertyValueChangedEventArgs<RenderTypes>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("RenderType");
+                }
+            }
+
+            private RenderTypes _RenderType;
+
+            public EventHandler<PropertyValueChangedEventArgs<RenderTypes>> RenderTypeChanged;
+
+            public static void OnRenderTypeChanged(object sender, PropertyValueChangedEventArgs<RenderTypes> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.RenderTypeChanged != null)
+                    obj.RenderTypeChanged(obj, e);
+            }
+
+            #endregion
+
+            #region MousePosValue Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public string MousePosValue
+            {
+                get { return _MousePosValue; }
+                set
+                {
+                    if (AreEqualObjects(_MousePosValue, value))
+                        return;
+
+                    var _fieldOldValue = _MousePosValue;
+
+                    _MousePosValue = value;
+
+                    ContextClass.OnMousePosValueChanged(this, new PropertyValueChangedEventArgs<string>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("MousePosValue");
+                }
+            }
+
+            private string _MousePosValue;
+
+            public EventHandler<PropertyValueChangedEventArgs<string>> MousePosValueChanged;
+
+            public static void OnMousePosValueChanged(object sender, PropertyValueChangedEventArgs<string> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.MousePosValueChanged != null)
+                    obj.MousePosValueChanged(obj, e);
+            }
+
+            #endregion
+
+            public enum RenderTypes
+            {
+                Fft,
+                Harmonic,
+                HitBased
+            }
 
             private void updateRenderType()
-            {
+            {/*
                 if (this.ShowFft)
                     render = new FftRender();
 
-                if(this.ShowHarmonic)
+                if (this.ShowHarmonic)
                     render = new HarmonicSignalGraphRenderer();
+                */
+
+                var curr = this.renderer;
+
+                //curr.SetEnabled(false);
+
+
+                switch (this.RenderType)
+                {
+                    case RenderTypes.Fft:
+                        curr = Renderers.FirstOrDefault(i => i is FftRender);
+                        break;
+
+                    case RenderTypes.Harmonic:
+                        curr = Renderers.FirstOrDefault(i => i is HarmonicSignalGraphRenderer);
+                        break;
+
+                    case RenderTypes.HitBased:
+                        curr = Renderers.FirstOrDefault(i => i is HitBasedSignalGraphRender);
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
+                        break;
+                }
+
+                //curr.SetEnabled(true);
+
+                this.renderer = curr;
             }
 
             /*
@@ -668,11 +810,48 @@ namespace SimpleOsciloscope.UI
             }
             */
 
+
+            private IScopeRenderer[] Renderers;
+
             internal void Init()
             {
+                Renderers = new IScopeRenderer[] {
+                    new HarmonicSignalGraphRenderer(),
+                    new HitBasedSignalGraphRender(),
+                    new FftRender(),
+                };
+
+               
+
+
+                renderer = Renderers[0];
+
+                this.RenderType = RenderTypes.Harmonic;
+
                 {
-                    this.ShowFftChanged += (a, b) => updateRenderType();
-                    this.ShowHarmonicChanged += (a, b) => updateRenderType();
+                    /*
+                    this.ShowFftChanged += (a, b) =>
+                    {
+                        if (b.NewValue)
+                            this.RenderType = RenderTypes.Fft;
+                    };
+
+
+                    this.ShowHarmonicChanged += (a, b) =>
+                    {
+                        if (b.NewValue)
+                            this.RenderType = RenderTypes.Harmonic;
+                    };
+
+                    this.ShowHitBasedChanged += (a, b) =>
+                    {
+                        if (b.NewValue)
+                            this.RenderType = RenderTypes.HitBased;
+                    };
+                    */
+
+                    //this.ShowHarmonicChanged 
+                    this.RenderTypeChanged += (a, b) => updateRenderType();
                 }
 
                 {
@@ -754,9 +933,8 @@ namespace SimpleOsciloscope.UI
                 }
             }
 
-            
-            IScopeRenderer render =
-                new HarmonicSignalGraphRenderer();
+
+            IScopeRenderer renderer;
                 //new HitBasedSignalGraphRender();
                 //new FftRender();
 
@@ -766,43 +944,100 @@ namespace SimpleOsciloscope.UI
             }
 
 
+            private bool RenderLoopFlag = false;
+
             void RenderLoopSync()
             {
                 var wait = (1 / UiState.RenderFramerate) * 1000;
 
                 while (true)
                 {
-                    if (this.IsNotConnected)
+                    if (!RenderLoopFlag)
                         return;
 
                     RenderShot();
+
+                    try
+                    {
+                        
+                    }
+                    catch(Exception ex)
+                    {
+
+                    }
                     //this.TotalSmaples = UiState.Instance.CurrentRepo.Samples.Index;// s.Sum(i => i.Sets);
                     //this.TotalSamplesStr = Utils.numStr(this.TotalSmaples);
                     Thread.Sleep((int)wait);
                 }
             }
 
+
+            public void Stop()
+            {
+                if (this.IsNotConnected)
+                    return;
+
+                this.IsNotConnected = true;
+                
+                if (RenderThread != null)
+                {
+                    RenderLoopFlag = false;
+
+                    
+                    if (RenderThread.IsAlive)
+                        RenderThread.Abort();
+                }
+
+                if (DaqInterface != null)
+                {
+                    DaqInterface.StopAdc();
+
+                    if (DaqThread.IsAlive)
+                        DaqThread.Abort();
+
+                    DaqInterface.DisConnect();
+                }
+
+               
+
+                
+            }
+
+            private Thread RenderThread;
+            private Thread DaqThread;
+            private RpiPicoDaqInterface DaqInterface;
+
             public void StartAdc()
             {
-
                 if (this.SelectedChannel == null)
                 {
                     MessageBox.Show("Select Channel");
                     return;
                 }
-                    
+
+                //UiState.Instance.CurrentRepo.clear
                 UiState.Instance.CurrentRepo.Init((int)SampleRate);
+
+                {
+                    UiState.AdcConfig.SampleRate = SampleRate;
+
+                    foreach (var item in Renderers)
+                    {
+                        item.ReSetZoom();
+                    }
+                }
 
                 this.IsNotConnected = false;
 
                 {
-                    var thr = new Thread(RenderLoopSync);
+                    var thr = RenderThread = new Thread(RenderLoopSync);
+                    RenderLoopFlag = true;
                     thr.Priority = ThreadPriority.AboveNormal;
                     thr.Start();
                 }
 
                 {
-                    var ifs = new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
+                    var ifs = DaqInterface = new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
                     //new Stm32Interface(this.SelectedPort, SampleRate);
                     //new ArduinoInterface();
                     //new FakeDaqInterface();
@@ -828,13 +1063,13 @@ namespace SimpleOsciloscope.UI
                     */
 
 
-                    var thr = new Thread(() =>
+                    var thr = DaqThread = new Thread(() =>
                       {
                           try
                           {
                               ifs.StartSync();
                           }
-                          catch(Exception ex)
+                          catch (Exception ex)
                           {
                               this.IsNotConnected = true;
 
@@ -846,7 +1081,7 @@ namespace SimpleOsciloscope.UI
                           {
                               this.IsNotConnected = true;
 
-                              render.Clear();
+                              renderer.Clear();
                           }
                       });
 
@@ -877,7 +1112,7 @@ namespace SimpleOsciloscope.UI
 
 
                 //var bmp = render.Render2(out freq, out min, out max);
-                var bmp = render.Render3(prps);
+                var bmp = renderer.Render3(prps);
 
 
                 {
@@ -959,6 +1194,34 @@ namespace SimpleOsciloscope.UI
                 this.AvailablePorts = new ObservableCollection<string>(SerialPort.GetPortNames());
                 this.SelectedPort = this.AvailablePorts.FirstOrDefault();
             }
+
+            public void OnMouseWheelZoom(Point center, double delta)
+            {
+                var sens = 0.001;
+
+
+                this.renderer.Zoom(delta * sens, (int)center.X, (int)center.Y);
+            }
+
+            public void OnMouseMoveStatus(Point center)
+            {
+                var sens = 0.001;
+
+                var val = this.renderer.GetPointerValue(center.X, center.Y);
+
+                this.MousePosValue = val;
+            }
+
+            public void ResetZoom()
+            {
+                this.renderer.ReSetZoom();
+            }
+        }
+
+
+        private void BtnStop_Click(object sender, RoutedEventArgs e)
+        {
+            Context.Stop();
         }
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
@@ -995,5 +1258,63 @@ namespace SimpleOsciloscope.UI
         {
             Calibration.Calibrate(Context.SelectedPort);
         }
+
+        private void btnFftClick_Click(object sender, RoutedEventArgs e)
+        {
+            Context.RenderType = ContextClass.RenderTypes.Fft;
+        }
+
+        private void btnHarmonicClick_Click(object sender, RoutedEventArgs e)
+        {
+            Context.RenderType = ContextClass.RenderTypes.Harmonic;
+        }
+
+        private void btnHitBasedClick_Click(object sender, RoutedEventArgs e)
+        {
+            Context.RenderType = ContextClass.RenderTypes.HitBased;
+        }
+
+        private void ImgCanvas_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var pt = e.GetPosition(sender as IInputElement);
+
+            var img = sender as Image;
+
+            var w = img.ActualWidth;
+            var h = img.ActualHeight;
+
+            var wp = (img.Source as BitmapSource).PixelWidth;
+            var hp = (img.Source as BitmapSource).PixelHeight;
+
+            var x = pt.X / w * wp;
+            var y = pt.Y / h * hp;
+
+            Context.OnMouseWheelZoom(new Point(x, y), -e.Delta);
+        }
+
+        private void ImgCanvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Middle)
+                Context.ResetZoom();
+        }
+
+        private void ImgCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            var pt = e.GetPosition(sender as IInputElement);
+
+            var img = sender as Image;
+
+            var w = img.ActualWidth;
+            var h = img.ActualHeight;
+
+            var wp = (img.Source as BitmapSource).PixelWidth;
+            var hp = (img.Source as BitmapSource).PixelHeight;
+
+            var x = pt.X / w * wp;
+            var y = pt.Y / h * hp;
+
+            Context.OnMouseMoveStatus(new Point(x, y));
+        }
+
     }
 }

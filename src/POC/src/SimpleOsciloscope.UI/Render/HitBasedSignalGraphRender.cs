@@ -372,5 +372,32 @@ namespace SimpleOsciloscope.UI
 
             return Bmp2;
         }
+
+        public void Zoom(double delta, int x, int y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReSetZoom()
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void SetEnabled(bool enabled)
+        {
+            Enabled = enabled;
+        }
+
+        public string GetPointerValue(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetPointerValue(double x, double y)
+        {
+            return "?";
+        }
+
+        bool Enabled = false;
     }
 }

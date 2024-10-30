@@ -661,7 +661,7 @@ namespace SimpleOsciloscope.UI
 
             {
                 var trsX = OneDTransformation.FromInOut(0, twl, Margin.Left, w - Margin.Right);
-                var trsY = OneDTransformation.FromInOut(min, max, h - Margin.Bottom, Margin.Top);
+                var trsY = LastYTrans = OneDTransformation.FromInOut(min, max, h - Margin.Bottom, Margin.Top);
 
                 int x, y;
 
@@ -736,6 +736,35 @@ namespace SimpleOsciloscope.UI
 
         }
 
+        OneDTransformation LastYTrans;
+
+        public void Zoom(double delta, int x, int y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReSetZoom()
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void SetEnabled(bool enabled)
+        {
+            Enabled = enabled;
+        }
+
+        public string GetPointerValue(double x, double y)
+        {
+            if (LastYTrans == null)
+                return "";
+
+            var volt = LastYTrans.TransformBack(y);
+
+            return FriendlyStringUtil.ToSI(volt, "0.000") + "V";
+        }
+
         object lc = new object();
+
+        bool Enabled = false;
     }
 }

@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="Harmonic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="2.9631822"
+     inkscape:cx="522.91756"
+     inkscape:cy="130.94031"
+     inkscape:window-width="2560"
+     inkscape:window-height="1346"
+     inkscape:window-x="1909"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showgrid="false" />
+  <defs
+     id="defs1">
+    <marker
+       style="overflow:visible"
+       id="Triangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker5"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Diamond"
+       markerWidth="3"
+       markerHeight="3"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.45)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         d="M 0,-7.0710768 -7.0710894,0 0,7.0710589 7.0710462,0 Z"
+         id="path5" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.0615994"
+       id="rect4"
+       width="65.739288"
+       height="42.867893"
+       x="71.508163"
+       y="43.370121"
+       ry="0.47400919" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker5)"
+       d="M 75.299783,67.709112 H 135.69763"
+       id="path4" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.80894px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0452235"
+       x="-70.599564"
+       y="73.662216"
+       id="text5"
+       transform="rotate(-90.614426)"><tspan
+         sodipodi:role="line"
+         id="tspan5"
+         style="stroke-width:0.0452235"
+         x="-70.599564"
+         y="73.662216">GND</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.0350833"
+       id="rect5"
+       width="58.474297"
+       height="33.051041"
+       x="76.409752"
+       y="49.851467"
+       ry="0.2017248" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.80894px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0452235"
+       x="135.18604"
+       y="51.288376"
+       id="text6"
+       transform="rotate(-0.614426)"><tspan
+         sodipodi:role="line"
+         id="tspan6"
+         style="stroke-width:0.0452235"
+         x="135.18604"
+         y="51.288376">i</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="51.639801"
+       y="102.0259"
+       id="text7"><tspan
+         sodipodi:role="line"
+         id="tspan7"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="102.0259">comboish box</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="106.53139"
+         id="tspan13">max</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="111.0369"
+         id="tspan8">median</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="115.5424"
+         id="tspan10">avg</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="120.0479"
+         id="tspan9">min voltage</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="124.5534"
+         id="tspan11">max voltage</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="129.0589"
+         id="tspan15">duty cycle</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 82.94031,55.628659 9.556797,0.07157 1.850954,24.417474 2.551143,0.16094 0.809051,-24.312313 13.654155,0.284918 1.24046,23.973635 2.48966,0.12331 1.40946,-23.848315 9.31253,-0.232166"
+       id="path12" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 134.88355,56.077537 -5.41753,0.255016 5.41753,0.953528 -0.89096,21.899292 -7.61403,0.52826 8.1048,0.68176 z"
+       id="path13" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="19.323626"
+       y="66.616287"
+       id="text18"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="19.323626"
+         y="66.616287"
+         id="tspan18">مقدار ولتاژ محل کنونی کرسر ماوس</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 133.36746,93.864973 c -0.37276,-0.37632 -2.9365,-13.81047 -2.9365,-13.81047"
+       id="path23" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0698073px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 109.59247,51.678747 -2.41418,2.481996"
+       id="path24" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0698073px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 109.59247,54.160743 -2.41418,-2.481996"
+       id="path25" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="79.863007"
+       y="101.07932"
+       id="text26"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="79.863007"
+         y="101.07932"
+         id="tspan26">کرسر ماوس ضربدری (مربعی نباشد)</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.294597;stroke-miterlimit:4.1;stroke-dasharray:0.180221, 0.180221"
+       id="rect6"
+       width="9.8267117"
+       height="1.8152164"
+       x="74.146461"
+       y="83.595306"
+       ry="0.21293008" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.294597;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle)"
+       d="m 74.146462,85.410523 c -7.349892,9.91434 -6.438761,11.8371 -6.438761,11.8371"
+       id="path6" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="20.986511"
+       y="134.51401"
+       id="text16"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="20.986511"
+         y="134.51401"
+         id="tspan16">اینها در چیزی شبیه به کمبو هستن و تیک دارن و وقتی انتخاب میشن </tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="20.986511"
+         y="139.06123"
+         id="tspan17">توی پایین نشون داده میشن. شبیه به اکسل وقتی چند سلول رو انتخاب میکنی و ماکس و مین </tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="20.986511"
+         y="143.60846"
+         id="tspan19">و ... اشون رو میبینی</tspan></text>
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.294597;stroke-miterlimit:4.1"
+       id="path1"
+       cx="76.409752"
+       cy="46.028385"
+       rx="1.6738871"
+       ry="1.6604638" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 76.775698,45.332918 c 0,1.383418 0.01515,1.418879 0.01515,1.418879"
+       id="path2" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 75.902545,45.332918 v 1.517176"
+       id="path3" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="37.578354"
+       y="34.375019"
+       id="text3"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         style="stroke-width:0.0901104"
+         x="37.578354"
+         y="34.375019">دکمه پاز سیگنال روی تصویر رو نگه میداره</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="37.578354"
+         y="38.922245"
+         id="tspan4">در حین اینکه پاز هست چراغی چشمک میزنه روی تصویر</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.559483;stroke-miterlimit:4.1;stroke-dasharray:0.342267, 0.342267"
+       id="rect565"
+       width="13.410884"
+       height="4.7973022"
+       x="76.671951"
+       y="77.620865"
+       ry="0.56273729" />
+    <path
+       style="fill:none;fill-opacity:0.323283;stroke:#ff0000;stroke-width:0.0858751;stroke-linejoin:round;stroke-opacity:1"
+       d="m 50.767269,69.029973 c 25.904673,8.59088 25.904673,10.98954 25.904673,10.98954"
+       id="path621" />
+    <path
+       style="fill:none;fill-opacity:0.323283;stroke:#ff0000;stroke-width:0.0858751;stroke-linejoin:round;stroke-opacity:1"
+       d="m 80.953726,40.215786 c 0,2.204777 -2.800898,5.43271 -2.800898,5.43271"
+       id="path1385"
+       sodipodi:nodetypes="cc" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.0663219"
+       id="rect435"
+       width="76.213928"
+       height="42.863171"
+       x="71.510521"
+       y="43.372486"
+       ry="0.47395697" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker5)"
+       d="M 75.299783,67.709112 H 135.69763"
+       id="path437" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.80894px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0452235"
+       x="-70.599564"
+       y="73.662216"
+       id="text441"
+       transform="rotate(-90.614426)"><tspan
+         sodipodi:role="line"
+         id="tspan439"
+         style="stroke-width:0.0452235"
+         x="-70.599564"
+         y="73.662216">GND</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.0350833"
+       id="rect443"
+       width="58.474297"
+       height="33.051041"
+       x="76.409752"
+       y="49.851467"
+       ry="0.2017248" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.80894px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0452235"
+       x="135.18604"
+       y="51.288376"
+       id="text447"
+       transform="rotate(-0.614426)"><tspan
+         sodipodi:role="line"
+         id="tspan445"
+         style="stroke-width:0.0452235"
+         x="135.18604"
+         y="51.288376">i</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="51.639801"
+       y="102.0259"
+       id="text463"><tspan
+         sodipodi:role="line"
+         id="tspan449"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="102.0259">comboish box</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="106.53139"
+         id="tspan451">max</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="111.0369"
+         id="tspan453">median</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="115.5424"
+         id="tspan455">avg</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="120.0479"
+         id="tspan457">min voltage</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="124.5534"
+         id="tspan459">max voltage</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="51.639801"
+         y="129.0589"
+         id="tspan461">duty cycle</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 82.94031,55.628659 9.556797,0.07157 1.850954,24.417474 2.551143,0.16094 0.809051,-24.312313 13.654155,0.284918 1.24046,23.973635 2.48966,0.12331 1.40946,-23.848315 9.31253,-0.232166"
+       id="path465" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 134.88355,56.077537 -5.41753,0.255016 5.41753,0.953528 -0.89096,21.899292 -7.61403,0.52826 8.1048,0.68176 z"
+       id="path467" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="19.323626"
+       y="66.616287"
+       id="text471"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="19.323626"
+         y="66.616287"
+         id="tspan469">مقدار ولتاژ محل کنونی کرسر ماوس</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 133.36746,93.864973 c -0.37276,-0.37632 -2.9365,-13.81047 -2.9365,-13.81047"
+       id="path473" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0698073px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 109.59247,51.678747 -2.41418,2.481996"
+       id="path475" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0698073px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 109.59247,54.160743 -2.41418,-2.481996"
+       id="path477" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 109.59247,51.678747 C 109.2197,51.302421 116.57128,28.64541 116.57128,28.64541"
+       id="path479"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="98.768661"
+       y="25.034885"
+       id="text483"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="98.768661"
+         y="25.034885"
+         id="tspan481">کرسر ماوس ضربدری (مربعی نباشد)</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.294597;stroke-miterlimit:4.1;stroke-dasharray:0.180221, 0.180221"
+       id="rect485"
+       width="9.8267117"
+       height="1.8152164"
+       x="74.146461"
+       y="83.595306"
+       ry="0.21293008" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.294597;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle)"
+       d="m 74.146462,85.410523 c -7.349892,9.91434 -6.438761,11.8371 -6.438761,11.8371"
+       id="path487" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="20.986511"
+       y="134.51401"
+       id="text495"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="20.986511"
+         y="134.51401"
+         id="tspan489">اینها در چیزی شبیه به کمبو هستن و تیک دارن و وقتی انتخاب میشن </tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="20.986511"
+         y="139.06123"
+         id="tspan491">توی پایین نشون داده میشن. شبیه به اکسل وقتی چند سلول رو انتخاب میکنی و ماکس و مین </tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="20.986511"
+         y="143.60846"
+         id="tspan493">و ... اشون رو میبینی</tspan></text>
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.294597;stroke-miterlimit:4.1"
+       id="ellipse497"
+       cx="76.409752"
+       cy="46.028385"
+       rx="1.6738871"
+       ry="1.6604638" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 76.775698,45.332918 c 0,1.383418 0.01515,1.418879 0.01515,1.418879"
+       id="path499" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0901104px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 75.902545,45.332918 v 1.517176"
+       id="path501" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="37.578354"
+       y="34.375019"
+       id="text507"><tspan
+         sodipodi:role="line"
+         id="tspan503"
+         style="stroke-width:0.0901104"
+         x="37.578354"
+         y="34.375019">دکمه پاز سیگنال روی تصویر رو نگه میداره</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="37.578354"
+         y="38.922245"
+         id="tspan505">در حین اینکه پاز هست چراغی چشمک میزنه روی تصویر</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.559483;stroke-miterlimit:4.1;stroke-dasharray:0.342267, 0.342267"
+       id="rect509"
+       width="13.410884"
+       height="4.7973022"
+       x="76.671951"
+       y="77.620865"
+       ry="0.56273729" />
+    <path
+       style="fill:none;fill-opacity:0.323283;stroke:#ff0000;stroke-width:0.0858751;stroke-linejoin:round;stroke-opacity:1"
+       d="m 50.767269,69.029973 c 25.904673,8.59088 25.904673,10.98954 25.904673,10.98954"
+       id="path511" />
+    <path
+       style="fill:none;fill-opacity:0.323283;stroke:#ff0000;stroke-width:0.0858751;stroke-linejoin:round;stroke-opacity:1"
+       d="m 80.953726,40.215786 c 0,2.204777 -2.800898,5.43271 -2.800898,5.43271"
+       id="path513"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#ff0000;stroke-width:0.0664832px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 78.161911,61.225174 9.556798,0.03896 1.850954,13.291489 2.551142,0.0876 0.809051,-13.234249 13.654154,0.155094 1.24046,13.049895 2.48966,0.0671 1.40946,-12.981672 9.31254,-0.126379"
+       id="path1088" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.648971;stroke-miterlimit:4.1;stroke-dasharray:0.397011, 0.397011"
+       id="rect1745"
+       width="10.591334"
+       height="8.1729507"
+       x="97.899879"
+       y="53.244228"
+       ry="0.95871043" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="108.4675"
+       y="55.187611"
+       id="text1749"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="108.4675"
+         y="55.187611"
+         id="tspan1747">dx=5ms</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="108.4675"
+         y="59.693111"
+         id="tspan1853">dy=2.1V</tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.323283;stroke:#ff0000;stroke-width:0.0858751;stroke-linejoin:round;stroke-opacity:1"
+       d="m 145.82271,32.165862 c -10.86588,2.519394 -4.33885,13.77971 -4.33885,13.77971"
+       id="path1948"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="81.5149"
+       y="11.079522"
+       id="text2048"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="81.5149"
+         y="11.079522"
+         id="tspan2046">چیزی شبیه به پنجره سلکت اتوکد</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="81.5149"
+         y="15.626748"
+         id="tspan2050">ولی برای نشان دادن تغییرات زمان و ولتاژ</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="81.5149"
+         y="20.173969"
+         id="tspan2052">بجای مربع میتواند فلش هم باشد</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.07064px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0267662"
+       x="140.02582"
+       y="47.092083"
+       id="text2253"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0267662"
+         x="140.02582"
+         y="47.092083"
+         id="tspan2251">Ch1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.07064px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0267662"
+       x="140.02582"
+       y="48.59927"
+       id="text2259"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0267662"
+         x="140.02582"
+         y="48.59927"
+         id="tspan2257">Ch۲</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.6044px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0901104"
+       x="124.23382"
+       y="31.424561"
+       id="text2267"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="124.23382"
+         y="31.424561"
+         id="tspan2265">انتخاب فعال و غیر فعال بودن کانال ها</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.0901104"
+         x="124.23382"
+         y="35.971783"
+         id="tspan2274">چک باکس</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.5675px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.114188"
+       x="123.96871"
+       y="177.71246"
+       id="text2384"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.114188"
+         x="123.96871"
+         y="177.71246"
+         id="tspan2382">در حالت پاز شده میتوان با ماوس زوم و پن کرد</tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.323283;stroke:#ff0000;stroke-width:0.252148;stroke-linejoin:round;stroke-opacity:1"
+       d="M 103.19554,53.244228 C 109.61749,43.372486 92.326136,20.937793 92.326136,20.937793"
+       id="path2548" />
+  </g>
+</svg>

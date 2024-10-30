@@ -116,6 +116,13 @@ namespace SimpleOsciloscope.UI
             return buf;
         }
 
+
+        public static double GetHarmonicDistortion()
+        {
+            
+            return 0;
+        }
+
         public static short CalculateLowPercentile(long[] hist,long histSum, double percentile)
         {
             var tot = histSum;// hist.Sum();

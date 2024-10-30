@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="fft.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.2623761"
+     inkscape:cx="365.58043"
+     inkscape:cy="314.48631"
+     inkscape:window-width="1920"
+     inkscape:window-height="1046"
+     inkscape:window-x="-11"
+     inkscape:window-y="178"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.0780588"
+       id="rect435"
+       width="83.304871"
+       height="54.32222"
+       x="96.480888"
+       y="59.213215"
+       ry="0.60066473" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.0444576"
+       id="rect443"
+       width="74.098663"
+       height="41.882298"
+       x="102.69219"
+       y="67.426376"
+       ry="0.25562578" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:2.29229px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0573073"
+       x="177.12756"
+       y="69.309875"
+       id="text447"
+       transform="rotate(-0.614426)"><tspan
+         sodipodi:role="line"
+         id="tspan445"
+         style="stroke-width:0.0573073"
+         x="177.12756"
+         y="69.309875">i</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.114188px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 110.96771,74.747237 12.11038,0.09069 2.34553,30.941843 3.23281,0.20394 1.02523,-30.808579 17.30255,0.361048 1.57191,30.379401 3.1549,0.15626 1.78607,-30.220597 11.80085,-0.294201"
+       id="path465" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.5675px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.114188"
+       x="30.352612"
+       y="88.670769"
+       id="text471"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.114188"
+         x="30.352612"
+         y="88.670769"
+         id="tspan469">فرکانس و شدت محل کنونی کرسر ماوس</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0884598px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 139.01711,105.41474 -3.05924,3.14518"
+       id="path475" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.0884598px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 139.01711,108.55992 -3.05924,-3.14518"
+       id="path477" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.114188px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 141.60983,126.84223 c -0.47237,-0.47688 -3.72114,-17.50063 -3.72114,-17.50063"
+       id="path479" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.5675px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.114188"
+       x="107.06815"
+       y="132.34235"
+       id="text483"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.114188"
+         x="107.06815"
+         y="132.34235"
+         id="tspan481">کرسر ماوس ضربدری (مربعی نباشد)</tspan></text>
+    <ellipse
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.373314;stroke-miterlimit:4.1"
+       id="ellipse497"
+       cx="102.69219"
+       cy="62.58176"
+       rx="2.1211507"
+       ry="2.1041408" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.114188px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 103.15591,61.700467 c 0,1.753068 0.0192,1.798004 0.0192,1.798004"
+       id="path499" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.114188px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 102.04945,61.700467 v 1.922566"
+       id="path501" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.5675px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.114188"
+       x="53.485008"
+       y="47.81461"
+       id="text507"><tspan
+         sodipodi:role="line"
+         id="tspan503"
+         style="stroke-width:0.114188"
+         x="53.485008"
+         y="47.81461">دکمه پاز سیگنال روی تصویر رو نگه میداره</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.114188"
+         x="53.485008"
+         y="53.576859"
+         id="tspan505">در حین اینکه پاز هست چراغی چشمک میزنه روی تصویر</tspan></text>
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:#ff0000;stroke-width:0.708977;stroke-miterlimit:4.1;stroke-dasharray:0.433721, 0.433721"
+       id="rect509"
+       width="16.99428"
+       height="6.079144"
+       x="103.02445"
+       y="102.61576"
+       ry="0.71310103" />
+    <path
+       style="fill:none;fill-opacity:0.323283;stroke:#ff0000;stroke-width:0.108821;stroke-linejoin:round;stroke-opacity:1"
+       d="M 70.198013,91.729393 C 103.02443,102.61576 103.02443,105.65534 103.02443,105.65534"
+       id="path511" />
+    <path
+       style="fill:none;fill-opacity:0.323283;stroke:#ff0000;stroke-width:0.108821;stroke-linejoin:round;stroke-opacity:1"
+       d="m 108.45031,55.216035 c 0,2.793894 -3.5493,6.884333 -3.5493,6.884333"
+       id="path513"
+       sodipodi:nodetypes="cc" />
+  </g>
+</svg>

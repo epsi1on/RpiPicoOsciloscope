@@ -116,6 +116,9 @@ namespace SimpleOsciloscope.UI
             return true;
         }
 
+
+
+
         private int[] FindKBiggestNumbersM(int[] testArray, int k)
         {
             int[] result = new int[k];

@@ -15,6 +15,12 @@ namespace SimpleOsciloscope.UI.Render
 {
     internal class FftRender : IScopeRenderer
     {
+
+        public FftRender() {
+
+            ReSetZoom();
+        }
+
         struct IntThickness
         {
             public int Left, Right, Top, Bottom;
@@ -61,6 +67,8 @@ namespace SimpleOsciloscope.UI.Render
             throw new NotImplementedException();
         }
 
+        public double MinFreqShow, MaxFreqShow;
+
         public WriteableBitmap Render3(SignalPropertyList properties)
         {
             double frequency, vmin, vmax;
@@ -94,19 +102,16 @@ namespace SimpleOsciloscope.UI.Render
             var d = 50;
             var ct = 150;
 
-            var minFreq = ct-d;
-            var maxFreq = ct+d;
+            var minFreq = MinFreqShow;
+            var maxFreq = MaxFreqShow;
 
-            //minFreq = 0;
-            //maxFreq = (int)sampleRate/2;
-
-            if (minFreq < 0) minFreq = 0;
-            if (maxFreq > (int)sampleRate / 2) minFreq = (int)sampleRate / 2;
+            //if (minFreq < 0) minFreq = 0;
+            //if (maxFreq > (int)sampleRate / 2) maxFreq = (int)sampleRate / 2;
 
             var maxMag = double.MinValue;
 
-
-            for (var i = 0; i < maxFreq; i++)
+            
+            for (var i = 0; i < cpx.Length; i++)
             {
                 if (maxMag < cpx[i].Magnitude)
                     maxMag = cpx[i].Magnitude;
@@ -115,7 +120,7 @@ namespace SimpleOsciloscope.UI.Render
             maxMag = Math.Log10(maxMag);
 
             var trsX = OneDTransformation.FromInOut(minFreq, maxFreq, Margin.Left, w - Margin.Right);
-            var trsY = OneDTransformation.FromInOut(0, maxMag, h - Margin.Bottom, Margin.Top);
+            var trsY = LastYTransform = OneDTransformation.FromInOut(0, maxMag, h - Margin.Bottom, Margin.Top);
 
 
             byte r = 255;
@@ -127,15 +132,16 @@ namespace SimpleOsciloscope.UI.Render
 
             DrawGridsHoriz(Bmp2, minFreq, maxFreq);
 
-
             int x, y;
-
-            
 
             using (var ctx = Bmp2.GetBitmapContext())
             {
-                for (var i = minFreq; i < maxFreq; i++)
+                var st = Math.Max(minFreq, 0);
+                var en = Math.Min(maxFreq, cpx.Length);
+
+                for (var i = (int)st; i < en; i++)
                 {
+                    
                     var mag = cpx[i].Magnitude;
                     var freq = i * sampleRate / n;
 
@@ -275,5 +281,70 @@ namespace SimpleOsciloscope.UI.Render
             */
 
         }
+
+        OneDTransformation LastYTransform;
+
+
+        public void Zoom(double delta, int x, int y)
+        {
+            var trsX = OneDTransformation.FromInOut(MinFreqShow, MaxFreqShow, Margin.Left, UiState.Instance.RenderBitmapWidth - Margin.Right);
+
+            var minFreqVisible = trsX.TransformBack(Margin.Left);
+            var maxFreqVisible = trsX.TransformBack(UiState.Instance.RenderBitmapWidth - Margin.Right);
+            var pointerFreq = trsX.TransformBack(x);
+
+            var d1 = pointerFreq - minFreqVisible;
+            var d2 = maxFreqVisible - pointerFreq;
+
+            d1 *= 1 + delta;
+            d2 *= 1 + delta;
+
+            MinFreqShow = pointerFreq - d1;
+            MaxFreqShow = pointerFreq + d2;
+
+            //if (MinFreqShow < 0)
+            //    MinFreqShow = 0;
+
+
+        }
+
+        public void ReSetZoom()
+        {
+            var sr = UiState.AdcConfig.SampleRate;
+            this.MinFreqShow = 0;
+            this.MaxFreqShow = sr / 2;
+        }
+
+        
+
+        public string GetPointerValue(double x, double y)
+        {
+            var trsX = OneDTransformation.FromInOut(MinFreqShow, MaxFreqShow, Margin.Left, UiState.Instance.RenderBitmapWidth - Margin.Right);
+
+            var pointerFreq = trsX.TransformBack(x);
+
+            var mag = double.NaN;
+
+            if (LastYTransform != null)
+                mag = LastYTransform.TransformBack(y);
+
+            var l = (UiState.Instance.CurrentRepo.Samples as FixedLengthListRepo<short>).FixedLength;
+
+            var freq = FriendlyStringUtil.ToSI(pointerFreq, "0.00") + "Hz";
+            var mg = FriendlyStringUtil.ToSI(mag, "0.00") + "dbV";
+
+            var buf = freq + "\r\n" + mg;
+
+            return buf;
+        }
+
+        /*
+        public void SetEnabled(bool enabled)
+        {
+            Enabled = enabled;
+        }
+
+        bool Enabled = false;
+        */
     }
 }
