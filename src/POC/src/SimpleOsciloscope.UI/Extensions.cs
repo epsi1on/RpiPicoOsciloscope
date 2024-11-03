@@ -141,6 +141,14 @@ namespace SimpleOsciloscope.UI
         #endregion
 
 
+        public static int Truncate(this int a,int min,int max)
+        {
+            if (a < min)
+                return min;
+            if (a > max) return max;
+
+            return a;
+        }
 
         public static int FindFirstIndexOf<T>(this T[] data, Predicate<T> finder)
         {

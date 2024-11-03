@@ -3,20 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.Windows;
+using System.Web.UI.WebControls;
 
 namespace SimpleOsciloscope.UI.Render
 {
-    internal class FftRender : IScopeRenderer
+
+
+    //Total Harmonic Distortion
+    public class ThdRender:IScopeRenderer
     {
 
-        public FftRender() {
+        public ThdRender()
+        {
 
             ReSetZoom();
         }
@@ -37,7 +40,7 @@ namespace SimpleOsciloscope.UI.Render
 
         RgbBitmap BMP;
         WriteableBitmap Bmp2;
-        static readonly IntThickness Margin = new IntThickness(40, 30, 20, 10);
+        static readonly IntThickness Margin = new IntThickness(40, 130, 20, 10);
         static readonly int MarginLeft = 30;
 
 
@@ -99,9 +102,6 @@ namespace SimpleOsciloscope.UI.Render
 
             var sampleRate = UiState.AdcConfig.SampleRate;
 
-            var d = 50;
-            var ct = 150;
-
             var minFreq = MinFreqShow;
             var maxFreq = MaxFreqShow;
 
@@ -110,17 +110,25 @@ namespace SimpleOsciloscope.UI.Render
 
             var maxMag = double.MinValue;
 
-            
-            for (var i = 0; i < cpx.Length; i++)
+            var maxIdx = -1;
+
+            for (var i = 1; i < cpx.Length; i++)//bypass dc offset
             {
                 if (maxMag < cpx[i].Magnitude)
+                {
                     maxMag = cpx[i].Magnitude;
+                    maxIdx = i;
+                }
+                    
             }
 
-            maxMag = Math.Log10(maxMag);
+            var maxMagLog = Math.Log10(maxMag);
+
+            
+
 
             var trsX = OneDTransformation.FromInOut(minFreq, maxFreq, Margin.Left, w - Margin.Right);
-            var trsY = LastYTransform = OneDTransformation.FromInOut(0, maxMag, h - Margin.Bottom, Margin.Top);
+            var trsY = LastYTransform = OneDTransformation.FromInOut(0, maxMagLog, h - Margin.Bottom, Margin.Top);
 
 
             byte r = 255;
@@ -136,6 +144,10 @@ namespace SimpleOsciloscope.UI.Render
 
             int x, y;
 
+
+            double THD;
+            double THDFreq;
+
             using (var ctx = Bmp2.GetBitmapContext())
             {
                 var st = Math.Max(minFreq, 0);
@@ -143,7 +155,7 @@ namespace SimpleOsciloscope.UI.Render
 
                 for (var i = (int)st; i < en; i++)
                 {
-                    
+
                     var mag = cpx[i].Magnitude;
                     var freq = i * sampleRate / n;
 
@@ -156,8 +168,132 @@ namespace SimpleOsciloscope.UI.Render
                     if (x > 0 && y > 0 && x < w && y < h)
                         WriteableBitmapEx.SetPixel(ctx, x, y, r, g, b);
                 }
+
+
+                {//calculate thd
+
+                    r = 255;
+                    b = 0;
+                    g = 255;
+
+
+                    double baseFreq = maxIdx * sampleRate / cpx.Length;
+
+                    baseFreq = properties.Frequency;
+
+                    var bw = 1000;
+
+                    if (bw <= 0)
+                        bw = 1;
+
+                    double fq = baseFreq;
+
+
+                    var lst = new List<Tuple<double, double>>();
+
+                    while (fq < maxFreq)
+                    {
+                        var start = fq - bw;
+                        var end = fq + bw;
+
+                        var startIdx = (int)(start * cpx.Length / sampleRate);
+                        var endIdx = (int)(end * cpx.Length / sampleRate);
+
+                        int maxIdx_ = -1;
+                        double max_ = double.MinValue;
+
+                        if (startIdx < 0)
+                            startIdx = 0;
+
+                        if (endIdx < 0)
+                            endIdx = 0;
+
+                        if (startIdx >= cpx.Length)
+                            startIdx = cpx.Length-1;
+
+                        if (endIdx >= cpx.Length)
+                            endIdx = cpx.Length-1;
+
+
+                        for (var i = startIdx; i < endIdx; i++)
+                        {
+                            if (cpx[i].Magnitude > max_)
+                                max_ = cpx[maxIdx_ = i].Magnitude;
+                        }
+
+                        
+
+                        var mag = max_;
+                        var maxFreq_ = maxIdx_ * sampleRate / cpx.Length;
+
+                        lst.Add(new Tuple<double, double>(maxFreq_, max_));
+
+                        var xi = maxFreq_;
+                        var yi = Math.Log10(mag);
+
+                        x = (int)trsX.Transform(xi);
+                        y = (int)trsY.Transform(yi);
+
+                        var D = 5;
+
+
+                        var x0 = (int)trsX.Transform(xi - bw / 2);
+                        var y0 = y - D;
+
+                        var x1 = (int)trsX.Transform(xi + bw / 2); ;
+                        var y1 = y + D;
+
+                        {
+                            x0 = x0.Truncate(0, Bmp2.PixelWidth);
+                            y0 = y0.Truncate(0, Bmp2.PixelHeight);
+
+                            x1 = x1.Truncate(0, Bmp2.PixelWidth);
+                            y1 = y1.Truncate(0, Bmp2.PixelHeight);
+                        }
+                        
+
+                        WriteableBitmapEx.FillRectangle(ctx, x0, y0, x1, y1, r, g, b);
+
+                        fq += 2 * baseFreq;
+                    }
+
+                    {
+                        if (lst.Count != 0)
+                        {
+                            var baseFq = THDFreq = lst[0].Item1;
+                            var baseMag = lst[0].Item2;
+
+                            lst.RemoveAt(0);
+
+                            var rms = Math.Sqrt(lst.Sum(i => i.Item2 * i.Item2));
+
+                            THD = rms / baseMag;
+                        }
+                        else
+                            THD = THDFreq = double.NaN;
+                        
+                    }
+
+                }
             }
 
+            {
+                var str = FriendlyStringUtil.ToSI(THDFreq, "0.000") 
+                    + "Hz" 
+                    + " , "
+                    + THD.ToString("p");
+
+
+                str += " Faulty"; //this section have bugs
+                var fontSize = 50;
+
+                var formattedText = new FormattedText(str, CultureInfo.GetCultureInfo("en-us"),
+                FlowDirection.LeftToRight, new Typeface(new FontFamily("Sans MS"), FontStyles.Normal,
+                FontWeights.Medium, FontStretches.Normal), fontSize, System.Windows.Media.Brushes.Black);
+
+                WriteableBitmapEx.DrawText(Bmp2, formattedText, 0,Bmp2.PixelHeight- fontSize,  Colors.White);
+                WriteableBitmapEx.FillText(Bmp2, formattedText, 0,Bmp2.PixelHeight- fontSize,  Colors.White);
+            }
 
             ArrayPool.Return(input);
             ArrayPool.Return(cpx);
@@ -169,7 +305,7 @@ namespace SimpleOsciloscope.UI.Render
 
 
 
-        private void DrawGridsHoriz(WriteableBitmap bmp,double fMin,double fMax)
+        private void DrawGridsHoriz(WriteableBitmap bmp, double fMin, double fMax)
         {
             var trsX = OneDTransformation.FromInOut(fMin, fMax, Margin.Left, bmp.Width - Margin.Right);
 
@@ -187,7 +323,7 @@ namespace SimpleOsciloscope.UI.Render
             using (var ctx = bmp.GetBitmapContext())
                 for (int ii = 0; ii <= count; ii++)
                 {
-                    var y = delta * ii+ fMin;
+                    var y = delta * ii + fMin;
 
                     var yp = (int)trsX.Transform(y);
 
@@ -201,13 +337,13 @@ namespace SimpleOsciloscope.UI.Render
 
                     /**/
 
-                    var frq = fMin+ ii * (fMax - fMin) / count;
+                    var frq = fMin + ii * (fMax - fMin) / count;
 
                     var str = FriendlyStringUtil.ToSI(frq, "0.000") + "Hz";
 
 
                     var fontSize = 15;
-                    
+
                     var formattedText = new FormattedText(str, CultureInfo.GetCultureInfo("en-us"),
                         FlowDirection.LeftToRight, new Typeface(new FontFamily("Sans MS"), FontStyles.Normal,
                         FontWeights.Medium, FontStretches.Normal), fontSize, System.Windows.Media.Brushes.Black);
@@ -317,10 +453,11 @@ namespace SimpleOsciloscope.UI.Render
             this.MaxFreqShow = sr / 2;
         }
 
-        
+
 
         public string GetPointerValue(double x, double y)
         {
+            return "";
             var trsX = OneDTransformation.FromInOut(MinFreqShow, MaxFreqShow, Margin.Left, UiState.Instance.RenderBitmapWidth - Margin.Right);
 
             var pointerFreq = trsX.TransformBack(x);
@@ -336,7 +473,7 @@ namespace SimpleOsciloscope.UI.Render
             var mg = FriendlyStringUtil.ToSI(mag, "0.00") + "dbV";
 
             var buf = freq + "\r\n" + mg;
-            
+
             buf = freq;
 
             return buf;

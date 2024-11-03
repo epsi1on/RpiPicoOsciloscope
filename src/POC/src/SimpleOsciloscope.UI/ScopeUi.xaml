@@ -38,6 +38,7 @@
             <Button Content="FFt" MinWidth="100" Click="btnFftClick_Click"/>
             <Button Content="Harmonic" MinWidth="100" Click="btnHarmonicClick_Click"/>
             <Button Content="Hit based" MinWidth="100" Click="btnHitBasedClick_Click"/>
+            <Button Content="Thd" ToolTip="Total Harmonic Distortion" MinWidth="100" Click="btnThdBasedClick_Click"/>
         </StackPanel>
 
         <Border Margin="5,5,5,5" Grid.ColumnSpan="4" BorderBrush="Gray" BorderThickness="2" Grid.Column="1" Grid.Row="1" >

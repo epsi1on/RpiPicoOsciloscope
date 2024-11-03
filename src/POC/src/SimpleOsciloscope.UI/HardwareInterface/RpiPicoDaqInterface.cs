@@ -248,6 +248,9 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
         public void StopAdc()
         {
+
+            if (Port == null)
+                return;
             var port = Port;
             Stopped = true;
 

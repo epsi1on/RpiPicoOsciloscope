@@ -12,6 +12,16 @@ namespace SimpleOsciloscope.UI
 {
     public static class WriteableBitmapEx
     {
+
+
+        public unsafe static void FillRectangle(this BitmapContext ctx, int x0, int y0, int x1, int y1, byte r, byte g, byte b)
+        {
+            for (int i = x0; i <= x1; i++)
+                for (int j = y0; j <= y1; j++)
+                    SetPixel(ctx, i, j, r, g, b);
+        }
+
+
         public unsafe static void SetPixel(this BitmapContext ctx,int x,int y,byte r,byte g,byte b)
         {
             ctx.Pixels[y * ctx.Width + x] = -16777216 | (r << 16) | (g << 8) | b;

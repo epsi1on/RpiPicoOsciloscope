@@ -376,6 +376,7 @@
     <Compile Include="HardwareInterface\Stm32Interface.cs" />
     <Compile Include="HistogramUtil.cs" />
     <Compile Include="Render\FftRender.cs" />
+    <Compile Include="Render\ThdRender.cs" />
     <Compile Include="Render\HitBasedSignalGraphRender.cs" />
     <Compile Include="HpVectorOperation.cs" />
     <Compile Include="ISampleRepository.cs" />

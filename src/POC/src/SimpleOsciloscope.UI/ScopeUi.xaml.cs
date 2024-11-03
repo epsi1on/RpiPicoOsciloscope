@@ -760,7 +760,8 @@ namespace SimpleOsciloscope.UI
             {
                 Fft,
                 Harmonic,
-                HitBased
+                HitBased,
+                Thd
             }
 
             private void updateRenderType()
@@ -791,6 +792,9 @@ namespace SimpleOsciloscope.UI
                         curr = Renderers.FirstOrDefault(i => i is HitBasedSignalGraphRender);
                         break;
 
+                    case RenderTypes.Thd:
+                        curr = Renderers.FirstOrDefault(i => i is ThdRender);
+                        break;
                     default:
                         throw new NotImplementedException();
                         break;
@@ -819,6 +823,7 @@ namespace SimpleOsciloscope.UI
                     new HarmonicSignalGraphRenderer(),
                     new HitBasedSignalGraphRender(),
                     new FftRender(),
+                    new ThdRender()
                 };
 
                
@@ -978,12 +983,12 @@ namespace SimpleOsciloscope.UI
                     return;
 
                 this.IsNotConnected = true;
-                
+
                 if (RenderThread != null)
                 {
                     RenderLoopFlag = false;
 
-                    
+
                     if (RenderThread.IsAlive)
                         RenderThread.Abort();
                 }
@@ -998,9 +1003,9 @@ namespace SimpleOsciloscope.UI
                     DaqInterface.DisConnect();
                 }
 
-               
+                foreach (var rnd in Renderers)
+                    rnd.Clear();
 
-                
             }
 
             private Thread RenderThread;
@@ -1071,17 +1076,11 @@ namespace SimpleOsciloscope.UI
                           }
                           catch (Exception ex)
                           {
-                              this.IsNotConnected = true;
+                              Stop();
 
-                              ifs.DisConnect();
+                              Application.Current.Dispatcher.Invoke(() => { MessageBox.Show(ex.Message); });
 
-                              MessageBox.Show(ex.Message);
-                          }
-                          finally
-                          {
-                              this.IsNotConnected = true;
-
-                              renderer.Clear();
+                              
                           }
                       });
 
@@ -1272,6 +1271,12 @@ namespace SimpleOsciloscope.UI
         private void btnHitBasedClick_Click(object sender, RoutedEventArgs e)
         {
             Context.RenderType = ContextClass.RenderTypes.HitBased;
+        }
+
+
+        private void btnThdBasedClick_Click(object sender, RoutedEventArgs e)
+        {
+            Context.RenderType = ContextClass.RenderTypes.Thd;
         }
 
         private void ImgCanvas_MouseWheel(object sender, MouseWheelEventArgs e)

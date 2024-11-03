@@ -11,6 +11,10 @@ namespace SimpleOsciloscope.UI
         //https://stackoverflow.com/a/12181661
         public static string ToSI(double d, string format = null)
         {
+
+            if (double.IsNaN(d))
+                return "-";
+
             char[] incPrefixes = new[] { 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' };
             char[] decPrefixes = new[] { 'm', '\u03bc', 'n', 'p', 'f', 'a', 'z', 'y' };
 
