@@ -377,9 +377,11 @@
     <Compile Include="HardwareInterface\IDaqInterface.cs" />
     <Compile Include="HardwareInterface\Stm32Interface.cs" />
     <Compile Include="HistogramUtil.cs" />
-    <Compile Include="InterfaceUi\BaseDaqConfigControl.cs" />
+    <Compile Include="InterfaceUi\BaseDaqConfigGUIControl.cs" />
     <Compile Include="InterfaceUi\BaseDeviceCalibrationData.cs" />
     <Compile Include="InterfaceUi\BaseDeviceInterface.cs" />
+    <Compile Include="InterfaceUi\BaseDeviceStateData.cs" />
+    <Compile Include="InterfaceUi\BaseDeviceUserSettingsData.cs" />
     <Compile Include="InterfaceUi\Interfaces.cs" />
     <Compile Include="InterfaceUi\Rp2daq\Rp2daqCalibrationData.cs" />
     <Compile Include="InterfaceUi\Rp2daq\Rp2daqUserSettings.cs" />

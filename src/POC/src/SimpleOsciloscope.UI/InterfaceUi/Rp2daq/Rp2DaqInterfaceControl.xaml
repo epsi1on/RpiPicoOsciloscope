@@ -22,8 +22,11 @@
         <TextBlock Text="COM port" Grid.Row="0"/>
         <TextBlock Text="Sample Rate" Grid.Row="1"/>
         <TextBlock Text="Channel" Grid.Row="2"/>
+        <TextBlock Text="Bit Width" Grid.Row="3"/>
 
         <TextBox Text="{Binding SampleRate, FallbackValue=SPS}" Grid.Row="1" Grid.Column="1"/>
+
+        <TextBox Text="{Binding BitWidth, FallbackValue=BW}" Grid.Row="3" Grid.Column="1"/>
 
         <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,0,0" Orientation="Horizontal"  VerticalAlignment="Center" IsEnabled="{Binding IsNotConnected}">
             <Button Content="⟳" Click="BtnRefreshPorts_Click"/>

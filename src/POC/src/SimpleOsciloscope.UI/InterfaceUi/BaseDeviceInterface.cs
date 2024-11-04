@@ -30,7 +30,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
         /// config: output of BaseDaqConfigControl.GetConfig()
         /// </summary>
         /// <returns></returns>
-        public abstract BaseDaqConfigControl GenerateUiInterface(BaseDeviceUserSettingsData config);
+        public abstract BaseDaqConfigGUIControl GenerateUiInterface(BaseDeviceUserSettingsData config);
 
         //for saving settings
         public abstract string GetUid();
@@ -63,7 +63,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
             {
                 buf = SerializationUtil.DeSerialize(str) as BaseDeviceUserSettingsData;
             }
-                
+
 
             return buf;
         }
@@ -82,6 +82,24 @@ namespace SimpleOsciloscope.UI.InterfaceUi
                 buf = SerializationUtil.DeSerialize(str) as BaseDeviceCalibrationData;
 
             return buf;
+        }
+
+        public void SaveUserSettings(BaseDeviceUserSettingsData set)
+        {
+            var key = GetUid() + "_userSettings";
+
+            var bytes = SerializationUtil.Serialize(set);
+
+            SettingsUtil.Save(key, bytes);
+        }
+
+        public void SaveCalibrationSettings(BaseDeviceCalibrationData set)
+        {
+            var key = GetUid() + "_calibration";
+
+            var bytes = SerializationUtil.Serialize(set);
+
+            SettingsUtil.Save(key, bytes);
         }
 
     }

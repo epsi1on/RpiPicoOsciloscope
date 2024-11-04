@@ -29,13 +29,55 @@ namespace SimpleOsciloscope.UI.InterfaceUi
     /// <summary>
     /// Interaction logic for Rp2DaqInterfaceControl.xaml
     /// </summary>
-    public partial class Rp2DaqInterfaceControl : UserControl, BaseDaqConfigControl
+    public partial class Rp2DaqInterfaceControl : UserControl, BaseDaqConfigGUIControl
     {
 
         ContextClass Context;
 
         public class ContextClass : INotifyPropertyChanged
         {
+            public class Rp2DaqChannelInfo
+            {
+                public Rp2DaqChannelInfo(RpiPicoDaqInterface.Rp2040AdcChannels rpChannel, int pin10x, int pinAcDc, int pinAdc)
+                {
+                    //Id = id;
+                    Pin10x = pin10x;
+                    PinAcDc = pinAcDc;
+                    PinAdc = pinAdc;
+                    //NormalAlpha = normalAlpha;
+                    //NormalBeta = normalBeta;
+                    //this._10xAlpha = _10xAlpha;
+                    //this._10xBeta = _10xBeta;
+                    ChannelId = rpChannel;
+                }
+
+                public readonly int Pin10x = -1;//gpio# for 10x button
+                public readonly int PinAcDc = -1;//ac coupling cap button
+                public readonly int PinAdc = -1;//gpio# for adc
+
+                public readonly RpiPicoDaqInterface.Rp2040AdcChannels ChannelId;
+
+
+                //public double NormalPullupResistor = double.MaxValue;
+                //public double NormalPulldownResistor = double.MaxValue;
+
+                //public double _10xPullupResistor = double.MaxValue;
+                //public double _10xPulldownResistor = double.MaxValue;
+                /*
+                public readonly double NormalAlpha = double.NaN;
+                public readonly double NormalBeta = double.NaN;
+
+                public readonly double _10xAlpha = double.NaN;
+                public readonly double _10xBeta = double.NaN;
+                */
+                public string Title { get; set; }
+                public string Description { get; set; }
+
+
+                public bool AcDcMode { get; set; }// ac/dc button is pressed
+                public bool _10xMode { get; set; }// 10x button is active
+            }
+
             #region INotifyPropertyChanged members and helpers
 
             public event PropertyChangedEventHandler PropertyChanged;
@@ -182,7 +224,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
             #region AvailableChannels Property and field
 
             [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public ObservableCollection<ChannelInfo> AvailableChannels
+            public ObservableCollection<Rp2DaqChannelInfo> AvailableChannels
             {
                 get { return _AvailableChannels; }
                 set
@@ -193,17 +235,17 @@ namespace SimpleOsciloscope.UI.InterfaceUi
                     var _fieldOldValue = _AvailableChannels;
                     _AvailableChannels = value;
 
-                    ContextClass.OnAvailableChannelsChanged(this, new PropertyValueChangedEventArgs<ObservableCollection<ChannelInfo>>(_fieldOldValue, value));
+                    ContextClass.OnAvailableChannelsChanged(this, new PropertyValueChangedEventArgs<ObservableCollection<Rp2DaqChannelInfo>>(_fieldOldValue, value));
 
                     this.OnPropertyChanged("AvailableChannels");
                 }
             }
 
-            private ObservableCollection<ChannelInfo> _AvailableChannels;
+            private ObservableCollection<Rp2DaqChannelInfo> _AvailableChannels;
 
-            public EventHandler<PropertyValueChangedEventArgs<ObservableCollection<ChannelInfo>>> AvailableChannelsChanged;
+            public EventHandler<PropertyValueChangedEventArgs<ObservableCollection<Rp2DaqChannelInfo>>> AvailableChannelsChanged;
 
-            public static void OnAvailableChannelsChanged(object sender, PropertyValueChangedEventArgs<ObservableCollection<ChannelInfo>> e)
+            public static void OnAvailableChannelsChanged(object sender, PropertyValueChangedEventArgs<ObservableCollection<Rp2DaqChannelInfo>> e)
             {
                 var obj = sender as ContextClass;
 
@@ -216,7 +258,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
             #region SelectedChannel Property and field
 
             [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public ChannelInfo SelectedChannel
+            public Rp2DaqChannelInfo SelectedChannel
             {
                 get { return _SelectedChannel; }
                 set
@@ -227,17 +269,17 @@ namespace SimpleOsciloscope.UI.InterfaceUi
                     var _fieldOldValue = _SelectedChannel;
                     _SelectedChannel = value;
 
-                    ContextClass.OnSelectedChannelChanged(this, new PropertyValueChangedEventArgs<ChannelInfo>(_fieldOldValue, value));
+                    ContextClass.OnSelectedChannelChanged(this, new PropertyValueChangedEventArgs<Rp2DaqChannelInfo>(_fieldOldValue, value));
 
                     this.OnPropertyChanged("SelectedChannel");
                 }
             }
 
-            private ChannelInfo _SelectedChannel;
+            private Rp2DaqChannelInfo _SelectedChannel;
 
-            public EventHandler<PropertyValueChangedEventArgs<ChannelInfo>> SelectedChannelChanged;
+            public EventHandler<PropertyValueChangedEventArgs<Rp2DaqChannelInfo>> SelectedChannelChanged;
 
-            public static void OnSelectedChannelChanged(object sender, PropertyValueChangedEventArgs<ChannelInfo> e)
+            public static void OnSelectedChannelChanged(object sender, PropertyValueChangedEventArgs<Rp2DaqChannelInfo> e)
             {
                 var obj = sender as ContextClass;
 
@@ -247,10 +289,45 @@ namespace SimpleOsciloscope.UI.InterfaceUi
 
             #endregion
 
+            #region BitWidth Property and field
 
-            public static AdcChannelInfo[] InitChannels()
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public int BitWidth
             {
-                var lst = new List<AdcChannelInfo>();
+                get { return _BitWidth; }
+                set
+                {
+                    if (AreEqualObjects(_BitWidth, value))
+                        return;
+
+                    var _fieldOldValue = _BitWidth;
+
+                    _BitWidth = value;
+
+                    ContextClass.OnBitWidthChanged(this, new PropertyValueChangedEventArgs<int>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("BitWidth");
+                }
+            }
+
+            private int _BitWidth;
+
+            public EventHandler<PropertyValueChangedEventArgs<int>> BitWidthChanged;
+
+            public static void OnBitWidthChanged(object sender, PropertyValueChangedEventArgs<int> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.BitWidthChanged != null)
+                    obj.BitWidthChanged(obj, e);
+            }
+
+            #endregion
+
+
+            public static Rp2DaqChannelInfo[] InitChannels()
+            {
+                var lst = new List<Rp2DaqChannelInfo>();
 
                 var ids = new RpiPicoDaqInterface.Rp2040AdcChannels[]{
                     RpiPicoDaqInterface.Rp2040AdcChannels.Gpio28,
@@ -275,7 +352,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
                         "1",
                         "2",
                         "3",
-                        "VRef ",
+                        "VRef",
                         "Tmpr"
                     };
 
@@ -288,7 +365,13 @@ namespace SimpleOsciloscope.UI.InterfaceUi
 
                 for (var i = 0; i < 3; i++)
                 {
-                    var ch = InitChannel(i, ids[i], SwPins[i], AcDcPins[i]);
+                    var ch = new Rp2DaqChannelInfo(ids[i], SwPins[i], AcDcPins[i], adcPins[i]);
+
+                    /*
+                    ch.RpChannel = ids[i];
+                    
+                        InitChannel();
+                    */
 
                     ch.Title = titles[i];
                     ch.Description = descs[i];
@@ -302,39 +385,12 @@ namespace SimpleOsciloscope.UI.InterfaceUi
                 return tmp;
             }
 
-            private static AdcChannelInfo InitChannel(int index, Rp2040AdcChannels chn, int swPin, int acdcPin)
-            {
-
-                //var AdcPins = new int[] { 26, 27, 28 };
-                //var SwPins = new int[] { 19, 21, 18 };
-                //var AcDcPins = new int[] { 20, -1, -1 };
-
-                double normalAlpha, normalBeta;
-                double _10xAlpha, _10xBeta;
-
-                normalAlpha = double.Parse(ConfigurationManager.AppSettings["ch" + (index) + "_alpha_off"]);
-                normalBeta = double.Parse(ConfigurationManager.AppSettings["ch" + (index) + "_beta_off"]);
-
-                _10xAlpha = double.Parse(ConfigurationManager.AppSettings["ch" + (index) + "_alpha_on"]);
-                _10xBeta = double.Parse(ConfigurationManager.AppSettings["ch" + (index) + "_beta_on"]);
-
-                //var pns = AdcPins();
-                //var adcPin = pns[chnId];
-                //var swPin = SwPins[chnId];
-                //var acdcPin = AcDcPins[chnId];
-
-                var ch1 = new AdcChannelInfo(index, swPin, acdcPin,
-                    normalAlpha, normalBeta,
-                    _10xAlpha, _10xBeta, chn);
-
-                return ch1;
-            }
 
             public void Init()
             {
                 RefreshPorts();
 
-                this.AvailableChannels = new ObservableCollection<ChannelInfo>(InitChannels());
+                this.AvailableChannels = new ObservableCollection<Rp2DaqChannelInfo>(InitChannels());
             }
 
             internal void RefreshPorts()
@@ -349,8 +405,8 @@ namespace SimpleOsciloscope.UI.InterfaceUi
 
                 cfg.SampleRate = (int)this.SampleRate;
                 cfg.ComPortName = this.SelectedPort;
-                cfg.ChannelId = this.SelectedChannel.Id;
-
+                cfg.ChannelId = this.SelectedChannel.ChannelId;
+                cfg.BitWidth = this.BitWidth;
                 return (cfg);
             }
 
@@ -361,7 +417,9 @@ namespace SimpleOsciloscope.UI.InterfaceUi
                 this.SampleRate = cfg.SampleRate;
                 this.SelectedPort = cfg.ComPortName;
 
-                this.SelectedChannel = AvailableChannels.FirstOrDefault(ii => ii.Id == cfg.ChannelId);
+                this.SelectedChannel = AvailableChannels.FirstOrDefault(ii => ii.ChannelId == cfg.ChannelId);
+
+                this.BitWidth= cfg.BitWidth;
             }
         }
 
@@ -394,6 +452,10 @@ namespace SimpleOsciloscope.UI.InterfaceUi
             if (Context.SelectedChannel == null) return false;
 
             if (Context.SelectedPort == null) return false;
+
+            var availableBitWidths = new int[] { 12 };
+
+            if (!availableBitWidths.Contains( Context.BitWidth )) return false;
 
             return true;
         }

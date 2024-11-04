@@ -20,7 +20,7 @@
         </DataTemplate>
     </Window.Resources>
     <Grid>
-        <Grid Name="backgroundGrid" IsEnabled="{Binding IsNotConnected}" >
+        <Grid Name="backgroundGrid" >
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -32,8 +32,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
 
@@ -58,36 +56,20 @@
             </Expander>
             <TextBlock Text="Signal Frequency:" Grid.Column="1" Margin="5,5,5,5" Grid.Row="2"/>
             <TextBlock Text="{Binding Frequency}" Grid.Column="2" Margin="5,5,5,5" Grid.Row="2" />
-
-
-            <TextBlock Text="Sample Rate (Sps):" Grid.Column="1" Margin="5,5,5,5" Grid.Row="3"/>
-            <TextBox Text="{Binding SampleRate}" Grid.Column="2" Margin="5,5,5,5" Grid.Row="3" IsEnabled="{Binding IsNotConnected}"/>
             <CheckBox Grid.Column="3" Visibility="Collapsed" Content="Listen to audio" Margin="5,5,5,5" Grid.Row="3" IsChecked="{Binding ListenToAudio}" Grid.ColumnSpan="2"/>
-            <TextBlock Text="Com Port:" Grid.Column="1" Margin="5,5,5,5" Grid.Row="4" />
-            <StackPanel Grid.Column="2" HorizontalAlignment="Left" Margin="5,0,0,0" Orientation="Horizontal" Grid.Row="4" VerticalAlignment="Center" IsEnabled="{Binding IsNotConnected}">
-                <Button Content="⟳" Click="BtnRefreshPorts_Click"/>
-                <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" Width="100" />
-            </StackPanel>
             <StackPanel Grid.Column="3" HorizontalAlignment="Left" Margin="10,0,0,0" Orientation="Horizontal" 
-                Grid.Row="4" VerticalAlignment="Center" >
+                Grid.Row="2" VerticalAlignment="Center" >
                 <Button Content="Connect" Click="BtnStart_Click" IsEnabled="{Binding IsNotConnected}"/>
                 <Button Content="Dis-Connect" Click="BtnStop_Click" IsEnabled="{Binding IsNotConnected, ConverterParameter=!, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
 
                 <Button Content="Calibrate" Click="BtnCalib_Click" IsEnabled="{Binding IsNotConnected}"/>
             </StackPanel>
 
-            <StackPanel Grid.Column="3"  Orientation="Horizontal" Grid.Row="2">
-                <TextBlock Text="Channel:" Grid.Column="3" Margin="5" Grid.Row="1"/>
-                <ComboBox ItemTemplate="{DynamicResource ComboBoxItemTemplate1}" IsEnabled="{Binding IsNotConnected}" ItemsSource="{Binding AvailableChannels}" SelectedItem="{Binding SelectedChannel}" MinWidth="150"/>
-
-
-            </StackPanel>
-
 
         </Grid>
 
         <Grid Background="White" Name="foregroundGrid" 
-              Visibility="{Binding IsNotConnected, Converter={StaticResource ParametricBooleanToVisibilityConverter}, Mode=OneWay}">
+              Visibility="{Binding IsNotConnected, Converter={StaticResource ParametricBooleanToVisibilityConverter}, Mode=OneWay,FallbackValue=Collapsed}">
 
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="200" MinWidth="300" >
                 <Grid.RowDefinitions>

@@ -1065,7 +1065,7 @@ namespace SimpleOsciloscope.UI
             
 
 
-            public void Start()
+            public void Start(IDaqInterface intfs)
             {
 
 
@@ -1111,12 +1111,12 @@ namespace SimpleOsciloscope.UI
                         DaqInterface.DisConnect();
                     }
 
-                    var ifs = DaqInterface = new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
+                    var ifs = DaqInterface = intfs;// new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
                     //new Stm32Interface(this.SelectedPort, SampleRate);
                     //new ArduinoInterface();
                     //new FakeDaqInterface();
 
-                    ifs.Channel = this.SelectedChannel;
+                    //ifs.Channel = this.SelectedChannel;
 
                     //ifs.ChannelMask = RpiPicoDaqInterface.GetChannelMask(this.SelectedChannel.RpChannel);
 
@@ -1236,7 +1236,7 @@ namespace SimpleOsciloscope.UI
 
             private Thread RenderThread;
             private Thread DaqThread;
-            private RpiPicoDaqInterface DaqInterface;
+            private IDaqInterface DaqInterface;
 
 
 
@@ -1392,7 +1392,7 @@ namespace SimpleOsciloscope.UI
 
 
             
-            Context.Start();
+            Context.Start(null);
         }
 
         private void BtnRefreshPorts_Click(object sender, RoutedEventArgs e)
@@ -1476,7 +1476,7 @@ namespace SimpleOsciloscope.UI
                 return;
             }
 
-            var ctrl = itmDeviceConfig.Content as BaseDaqConfigControl;
+            var ctrl = itmDeviceConfig.Content as BaseDaqConfigGUIControl;
 
             if (ctrl == null)
                 return;
@@ -1490,12 +1490,15 @@ namespace SimpleOsciloscope.UI
 
             var ui = Context.SelectedDevice.UI;
 
-
             var config = ctrl.GetUserSettings();
+
+            ui.SaveUserSettings(config);
 
             var calib = ui.LoadCalibrationSettings();
 
             var daqInterface = Context.SelectedDevice.UI.GenerateDaqInterface(calib, config);
+
+            Context.Start(daqInterface);
 
             return;
         }

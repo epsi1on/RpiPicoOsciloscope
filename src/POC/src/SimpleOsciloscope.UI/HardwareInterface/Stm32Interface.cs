@@ -171,6 +171,14 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             throw new NotImplementedException();
         }
 
+        public void StopAdc()
+        {
+            throw new NotImplementedException();
+        }
 
+        public void DisConnect()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Web.UI;
 
 namespace SimpleOsciloscope.UI.InterfaceUi
 {
-    public interface BaseDaqConfigControl 
+    public interface BaseDaqConfigGUIControl 
     {
         BaseDeviceUserSettingsData GetUserSettings();//gets the config (set by user on UI) as byte array to pass into DAQ interface
 

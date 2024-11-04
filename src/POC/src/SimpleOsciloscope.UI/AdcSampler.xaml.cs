@@ -704,6 +704,7 @@ namespace SimpleOsciloscope.UI
 
             public void StartReadSync()
 			{
+				/*
 				var hw = intfs;
 
 				hw.Channel = this.Chn;// RpiPicoDaqInterface.GetChannelMask();
@@ -716,6 +717,7 @@ namespace SimpleOsciloscope.UI
 				hw.SetupAdc();
 
 				hw.ReadAdcData();
+				*/
 			}
 			public RpiPicoDaqInterface intfs;
 

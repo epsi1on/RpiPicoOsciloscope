@@ -12,10 +12,14 @@ namespace SimpleOsciloscope.UI.InterfaceUi
     {
         public override IDaqInterface GenerateDaqInterface(BaseDeviceCalibrationData calibrationData, BaseDeviceUserSettingsData userSettings)
         {
+            var buf = new RpiPicoDaqInterface(userSettings, calibrationData);
+
+            return buf;
+            
             throw new NotImplementedException();
         }
 
-        public override BaseDaqConfigControl GenerateUiInterface(BaseDeviceUserSettingsData config)
+        public override BaseDaqConfigGUIControl GenerateUiInterface(BaseDeviceUserSettingsData config)
         {
             var buf = new Rp2DaqInterfaceControl();
 
@@ -29,8 +33,12 @@ namespace SimpleOsciloscope.UI.InterfaceUi
         {
             var buf = new Rp2daqCalibrationData();
 
-            buf.Alpha1 = buf.Alpha2 = buf.Alpha3 = 1.0 / 4096;
-            buf.Beta1 = buf.Beta2 = buf.Beta3 = 0;
+            buf.AlphaA1 = buf.AlphaA2 = 1.0 / 4096;
+            buf.AlphaB1 = buf.AlphaB2 = 1.0 / 4096;
+            buf.AlphaC1 = buf.AlphaC2 = 1.0 / 4096;
+
+            buf.BetaA1 = buf.BetaB1 = buf.BetaC1 = 0;
+            buf.BetaA2 = buf.BetaB2 = buf.BetaC2 = 0;
 
             return buf;
         }
@@ -40,7 +48,8 @@ namespace SimpleOsciloscope.UI.InterfaceUi
             var set = new Rp2daqUserSettings();
 
             set.SampleRate = 500_000;
-            set.ChannelId = 1;
+            set.ChannelId =  RpiPicoDaqInterface.Rp2040AdcChannels.Gpio27;
+            set.BitWidth = 12;
 
             return set;
         }

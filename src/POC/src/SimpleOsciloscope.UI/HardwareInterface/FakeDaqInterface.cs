@@ -88,5 +88,15 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         {
 
         }
+
+        public void StopAdc()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisConnect()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

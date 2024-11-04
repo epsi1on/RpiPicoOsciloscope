@@ -23,12 +23,15 @@ using uint8_t = System.Byte;
 using uint16_t = System.UInt16;
 using System.Configuration;
 using System.Net.NetworkInformation;
+using SimpleOsciloscope.UI.InterfaceUi;
+using SimpleOsciloscope.UI.InterfaceUi.Rp2daq;
 
 namespace SimpleOsciloscope.UI.HardwareInterface
 {
     /// <summary>
     /// config in UI level (no firmware) for channel
     /// </summary>
+    [Obsolete("do not use a global channel info, todo detach and delete")]
     public class AdcChannelInfo
     {
         public readonly int Id = -1;// 1 or 2 or 3 or 4 etc
@@ -72,10 +75,6 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         }
     }
 
-    public class Channels
-    {
-
-    }
 
     public class RpiPicoDaqInterface: IDaqInterface
     {
@@ -108,9 +107,15 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             return buf;
         }
 
-        public AdcChannelInfo Channel;
+        private AdcChannelInfo Channel;
+        public Rp2daqCalibrationData CalibrationData;
+        public Rp2daqUserSettings UserSettings;
 
-        
+
+        private bool ch1X10 = false;
+        private bool ch1XAcDc = false;
+        private bool ch2X10 = false;
+        private bool ch3X10 = false;
 
         /// <summary>
         /// 
@@ -162,7 +167,16 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
         public bool IsConnected = false;
 
-        
+
+        public RpiPicoDaqInterface(BaseDeviceUserSettingsData setts, BaseDeviceCalibrationData calib)
+        {
+            //AdcResolutionBits = adcResolutionBits;
+            //AdcSampleRate = adcSampleRate;
+            //PortName = portName;
+
+            this.UserSettings = setts as Rp2daqUserSettings;
+            this.CalibrationData = calib as Rp2daqCalibrationData;
+        }
 
         public RpiPicoDaqInterface(string portName, long adcSampleRate)
         {
@@ -186,19 +200,20 @@ namespace SimpleOsciloscope.UI.HardwareInterface
                 resolutionBits = value;
             }
         }
+        private int resolutionBits = 12;
 
 
         public long AdcSampleRate { get; set; }
 
 
-        private int resolutionBits = 12;
+        
 
         //public int SampleRate ;
         public string PortName;
 
         public long TotalReads;
 
-        public byte BitWidth = 12;
+        //public byte BitWidth = 12;
 
 
         public static ushort blockSize = 1_000;
@@ -228,7 +243,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
         public void Connect(bool log = false)
         {
-            var sport = new SnifferSerial(PortName, 268435456);
+            var sport = new SnifferSerial(UserSettings.ComPortName, 268435456);
 
             sport.LogToConsole = log;
 
@@ -239,7 +254,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
                 sport.StopBits = StopBits.One;
                 sport.DataBits = 8;
                 sport.Parity = Parity.None;
-                sport.ReadBufferSize = 1024 * 1000;//1000KB
+                sport.ReadBufferSize = 1024 * 1000;//1MB
             }
 
             sport.Open();
@@ -319,21 +334,22 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         {
             //var blockSize = blockSize;//samples per block
             var blockCount = 0;
-            var bitwidth = this.BitWidth;
-            var sampleRate = (int)this.AdcSampleRate;
+            var bitwidth = this.UserSettings.BitWidth;
+            var sampleRate = (int)this.UserSettings.SampleRate;
+            var channel = this.UserSettings.ChannelId;
+
             Stopped = false;
 
             var cmd = AdcConfig.Default();
 
             {
                 //https://github.com/FilipDominec/rp2daq/blob/main/docs/PYTHON_REFERENCE.md#adc
-                cmd.channel_mask = (byte)GetChannelMask(Channel.RpChannel);
+                cmd.channel_mask = (byte)GetChannelMask((Rp2040AdcChannels)channel);
                 cmd.blocksize = (ushort)blockSize;
                 cmd.blocks_to_send = (ushort)blockCount;
                 cmd.infinite = infiniteBlocks ? (byte)1 : (byte)0;
                 cmd.clkdiv = (ushort)(48_000_000 / sampleRate); //rate is 48MHz/clkdiv (e.g. 96 gives 500 ksps; 48000 gives 1000 sps etc.)
             }
-
 
             var cmdBin = cmd.ToArray();// StructTools.RawSerialize(cmd);//serialize into 9 byte binary
 
@@ -347,6 +363,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             Thread.Sleep(10);
         }
 
+        /*
         public void ReadAdcDataFake()
         {
             var dt = new List<byte>();
@@ -359,11 +376,16 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             }
 
         }
+        */
+
+        public Dictionary<byte, bool> LastGpioValues = new Dictionary<uint8_t, bool>();
 
         public event EventHandler<EventArgs> OnGpioChange;
 
         public void HandleGpioChange(byte pin,bool newValue)
         {
+            LastGpioValues[pin] = newValue;
+            /*
             foreach (var ch in UiState.Instance.Channels)
             {
                 if (pin == ch.Pin10x)
@@ -378,15 +400,14 @@ namespace SimpleOsciloscope.UI.HardwareInterface
                     return;
                 }
             }
+            */
 
             if (OnGpioChange != null)
                 OnGpioChange(this, EventArgs.Empty);
-
         }
 
         public void ReadGpioChangeData(byte[] data)
         {
-
             var pin = data[0];
             var newVal = data[4];
 
@@ -415,6 +436,11 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
             double alpha, beta;
 
+
+            alpha = 3.3 / 4096;
+            beta = 0;
+
+            /*
             if (ch._10xMode)
             {
                 alpha = ch._10xAlpha;
@@ -425,6 +451,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
                 alpha = ch.NormalAlpha;
                 beta = ch.NormalBeta;
             }
+            */
 
             UiState.Instance.CurrentRepo.LastAlpha = alpha;
             UiState.Instance.CurrentRepo.LastBeta = beta;
@@ -526,6 +553,62 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             return buf;
         }
 
+        private double Alpha, Beta;
+
+
+        public void SetLocalCalibParams()
+        {
+            var g26_10x = 19;
+            var g27_10x = 20;
+            var g28_10x = 21;
+
+            /*
+            if (UserSettings.ChannelId == Rp2040AdcChannels.Gpio26)
+            {
+                if (LastGpioValues[g26_10x])//channel1, 10x pressed
+                {
+                    Alpha = CalibrationData.AlphaA1;
+                    Beta = CalibrationData.BetaA1;
+                }
+                else
+                {
+                    Alpha = CalibrationData.AlphaB1;
+                    Beta = CalibrationData.BetaB1;
+                }
+            }*/
+
+
+            if (UserSettings.ChannelId == Rp2040AdcChannels.Gpio27)
+            {
+                if (LastGpioValues[20])//channel1, 10x pressed
+                {
+                    Alpha = CalibrationData.AlphaA2;
+                    Beta = CalibrationData.BetaA2;
+                }
+                else
+                {
+                    Alpha = CalibrationData.AlphaB2;
+                    Beta = CalibrationData.BetaB2;
+                }
+            }
+
+
+            if (UserSettings.ChannelId == Rp2040AdcChannels.Gpio28)
+            {
+                if (LastGpioValues[19])//channel1, 10x pressed
+                {
+                    Alpha = CalibrationData.AlphaA2;
+                    Beta = CalibrationData.BetaA2;
+                }
+                else
+                {
+                    Alpha = CalibrationData.AlphaB2;
+                    Beta = CalibrationData.BetaB2;
+                }
+            }
+        }
+
+
         public void ReadGpioInitialValues()
         {
             var pinsList = new List<byte>();
@@ -561,7 +644,8 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             int bitwidthCurr;
             var sport = Port;
 
-            var bw = this.BitWidth;//faster access
+            var bw = this.UserSettings.BitWidth;//faster access
+
             var arrLength = (blockSize * bw) / 8;
 
             var arr = TargetRepository.Samples;
@@ -747,7 +831,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
                 throw new Exception("Invalid firmware version");
 
 
-            {//send command for set ADC pins to high impedance (remove pull up/down resistors)
+            {//send command for set ADC pins to high impedance (remove pull up/down resistors), no need anymore, fixed on firmware
                 //SetHighZ();
             }
            
@@ -765,6 +849,9 @@ namespace SimpleOsciloscope.UI.HardwareInterface
                 ReadGpioInitialValues();
             }
 
+            {//set calibration parameters
+                SetLocalCalibParams();
+            }
 
             {//send command for ADC
                 SetupAdc();
@@ -782,6 +869,9 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             //throw new NotImplementedException();
         }
 
-       
+        public void DisConnect()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

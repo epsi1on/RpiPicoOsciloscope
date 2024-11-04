@@ -12,5 +12,10 @@
 
         long AdcSampleRate { get; }
 
+
+        void StopAdc();
+
+
+        void DisConnect();
     }
 }
