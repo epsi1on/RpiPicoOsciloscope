@@ -1,3 +1,6 @@
 [submodule "hardware/v2/analog/KiCad-RP-Pico"]
 	path = hardware/v2/analog/KiCad-RP-Pico
 	url = https://github.com/ncarandini/KiCad-RP-Pico.git
+[submodule "src/POC/src/SharpFFTW"]
+	path = src/POC/src/SharpFFTW
+	url = https://github.com/wo80/SharpFFTW.git
