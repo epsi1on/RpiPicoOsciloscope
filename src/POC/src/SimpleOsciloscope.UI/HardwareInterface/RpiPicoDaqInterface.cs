@@ -31,7 +31,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
     /// </summary>
     public class AdcChannelInfo
     {
-        public readonly int Id = -1;
+        public readonly int Id = -1;// 1 or 2 or 3 or 4 etc
         public readonly int Pin10x = -1;//gpio# for 10x button
         public readonly int PinAcDc = -1;//ac coupling cap button
         public readonly int PinAdc = -1;//gpio# for adc
@@ -109,6 +109,8 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         }
 
         public AdcChannelInfo Channel;
+
+        
 
         /// <summary>
         /// 
@@ -221,7 +223,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             if (Port != null)
                 Port.Close();
 
-            this.IsConnected= false;
+            this.IsConnected = false;
         }
 
         public void Connect(bool log = false)

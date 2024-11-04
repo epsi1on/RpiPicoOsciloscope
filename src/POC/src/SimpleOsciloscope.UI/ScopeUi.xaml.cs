@@ -1,5 +1,6 @@
 ﻿using NAudio.Mixer;
 using SimpleOsciloscope.UI.HardwareInterface;
+using SimpleOsciloscope.UI.InterfaceUi;
 using SimpleOsciloscope.UI.Properties;
 using SimpleOsciloscope.UI.Render;
 using System;
@@ -22,6 +23,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static SimpleOsciloscope.UI.ScopeUi.ContextClass;
 using ChannelInfo = SimpleOsciloscope.UI.HardwareInterface.AdcChannelInfo;
 
 
@@ -32,12 +34,32 @@ namespace SimpleOsciloscope.UI
     /// </summary>
     public partial class ScopeUi : Window
     {
+
         public ScopeUi()
         {
             InitializeComponent();
             this.DataContext = this.Context = new ContextClass();
             Context.Init();
-            
+
+
+            Context.SelectedDeviceChanged += OnSelectedDeviceChanged;
+        }
+
+
+        public void OnSelectedDeviceChanged(object sender, PropertyValueChangedEventArgs<OsciloscopeDeviceInfo> e)
+        {
+            if (e.NewValue == null)
+                return;
+
+            var t = e.NewValue;
+
+            var ui = t.UI;
+
+            var cfg = ui.LoadUserSettings();
+            var ctrl = ui.GenerateUiInterface(cfg);
+
+            this.itmDeviceConfig.Content = ctrl;
+
         }
 
         ContextClass Context;
@@ -45,6 +67,225 @@ namespace SimpleOsciloscope.UI
 
         public class ContextClass : INotifyPropertyChanged
         {
+
+            internal void Init()
+            {
+                Renderers = new IScopeRenderer[] {
+                    new HarmonicSignalGraphRenderer(),
+                    new HitBasedSignalGraphRender(),
+                    new FftRender(),
+                    new ThdRender()
+                };
+
+                renderer = Renderers[0];
+
+                this.RenderType = RenderTypes.Harmonic;
+
+
+                {
+                    var dvcs = Interfaces.GetInterfaces();
+
+                    var lst = new List<OsciloscopeDeviceInfo>();
+
+                    foreach (var iface in dvcs)
+                    {
+                        var inf = new OsciloscopeDeviceInfo();
+                        inf.Name = iface.GetName();
+                        inf.Description = iface.GetDescription();
+                        inf.UI = iface;
+                        lst.Add(inf);
+                    }
+
+                    this.AvailableDevices = new ObservableCollection<OsciloscopeDeviceInfo>(lst);
+                }
+
+                {
+                    /*
+                    this.ShowFftChanged += (a, b) =>
+                    {
+                        if (b.NewValue)
+                            this.RenderType = RenderTypes.Fft;
+                    };
+
+
+                    this.ShowHarmonicChanged += (a, b) =>
+                    {
+                        if (b.NewValue)
+                            this.RenderType = RenderTypes.Harmonic;
+                    };
+
+                    this.ShowHitBasedChanged += (a, b) =>
+                    {
+                        if (b.NewValue)
+                            this.RenderType = RenderTypes.HitBased;
+                    };
+                    */
+
+                    //this.ShowHarmonicChanged 
+                    this.RenderTypeChanged += (a, b) => updateRenderType();
+                }
+
+                {
+                    this.BitmapSource = new WriteableBitmap(UiState.Instance.RenderBitmapWidth, UiState.Instance.RenderBitmapHeight, 96, 96, pixelFormat: UiState.BitmapPixelFormat, null);
+                    this.SampleRate = 500_000;// (long)UiState.AdcConfig.SampleRate;
+                }
+
+                {
+                    RefreshPorts();
+                    this.IsNotConnected = true;
+                }
+
+                {
+                    //this.SampleRate = 500_000;
+                }
+
+                //this.ListenToAudioChanged += AudioChanged;
+
+                {
+                    /*
+                    var lst = new List<ChannelInfo>();
+                    var ids = new RpiPicoDaqInterface.Rp2040AdcChannels[]{
+                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio26,
+                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio27,
+                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio28,
+                    RpiPicoDaqInterface.Rp2040AdcChannels.InternalReference,
+                    RpiPicoDaqInterface.Rp2040AdcChannels.InternalTempratureSensor
+                    };
+
+                    var pins = RpiPicoDaqInterface.AdcPins();
+                    var g26 = pins.FindFirstIndexOf(i => i == 26);
+                    var g27 = pins.FindFirstIndexOf(i => i == 27);
+                    var g28 = pins.FindFirstIndexOf(i => i == 28);
+
+                    var titles = new string[] {
+                        (g26 + 1).ToString(),
+                        (g27 + 1).ToString(),
+                        (g28 + 1).ToString(),
+                                    "VRef ",
+                        "Tmpr"
+                    };
+
+                    var descs = new string[] { 
+                        "ADC Probe", 
+                        "ADC Probe", 
+                        "ADC Probe", 
+                        "Internal Voltage Reference", 
+                        "Internal Temprature Sensor" };
+
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        var inf = new ChannelInfo();
+                        inf.ChannelId = ids[i];
+                        inf.Title = titles[i];
+                        inf.Description = descs[i];
+                        lst.Add(inf);
+                    }
+
+
+                    */
+
+                    this.AvailableChannels =
+                        //new ObservableCollection<ChannelInfo>(lst.OrderBy(i => i.Title).ToArray());
+                        new ObservableCollection<ChannelInfo>(UiState.Instance.Channels);
+                }
+
+                {
+                    var lastPort = Settings.Default.lastPort;
+                    var lastChnIdx = Settings.Default.lastChannelIndex;
+                    var lastSrate = Settings.Default.lastSampleRate;
+
+                    if (AvailablePorts.Contains(lastPort))
+                        SelectedPort = lastPort;
+
+                    SelectedChannel = AvailableChannels[lastChnIdx];
+
+                    SampleRate = lastSrate;
+                }
+            }
+
+            public class OsciloscopeDeviceInfo
+            {
+                public string Name { get; set; }
+                public string Description { get; set; }
+
+                public InterfaceUi.BaseDeviceInterface UI;
+            }
+
+
+
+            #region AvailableDevice Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public ObservableCollection<OsciloscopeDeviceInfo> AvailableDevices
+            {
+                get { return _AvailableDevices; }
+                set
+                {
+                    if (AreEqualObjects(_AvailableDevices, value))
+                        return;
+
+                    var _fieldOldValue = _AvailableDevices;
+
+                    _AvailableDevices = value;
+
+                    ContextClass.OnAvailableDevicesChanged(this, new PropertyValueChangedEventArgs<ObservableCollection<OsciloscopeDeviceInfo>>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("AvailableDevices");
+                }
+            }
+
+            private ObservableCollection<OsciloscopeDeviceInfo> _AvailableDevices;
+
+            public EventHandler<PropertyValueChangedEventArgs<ObservableCollection<OsciloscopeDeviceInfo>>> AvailableDevicesChanged;
+
+            public static void OnAvailableDevicesChanged(object sender, PropertyValueChangedEventArgs<ObservableCollection<OsciloscopeDeviceInfo>> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.AvailableDevicesChanged != null)
+                    obj.AvailableDevicesChanged(obj, e);
+            }
+
+            #endregion
+
+            #region SelectedDevice Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public OsciloscopeDeviceInfo SelectedDevice
+            {
+                get { return _SelectedDevice; }
+                set
+                {
+                    if (AreEqualObjects(_SelectedDevice, value))
+                        return;
+
+                    var _fieldOldValue = _SelectedDevice;
+
+                    _SelectedDevice = value;
+
+                    ContextClass.OnSelectedDeviceChanged(this, new PropertyValueChangedEventArgs<OsciloscopeDeviceInfo>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("SelectedDevice");
+                }
+            }
+
+            private OsciloscopeDeviceInfo _SelectedDevice;
+
+            public EventHandler<PropertyValueChangedEventArgs<OsciloscopeDeviceInfo>> SelectedDeviceChanged;
+
+            public static void OnSelectedDeviceChanged(object sender, PropertyValueChangedEventArgs<OsciloscopeDeviceInfo> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.SelectedDeviceChanged != null)
+                    obj.SelectedDeviceChanged(obj, e);
+            }
+
+            #endregion
+
+
+
 
             #region INotifyPropertyChanged members and helpers
 
@@ -81,6 +322,43 @@ namespace SimpleOsciloscope.UI
             }
 
             #endregion
+
+            #region HideForeground Property and field
+
+            //hide foreground controls (for connect to hardware)
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public bool HideForeground
+            {
+                get { return _HideForeground; }
+                set
+                {
+                    if (AreEqualObjects(_HideForeground, value))
+                        return;
+
+                    var _fieldOldValue = _HideForeground;
+
+                    _HideForeground = value;
+
+                    ContextClass.OnHideForegroundChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("HideForeground");
+                }
+            }
+
+            private bool _HideForeground;
+
+            public EventHandler<PropertyValueChangedEventArgs<bool>> HideForegroundChanged;
+
+            public static void OnHideForegroundChanged(object sender, PropertyValueChangedEventArgs<bool> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.HideForegroundChanged != null)
+                    obj.HideForegroundChanged(obj, e);
+            }
+
+            #endregion
+
 
             #region TotalSmaples Property and field
 
@@ -397,40 +675,7 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
-            #region ListenToAudio Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public bool ListenToAudio
-            {
-                get { return _ListenToAudio; }
-                set
-                {
-                    if (AreEqualObjects(_ListenToAudio, value))
-                        return;
-
-                    var _fieldOldValue = _ListenToAudio;
-
-                    _ListenToAudio = value;
-
-                    ContextClass.OnListenToAudioChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("ListenToAudio");
-                }
-            }
-
-            private bool _ListenToAudio;
-
-            public EventHandler<PropertyValueChangedEventArgs<bool>> ListenToAudioChanged;
-
-            public static void OnListenToAudioChanged(object sender, PropertyValueChangedEventArgs<bool> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.ListenToAudioChanged != null)
-                    obj.ListenToAudioChanged(obj, e);
-            }
-
-            #endregion
+            
 
             #region DutyCycle Property and field
 
@@ -817,125 +1062,136 @@ namespace SimpleOsciloscope.UI
 
             private IScopeRenderer[] Renderers;
 
-            internal void Init()
+            
+
+
+            public void Start()
             {
-                Renderers = new IScopeRenderer[] {
-                    new HarmonicSignalGraphRenderer(),
-                    new HitBasedSignalGraphRender(),
-                    new FftRender(),
-                    new ThdRender()
-                };
-
-               
 
 
-                renderer = Renderers[0];
+                foreach (var item in Renderers)
+                {
+                    if (item != null)
+                        item.Clear();
+                }
 
-                this.RenderType = RenderTypes.Harmonic;
+
+                if (this.SelectedChannel == null)
+                {
+                    MessageBox.Show("Select Channel");
+                    return;
+                }
+
+                //UiState.Instance.CurrentRepo.clear
+                UiState.Instance.CurrentRepo.Init((int)SampleRate);
 
                 {
-                    /*
-                    this.ShowFftChanged += (a, b) =>
+                    UiState.AdcConfig.SampleRate = SampleRate;
+
+                    foreach (var item in Renderers)
                     {
-                        if (b.NewValue)
-                            this.RenderType = RenderTypes.Fft;
-                    };
+                        item.ReSetZoom();
+                    }
+                }
 
+                this.IsNotConnected = false;
 
-                    this.ShowHarmonicChanged += (a, b) =>
-                    {
-                        if (b.NewValue)
-                            this.RenderType = RenderTypes.Harmonic;
-                    };
-
-                    this.ShowHitBasedChanged += (a, b) =>
-                    {
-                        if (b.NewValue)
-                            this.RenderType = RenderTypes.HitBased;
-                    };
-                    */
-
-                    //this.ShowHarmonicChanged 
-                    this.RenderTypeChanged += (a, b) => updateRenderType();
+                {
+                    var thr = RenderThread = new Thread(RenderLoopSync);
+                    RenderLoopFlag = true;
+                    thr.Priority = ThreadPriority.AboveNormal;
+                    thr.Start();
                 }
 
                 {
-                    this.BitmapSource = new WriteableBitmap(UiState.Instance.RenderBitmapWidth, UiState.Instance.RenderBitmapHeight, 96, 96, pixelFormat: UiState.BitmapPixelFormat, null);
-                    this.SampleRate = 500_000;// (long)UiState.AdcConfig.SampleRate;
-                }
 
-                {
-                    RefreshPorts();
-                    this.IsNotConnected = true;
-                }
-
-                {
-                    //this.SampleRate = 500_000;
-                }
-
-                this.ListenToAudioChanged += AudioChanged;
-
-                {
-                    /*
-                    var lst = new List<ChannelInfo>();
-                    var ids = new RpiPicoDaqInterface.Rp2040AdcChannels[]{
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio26,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio27,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio28,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.InternalReference,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.InternalTempratureSensor
-                    };
-
-                    var pins = RpiPicoDaqInterface.AdcPins();
-                    var g26 = pins.FindFirstIndexOf(i => i == 26);
-                    var g27 = pins.FindFirstIndexOf(i => i == 27);
-                    var g28 = pins.FindFirstIndexOf(i => i == 28);
-
-                    var titles = new string[] {
-                        (g26 + 1).ToString(),
-                        (g27 + 1).ToString(),
-                        (g28 + 1).ToString(),
-                                    "VRef ",
-                        "Tmpr"
-                    };
-
-                    var descs = new string[] { 
-                        "ADC Probe", 
-                        "ADC Probe", 
-                        "ADC Probe", 
-                        "Internal Voltage Reference", 
-                        "Internal Temprature Sensor" };
-
-
-                    for (int i = 0; i < 5; i++)
+                    if (DaqInterface != null)
                     {
-                        var inf = new ChannelInfo();
-                        inf.ChannelId = ids[i];
-                        inf.Title = titles[i];
-                        inf.Description = descs[i];
-                        lst.Add(inf);
+                        DaqInterface.StopAdc();
+                        DaqInterface.DisConnect();
                     }
 
+                    var ifs = DaqInterface = new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
+                    //new Stm32Interface(this.SelectedPort, SampleRate);
+                    //new ArduinoInterface();
+                    //new FakeDaqInterface();
 
+                    ifs.Channel = this.SelectedChannel;
+
+                    //ifs.ChannelMask = RpiPicoDaqInterface.GetChannelMask(this.SelectedChannel.RpChannel);
+
+                    UiState.AdcConfig.Set(ifs);
+
+                    //ifs.PortName = this.SelectedPort;
+                    //ifs.AdcSampleRate = (int)SampleRate;
+                    ifs.TargetRepository = UiState.Instance.CurrentRepo;
+                    //var thr = new Thread(ifs.StartSync);
+
+                    //https://stackoverflow.com/a/42988729
+
+                    /*
+                    ifs.OnPacketLoss += (a, b) =>
+                    {
+                        this.IsNotConnected = true;
+                    };
                     */
 
-                    this.AvailableChannels =
-                        //new ObservableCollection<ChannelInfo>(lst.OrderBy(i => i.Title).ToArray());
-                        new ObservableCollection<ChannelInfo>(UiState.Instance.Channels);
+
+                    var thr = DaqThread = new Thread(() =>
+                    {
+                        try
+                        {
+                            ifs.StartSync();
+                        }
+                        catch (Exception ex)
+                        {
+                            Stop();
+
+                            Application.Current.Dispatcher.Invoke(() => { MessageBox.Show(ex.Message); });
+
+
+                        }
+                    });
+
+                    thr.Start();
+
                 }
 
+                //UiState.Instance.CurrentRepo.AdcSampleRate = (int)this.SampleRate;
+                UiState.AdcConfig.SampleRate = (int)SampleRate;
+
+
+            }
+
+            public void Stop()
+            {
+                if (this.IsNotConnected)
+                    return;
+
+                this.IsNotConnected = true;
+
+                if (RenderThread != null)
                 {
-                    var lastPort = Settings.Default.lastPort;
-                    var lastChnIdx = Settings.Default.lastChannelIndex;
-                    var lastSrate = Settings.Default.lastSampleRate;
+                    RenderLoopFlag = false;
 
-                    if (AvailablePorts.Contains(lastPort))
-                        SelectedPort = lastPort;
 
-                    SelectedChannel = AvailableChannels[lastChnIdx];
-
-                    SampleRate = lastSrate;
+                    if (RenderThread.IsAlive)
+                        RenderThread.Abort();
                 }
+
+                if (DaqInterface != null)
+                {
+                    DaqInterface.StopAdc();
+
+                    if (DaqThread.IsAlive)
+                        DaqThread.Abort();
+
+                    DaqInterface.DisConnect();
+                }
+
+                foreach (var rnd in Renderers)
+                    rnd.Clear();
+
             }
 
 
@@ -977,122 +1233,11 @@ namespace SimpleOsciloscope.UI
             }
 
 
-            public void Stop()
-            {
-                if (this.IsNotConnected)
-                    return;
-
-                this.IsNotConnected = true;
-
-                if (RenderThread != null)
-                {
-                    RenderLoopFlag = false;
-
-
-                    if (RenderThread.IsAlive)
-                        RenderThread.Abort();
-                }
-
-                if (DaqInterface != null)
-                {
-                    DaqInterface.StopAdc();
-
-                    if (DaqThread.IsAlive)
-                        DaqThread.Abort();
-
-                    DaqInterface.DisConnect();
-                }
-
-                foreach (var rnd in Renderers)
-                    rnd.Clear();
-
-            }
 
             private Thread RenderThread;
             private Thread DaqThread;
             private RpiPicoDaqInterface DaqInterface;
 
-            public void StartAdc()
-            {
-                if (this.SelectedChannel == null)
-                {
-                    MessageBox.Show("Select Channel");
-                    return;
-                }
-
-                //UiState.Instance.CurrentRepo.clear
-                UiState.Instance.CurrentRepo.Init((int)SampleRate);
-
-                {
-                    UiState.AdcConfig.SampleRate = SampleRate;
-
-                    foreach (var item in Renderers)
-                    {
-                        item.ReSetZoom();
-                    }
-                }
-
-                this.IsNotConnected = false;
-
-                {
-                    var thr = RenderThread = new Thread(RenderLoopSync);
-                    RenderLoopFlag = true;
-                    thr.Priority = ThreadPriority.AboveNormal;
-                    thr.Start();
-                }
-
-                {
-                    var ifs = DaqInterface = new RpiPicoDaqInterface(this.SelectedPort, SampleRate);
-                    //new Stm32Interface(this.SelectedPort, SampleRate);
-                    //new ArduinoInterface();
-                    //new FakeDaqInterface();
-
-                    ifs.Channel = this.SelectedChannel;
-
-                    //ifs.ChannelMask = RpiPicoDaqInterface.GetChannelMask(this.SelectedChannel.RpChannel);
-
-                    UiState.AdcConfig.Set(ifs);
-
-                    //ifs.PortName = this.SelectedPort;
-                    //ifs.AdcSampleRate = (int)SampleRate;
-                    ifs.TargetRepository = UiState.Instance.CurrentRepo;
-                    //var thr = new Thread(ifs.StartSync);
-
-                    //https://stackoverflow.com/a/42988729
-
-                    /*
-                    ifs.OnPacketLoss += (a, b) =>
-                    {
-                        this.IsNotConnected = true;
-                    };
-                    */
-
-
-                    var thr = DaqThread = new Thread(() =>
-                      {
-                          try
-                          {
-                              ifs.StartSync();
-                          }
-                          catch (Exception ex)
-                          {
-                              Stop();
-
-                              Application.Current.Dispatcher.Invoke(() => { MessageBox.Show(ex.Message); });
-
-                              
-                          }
-                      });
-
-                    thr.Start();
-
-                }
-
-                //UiState.Instance.CurrentRepo.AdcSampleRate = (int)this.SampleRate;
-                UiState.AdcConfig.SampleRate = (int)SampleRate;
-
-                
-            }
 
 
             void RenderShot()
@@ -1245,7 +1390,9 @@ namespace SimpleOsciloscope.UI
             Settings.Default.lastPort = Context.SelectedPort;
             Settings.Default.Save();
 
-            Context.StartAdc();
+
+            
+            Context.Start();
         }
 
         private void BtnRefreshPorts_Click(object sender, RoutedEventArgs e)
@@ -1321,5 +1468,41 @@ namespace SimpleOsciloscope.UI
             Context.OnMouseMoveStatus(new Point(x, y));
         }
 
+        private void BtnConnect_Click(object sender, RoutedEventArgs e)
+        {
+            if (Context.SelectedDevice == null)
+            {
+                ShoeMessageToUser("Select Device");
+                return;
+            }
+
+            var ctrl = itmDeviceConfig.Content as BaseDaqConfigControl;
+
+            if (ctrl == null)
+                return;
+
+            if (!ctrl.IsValidConfig())
+            {
+                ShoeMessageToUser("Invalid/incomplete config");
+                return;
+            }
+
+
+            var ui = Context.SelectedDevice.UI;
+
+
+            var config = ctrl.GetUserSettings();
+
+            var calib = ui.LoadCalibrationSettings();
+
+            var daqInterface = Context.SelectedDevice.UI.GenerateDaqInterface(calib, config);
+
+            return;
+        }
+
+        private void ShoeMessageToUser(string message)
+        {
+            MessageBox.Show(message);
+        }
     }
 }

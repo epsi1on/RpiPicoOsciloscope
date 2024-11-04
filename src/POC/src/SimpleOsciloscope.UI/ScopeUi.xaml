@@ -8,6 +8,7 @@
         xmlns:Converters="clr-namespace:SimpleOsciloscope.UI.Converters" x:Class="SimpleOsciloscope.UI.ScopeUi"
         mc:Ignorable="d"
         Title="Scope POC (Beta)" Height="450" Width="1000">
+    
     <Window.Resources>
         <Converters:ParametricBooleanToVisibilityConverter x:Key="ParametricBooleanToVisibilityConverter"/>
         <DataTemplate x:Key="ComboBoxItemTemplate1">
@@ -19,67 +20,112 @@
         </DataTemplate>
     </Window.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="150*"/>
-            <ColumnDefinition Width="300*"/>
-            <ColumnDefinition Width="300*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-        </Grid.RowDefinitions>
+        <Grid Name="backgroundGrid" IsEnabled="{Binding IsNotConnected}" >
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="150*"/>
+                <ColumnDefinition Width="300*"/>
+                <ColumnDefinition Width="300*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
-            <Button Content="FFt" MinWidth="100" Click="btnFftClick_Click"/>
-            <Button Content="Harmonic" MinWidth="100" Click="btnHarmonicClick_Click"/>
-            <Button Content="Hit based" MinWidth="100" Click="btnHitBasedClick_Click"/>
-            <Button Content="Thd" ToolTip="Total Harmonic Distortion" MinWidth="100" Click="btnThdBasedClick_Click"/>
-        </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+                <Button Content="FFt" MinWidth="100" Click="btnFftClick_Click"/>
+                <Button Content="Harmonic" MinWidth="100" Click="btnHarmonicClick_Click"/>
+                <Button Content="Hit based" MinWidth="100" Click="btnHitBasedClick_Click"/>
+                <Button Content="Thd" ToolTip="Total Harmonic Distortion" MinWidth="100" Click="btnThdBasedClick_Click"/>
+            </StackPanel>
 
-        <Border Margin="5,5,5,5" Grid.ColumnSpan="4" BorderBrush="Gray" BorderThickness="2" Grid.Column="1" Grid.Row="1" >
-            <Image Source="{Binding BitmapSource}" Cursor="Cross"
-                   MouseWheel="ImgCanvas_MouseWheel" 
-                   MouseDown="ImgCanvas_MouseDown"
-                   MouseMove="ImgCanvas_MouseMove"
+            <Border Margin="5,5,5,5" Grid.ColumnSpan="4" BorderBrush="Gray" BorderThickness="2" Grid.Column="1" Grid.Row="1" >
+                <Image Source="{Binding BitmapSource}" Cursor="Cross"
+                    MouseWheel="ImgCanvas_MouseWheel" 
+                    MouseDown="ImgCanvas_MouseDown"
+                    MouseMove="ImgCanvas_MouseMove"
                    />
-        </Border>
+            </Border>
 
-        <TextBlock Text="{Binding MousePosValue, FallbackValue=PointerState}" FontSize="25" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="White"/>
-        <Expander ExpandDirection="Right" Grid.Row="1">
-            <local:SignalPropertiesVisualizer SignalInfo="{Binding SignalInfo}"/>
-        </Expander>
-        <TextBlock Text="Signal Frequency:" Grid.Column="1" Margin="5,5,5,5" Grid.Row="2"/>
-        <TextBlock Text="{Binding Frequency}" Grid.Column="2" Margin="5,5,5,5" Grid.Row="2" />
-
-
-        <TextBlock Text="Sample Rate (Sps):" Grid.Column="1" Margin="5,5,5,5" Grid.Row="3"/>
-        <TextBox Text="{Binding SampleRate}" Grid.Column="2" Margin="5,5,5,5" Grid.Row="3" IsEnabled="{Binding IsNotConnected}"/>
-        <CheckBox Grid.Column="3" Visibility="Collapsed" Content="Listen to audio" Margin="5,5,5,5" Grid.Row="3" IsChecked="{Binding ListenToAudio}" Grid.ColumnSpan="2"/>
-        <TextBlock Text="Com Port:" Grid.Column="1" Margin="5,5,5,5" Grid.Row="4" />
-        <StackPanel Grid.Column="2" HorizontalAlignment="Left" Margin="5,0,0,0" Orientation="Horizontal" Grid.Row="4" VerticalAlignment="Center" IsEnabled="{Binding IsNotConnected}">
-            <Button Content="⟳" Click="BtnRefreshPorts_Click"/>
-            <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" Width="100" />
-        </StackPanel>
-        <StackPanel Grid.Column="3" HorizontalAlignment="Left" Margin="10,0,0,0" Orientation="Horizontal" 
-                    Grid.Row="4" VerticalAlignment="Center" >
-            <Button Content="Connect" Click="BtnStart_Click" IsEnabled="{Binding IsNotConnected}"/>
-            <Button Content="Dis-Connect" Click="BtnStop_Click" IsEnabled="{Binding IsNotConnected, ConverterParameter=!, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
-
-            <Button Content="Calibrate" Click="BtnCalib_Click" IsEnabled="{Binding IsNotConnected}"/>
-        </StackPanel>
-
-        <StackPanel Grid.Column="3"  Orientation="Horizontal" Grid.Row="2">
-            <TextBlock Text="Channel:" Grid.Column="3" Margin="5" Grid.Row="1"/>
-            <ComboBox ItemTemplate="{DynamicResource ComboBoxItemTemplate1}" IsEnabled="{Binding IsNotConnected}" ItemsSource="{Binding AvailableChannels}" SelectedItem="{Binding SelectedChannel}" MinWidth="150"/>
+            <TextBlock Text="{Binding MousePosValue, FallbackValue=PointerState}" FontSize="25" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="White"/>
+            <Expander ExpandDirection="Right" Grid.Row="1">
+                <local:SignalPropertiesVisualizer SignalInfo="{Binding SignalInfo}"/>
+            </Expander>
+            <TextBlock Text="Signal Frequency:" Grid.Column="1" Margin="5,5,5,5" Grid.Row="2"/>
+            <TextBlock Text="{Binding Frequency}" Grid.Column="2" Margin="5,5,5,5" Grid.Row="2" />
 
 
-        </StackPanel>
+            <TextBlock Text="Sample Rate (Sps):" Grid.Column="1" Margin="5,5,5,5" Grid.Row="3"/>
+            <TextBox Text="{Binding SampleRate}" Grid.Column="2" Margin="5,5,5,5" Grid.Row="3" IsEnabled="{Binding IsNotConnected}"/>
+            <CheckBox Grid.Column="3" Visibility="Collapsed" Content="Listen to audio" Margin="5,5,5,5" Grid.Row="3" IsChecked="{Binding ListenToAudio}" Grid.ColumnSpan="2"/>
+            <TextBlock Text="Com Port:" Grid.Column="1" Margin="5,5,5,5" Grid.Row="4" />
+            <StackPanel Grid.Column="2" HorizontalAlignment="Left" Margin="5,0,0,0" Orientation="Horizontal" Grid.Row="4" VerticalAlignment="Center" IsEnabled="{Binding IsNotConnected}">
+                <Button Content="⟳" Click="BtnRefreshPorts_Click"/>
+                <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" Width="100" />
+            </StackPanel>
+            <StackPanel Grid.Column="3" HorizontalAlignment="Left" Margin="10,0,0,0" Orientation="Horizontal" 
+                Grid.Row="4" VerticalAlignment="Center" >
+                <Button Content="Connect" Click="BtnStart_Click" IsEnabled="{Binding IsNotConnected}"/>
+                <Button Content="Dis-Connect" Click="BtnStop_Click" IsEnabled="{Binding IsNotConnected, ConverterParameter=!, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
+
+                <Button Content="Calibrate" Click="BtnCalib_Click" IsEnabled="{Binding IsNotConnected}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="3"  Orientation="Horizontal" Grid.Row="2">
+                <TextBlock Text="Channel:" Grid.Column="3" Margin="5" Grid.Row="1"/>
+                <ComboBox ItemTemplate="{DynamicResource ComboBoxItemTemplate1}" IsEnabled="{Binding IsNotConnected}" ItemsSource="{Binding AvailableChannels}" SelectedItem="{Binding SelectedChannel}" MinWidth="150"/>
 
 
+            </StackPanel>
+
+
+        </Grid>
+
+        <Grid Background="White" Name="foregroundGrid" 
+              Visibility="{Binding IsNotConnected, Converter={StaticResource ParametricBooleanToVisibilityConverter}, Mode=OneWay}">
+
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="200" MinWidth="300" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Text="Available Hardwares" />
+
+                <ComboBox ItemsSource="{Binding AvailableDevices}" SelectedItem="{Binding SelectedDevice}" Grid.Column="1">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="   "/>
+                                <TextBlock  Foreground="DarkGray"><Run Text="("/><Run Text=" "/><Run Text="{Binding Description}"/><Run Text=" "/><Run Text=")"/></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+
+                <ContentControl Grid.ColumnSpan="2" Grid.Row="1" Name="itmDeviceConfig">
+                    
+                </ContentControl>
+                
+                <Button Content="Connect" Grid.Row="2" Margin="5" Click="BtnConnect_Click"/>
+                
+                <CheckBox Content="Auto reconnect" Grid.Row="2" Grid.Column="1" IsChecked="{Binding AutoReconnect}"/>
+
+            </Grid>
+
+        </Grid>
     </Grid>
 </Window>

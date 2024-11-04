@@ -357,8 +357,10 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FixedLengthListRepo.cs" />
     <None Include="FrequencyDetection\CorrelationBasedFrequencyDetector.md" />
-    <Compile Include="FrequencyDetection\FftUtil.cs" />
+    <Compile Include="FrequencyDetection\CorrFreqDetector2.cs" />
+    <Compile Include="FrequencyDetection\FftwUtil.cs" />
     <Compile Include="FrequencyDetection\HybridFrequencyDetector.cs" />
+    <Compile Include="FrequencyDetection\SharpFftwUtil.cs" />
     <Compile Include="FriendlyStringUtil.cs" />
     <Compile Include="HardwareInterface\CalibrationUtil.cs" />
     <Compile Include="HardwareInterface\SerialExtensions.cs" />
@@ -375,6 +377,16 @@
     <Compile Include="HardwareInterface\IDaqInterface.cs" />
     <Compile Include="HardwareInterface\Stm32Interface.cs" />
     <Compile Include="HistogramUtil.cs" />
+    <Compile Include="InterfaceUi\BaseDaqConfigControl.cs" />
+    <Compile Include="InterfaceUi\BaseDeviceCalibrationData.cs" />
+    <Compile Include="InterfaceUi\BaseDeviceInterface.cs" />
+    <Compile Include="InterfaceUi\Interfaces.cs" />
+    <Compile Include="InterfaceUi\Rp2daq\Rp2daqCalibrationData.cs" />
+    <Compile Include="InterfaceUi\Rp2daq\Rp2daqUserSettings.cs" />
+    <Compile Include="InterfaceUi\Rp2daq\Rp2DaqInterfaceControl.xaml.cs">
+      <DependentUpon>Rp2DaqInterfaceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="InterfaceUi\Rp2daq\Rp2DaqInterfaceUi.cs" />
     <Compile Include="Render\FftRender.cs" />
     <Compile Include="Render\ThdRender.cs" />
     <Compile Include="Render\HitBasedSignalGraphRender.cs" />
@@ -397,6 +409,8 @@
     <Compile Include="HardwareInterface\SnifferSerial.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SerializationUtil.cs" />
+    <Compile Include="SettingsUtil.cs" />
     <Compile Include="SignalPropertiesVisualizer.xaml.cs">
       <DependentUpon>SignalPropertiesVisualizer.xaml</DependentUpon>
     </Compile>
@@ -410,6 +424,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Calibration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InterfaceUi\Rp2daq\Rp2DaqInterfaceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -465,6 +483,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpFFTW\SharpFFTW\SharpFFTW.csproj">
+      <Project>{e80f6357-4e7d-402f-bc9a-05ee06a79763}</Project>
+      <Name>SharpFFTW</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

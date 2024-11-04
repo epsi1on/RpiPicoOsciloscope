@@ -98,7 +98,7 @@ namespace SimpleOsciloscope.UI.Render
 
             var cpx = ArrayPool.Complex(n);
 
-            FftUtil.CalcFft(input, cpx);
+            FftwUtil.CalcFft(input, cpx);
 
             var sampleRate = UiState.AdcConfig.SampleRate;
 

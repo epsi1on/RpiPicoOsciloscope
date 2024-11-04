@@ -281,7 +281,7 @@ namespace SimpleOsciloscope.UI
             if (st == -1)
                 return Bmp2;
 
-            BMP.Clear();
+            Bmp2.Clear();
 
             {
                 var lstFlag = st;
@@ -317,14 +317,27 @@ namespace SimpleOsciloscope.UI
 
             var durrCount = en - st;
 
-            var min = 0;
-            var max = UiState.AdcConfig.MaxVoltage;//.Instance.CurrentRepo.AdcMaxValue;
+            //var min = 0;
+            //var max = UiState.AdcConfig.MaxVoltage;//.Instance.CurrentRepo.AdcMaxValue;
 
             {
+                var max = short.MinValue;
+                var min = short.MaxValue;
+
+                for (int i = st; i < en; i++)
+                {
+                    if (max < ys[i])
+                        max = ys[i];
+
+                    if (min > ys[i])
+                        min = ys[i];
+                }
+
+
                 var trsX = OneDTransformation.FromInOut(st, en, Margin, w - Margin);
                 var trsY = OneDTransformation.FromInOut(max, min, Margin, h - Margin);
 
-                byte r = 128;
+                byte r = 0;
                 byte b = 128;
                 byte g = 128;
 
@@ -345,7 +358,7 @@ namespace SimpleOsciloscope.UI
                         //var idx = (y * ww) + x;
 
                         if (x > 0 && y > 0 && x < w && y < h)
-                            BMP.SetPixel(x, y, r, g, b);
+                            Bmp2.SetPixel(x, y, r, g, b);
                     }
                 }
 
@@ -356,15 +369,15 @@ namespace SimpleOsciloscope.UI
 
                     if (avgY < BMP.Height && avgY > 0)
                         for (var i = Margin; i < w - Margin; i++)
-                            BMP.SetPixel(i, avgY, 255, 255, 255);
+                            Bmp2.SetPixel(i, avgY, 255, 255, 255);
 
                     if (thresPlus < BMP.Height && thresPlus > 0)
                         for (var i = Margin; i < w - Margin; i++)
-                            BMP.SetPixel(i, thresPlus, 255, 128, 255);
+                            Bmp2.SetPixel(i, thresPlus, 255, 128, 255);
 
                     if (thresMinus < BMP.Height && thresMinus > 0)
                         for (var i = Margin; i < w - Margin; i++)
-                            BMP.SetPixel(i, thresMinus, 255, 128, 255);
+                            Bmp2.SetPixel(i, thresMinus, 255, 128, 255);
                 }
             }
 
