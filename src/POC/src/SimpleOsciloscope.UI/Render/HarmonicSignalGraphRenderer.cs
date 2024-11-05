@@ -577,6 +577,10 @@ namespace SimpleOsciloscope.UI
             var h = UiState.Instance.RenderBitmapHeight;
 
 
+            var alpha = UiState.Instance.CurrentRepo.LastAlpha;
+            var beta = UiState.Instance.CurrentRepo.LastBeta;
+
+
             if (Bmp2 == null)
             {
                 Bmp2 = new WriteableBitmap(w, h, 96, 96, UiState.BitmapPixelFormat, null);
@@ -603,7 +607,7 @@ namespace SimpleOsciloscope.UI
             var l = arr.FixedLength;
 
             var ys = ArrayPool.Short(l);
-            var ysf = ArrayPool.Float(l);
+            //var ysf = ArrayPool.Float(l);
 
 
             properties.Max = ys.Max();
@@ -612,7 +616,7 @@ namespace SimpleOsciloscope.UI
             var xs = ArrayPool.Double(l);
 
             arr.CopyTo(ys);
-            arrf.CopyTo(ysf);
+            //arrf.CopyTo(ysf);
 
             var hist = ArrayPool.Long(4096);
 
@@ -653,8 +657,8 @@ namespace SimpleOsciloscope.UI
 
             var twl = sp * waveLength;
 
-            var min = ysf.Min();
-            var max = ysf.Max();// MathUtil.MaxValueForBits(UiState.AdcConfig.ResolutionBits);//.Instance.CurrentRepo.AdcMaxValue;
+            var min = ys.Min() * alpha + beta;
+            var max = ys.Max() * alpha + beta;// MathUtil.MaxValueForBits(UiState.AdcConfig.ResolutionBits);//.Instance.CurrentRepo.AdcMaxValue;
 
             vmin = min;
             vmax = max;
@@ -673,7 +677,7 @@ namespace SimpleOsciloscope.UI
                 Bmp2.Clear(Colors.Black);
 
 
-                DrawGridsF(Bmp2, min, max);
+                DrawGridsF(Bmp2, (float)min, (float)max);
 
                 var dt = 1.0 / UiState.AdcConfig.SampleRate;//repo.AdcSampleRate;
 
@@ -714,7 +718,7 @@ namespace SimpleOsciloscope.UI
 
                             xi = xi % twl;
 
-                            var ty = ysf[i];
+                            var ty = ys[i] * alpha + beta;
 
                             x = (int)trsX.Transform(xi);
                             y = (int)trsY.Transform(ty);
@@ -740,7 +744,7 @@ namespace SimpleOsciloscope.UI
 
         public void Zoom(double delta, int x, int y)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void ReSetZoom()

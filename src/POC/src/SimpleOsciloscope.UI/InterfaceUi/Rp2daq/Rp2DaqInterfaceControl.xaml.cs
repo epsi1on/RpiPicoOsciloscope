@@ -20,7 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static SimpleOsciloscope.UI.HardwareInterface.RpiPicoDaqInterface;
+using static SimpleOsciloscope.UI.HardwareInterface.Rp2DaqInterface;
 using ChannelInfo = SimpleOsciloscope.UI.HardwareInterface.AdcChannelInfo;
 
 
@@ -38,7 +38,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
         {
             public class Rp2DaqChannelInfo
             {
-                public Rp2DaqChannelInfo(RpiPicoDaqInterface.Rp2040AdcChannels rpChannel, int pin10x, int pinAcDc, int pinAdc)
+                public Rp2DaqChannelInfo(Rp2DaqInterface.Rp2040AdcChannels rpChannel, int pin10x, int pinAcDc, int pinAdc)
                 {
                     //Id = id;
                     Pin10x = pin10x;
@@ -55,7 +55,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
                 public readonly int PinAcDc = -1;//ac coupling cap button
                 public readonly int PinAdc = -1;//gpio# for adc
 
-                public readonly RpiPicoDaqInterface.Rp2040AdcChannels ChannelId;
+                public readonly Rp2DaqInterface.Rp2040AdcChannels ChannelId;
 
 
                 //public double NormalPullupResistor = double.MaxValue;
@@ -329,10 +329,10 @@ namespace SimpleOsciloscope.UI.InterfaceUi
             {
                 var lst = new List<Rp2DaqChannelInfo>();
 
-                var ids = new RpiPicoDaqInterface.Rp2040AdcChannels[]{
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio28,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio26,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio27,
+                var ids = new Rp2DaqInterface.Rp2040AdcChannels[]{
+                    Rp2DaqInterface.Rp2040AdcChannels.Gpio28,
+                    Rp2DaqInterface.Rp2040AdcChannels.Gpio26,
+                    Rp2DaqInterface.Rp2040AdcChannels.Gpio27,
                     //RpiPicoDaqInterface.Rp2040AdcChannels.InternalReference,
                     //RpiPicoDaqInterface.Rp2040AdcChannels.InternalTempratureSensor
                     };

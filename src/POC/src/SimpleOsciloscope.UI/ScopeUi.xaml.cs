@@ -1,4 +1,5 @@
-﻿using NAudio.Mixer;
+﻿using FftSharp;
+using NAudio.Mixer;
 using SimpleOsciloscope.UI.HardwareInterface;
 using SimpleOsciloscope.UI.InterfaceUi;
 using SimpleOsciloscope.UI.Properties;
@@ -32,7 +33,7 @@ namespace SimpleOsciloscope.UI
     /// <summary>
     /// Interaction logic for ScopeUi.xaml
     /// </summary>
-    public partial class ScopeUi : Window
+    public partial class ScopeUi 
     {
 
         public ScopeUi()
@@ -127,7 +128,7 @@ namespace SimpleOsciloscope.UI
 
                 {
                     this.BitmapSource = new WriteableBitmap(UiState.Instance.RenderBitmapWidth, UiState.Instance.RenderBitmapHeight, 96, 96, pixelFormat: UiState.BitmapPixelFormat, null);
-                    this.SampleRate = 500_000;// (long)UiState.AdcConfig.SampleRate;
+                    //this.SampleRate = 500_000;// (long)UiState.AdcConfig.SampleRate;
                 }
 
                 {
@@ -183,14 +184,17 @@ namespace SimpleOsciloscope.UI
                     }
 
 
-                    */
+                    
 
                     this.AvailableChannels =
                         //new ObservableCollection<ChannelInfo>(lst.OrderBy(i => i.Title).ToArray());
                         new ObservableCollection<ChannelInfo>(UiState.Instance.Channels);
+
+                    */
                 }
 
                 {
+                    /*
                     var lastPort = Settings.Default.lastPort;
                     var lastChnIdx = Settings.Default.lastChannelIndex;
                     var lastSrate = Settings.Default.lastSampleRate;
@@ -199,8 +203,8 @@ namespace SimpleOsciloscope.UI
                         SelectedPort = lastPort;
 
                     SelectedChannel = AvailableChannels[lastChnIdx];
-
-                    SampleRate = lastSrate;
+                    */
+                    //SampleRate = lastSrate;
                 }
             }
 
@@ -500,6 +504,8 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
+            /*
+
             #region SampleRate Property and field
 
             [Obfuscation(Exclude = true, ApplyToMembers = false)]
@@ -535,6 +541,7 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
+            */
             #region AvailablePorts Property and field
 
             [Obfuscation(Exclude = true, ApplyToMembers = false)]
@@ -1047,6 +1054,7 @@ namespace SimpleOsciloscope.UI
 
                 //curr.SetEnabled(true);
 
+                
                 this.renderer = curr;
             }
 
@@ -1065,7 +1073,7 @@ namespace SimpleOsciloscope.UI
             
 
 
-            public void Start(IDaqInterface intfs)
+            public void Start(IDaqInterface intfs,int sampleRate)
             {
 
 
@@ -1075,18 +1083,18 @@ namespace SimpleOsciloscope.UI
                         item.Clear();
                 }
 
-
+                /*
                 if (this.SelectedChannel == null)
                 {
                     MessageBox.Show("Select Channel");
                     return;
                 }
-
+                */
                 //UiState.Instance.CurrentRepo.clear
-                UiState.Instance.CurrentRepo.Init((int)SampleRate);
+                UiState.Instance.CurrentRepo.Init(sampleRate);
 
                 {
-                    UiState.AdcConfig.SampleRate = SampleRate;
+                    
 
                     foreach (var item in Renderers)
                     {
@@ -1145,9 +1153,12 @@ namespace SimpleOsciloscope.UI
                         }
                         catch (Exception ex)
                         {
+
                             Stop();
 
-                            Application.Current.Dispatcher.Invoke(() => { MessageBox.Show(ex.Message); });
+
+                            if (!(ex is ThreadAbortException))
+                                Application.Current.Dispatcher.Invoke(() => { MessageBox.Show(ex.Message); });
 
 
                         }
@@ -1158,7 +1169,7 @@ namespace SimpleOsciloscope.UI
                 }
 
                 //UiState.Instance.CurrentRepo.AdcSampleRate = (int)this.SampleRate;
-                UiState.AdcConfig.SampleRate = (int)SampleRate;
+                UiState.AdcConfig.SampleRate = sampleRate;
 
 
             }
@@ -1370,7 +1381,9 @@ namespace SimpleOsciloscope.UI
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            /**/
+            /*
+            return;
+            /** /
             if (string.IsNullOrEmpty(Context.SelectedPort))
             {
                 MessageBox.Show("invalid port");
@@ -1382,7 +1395,7 @@ namespace SimpleOsciloscope.UI
                 MessageBox.Show("invalid sample rate");
                 return;
             }
-            /**/
+            /** /
 
 
             Settings.Default.lastChannelIndex = Context.AvailableChannels.IndexOf(Context.SelectedChannel);
@@ -1393,6 +1406,8 @@ namespace SimpleOsciloscope.UI
 
             
             Context.Start(null);
+
+            */
         }
 
         private void BtnRefreshPorts_Click(object sender, RoutedEventArgs e)
@@ -1497,8 +1512,9 @@ namespace SimpleOsciloscope.UI
             var calib = ui.LoadCalibrationSettings();
 
             var daqInterface = Context.SelectedDevice.UI.GenerateDaqInterface(calib, config);
+            var sr = UiState.AdcConfig.SampleRate = config.GetAdcSampleRate();
 
-            Context.Start(daqInterface);
+            Context.Start(daqInterface, (int)sr);
 
             return;
         }

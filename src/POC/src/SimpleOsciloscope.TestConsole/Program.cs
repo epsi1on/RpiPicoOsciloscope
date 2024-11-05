@@ -280,7 +280,7 @@ namespace SimpleOsciloscope.TestConsole
 
         static void TestDaqInterface()
         {
-            var ifs = new RpiPicoDaqInterface("COM8",50_000);
+            var ifs = new Rp2DaqInterface("COM8",50_000);
             ifs.StartSync();
         }
 
@@ -405,7 +405,7 @@ namespace SimpleOsciloscope.TestConsole
         {
             var rate = 100_000;
 
-            var ifs = new RpiPicoDaqInterface("COM10",rate);
+            var ifs = new Rp2DaqInterface("COM10",rate);
 
             //RpiPicoDaqInterface.ChannelMask = 4;
             //RpiPicoDaqInterface.blockSize = 100;
@@ -472,7 +472,7 @@ namespace SimpleOsciloscope.TestConsole
         {
             var rate = 50_000;
 
-            var ifs = new RpiPicoDaqInterface("COM10", rate);
+            var ifs = new Rp2DaqInterface("COM10", rate);
 
 
             var repo = new DataRepository();
@@ -767,7 +767,7 @@ namespace SimpleOsciloscope.TestConsole
 
         static void t2()
         {
-            var ifs = new RpiPicoDaqInterface("COM8",50_000);
+            var ifs = new Rp2DaqInterface("COM8",50_000);
 
             ifs.TargetRepository = UiState.Instance.CurrentRepo;
 

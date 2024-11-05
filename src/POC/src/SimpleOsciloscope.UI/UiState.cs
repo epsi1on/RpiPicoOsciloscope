@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using static SimpleOsciloscope.UI.HardwareInterface.RpiPicoDaqInterface;
+using static SimpleOsciloscope.UI.HardwareInterface.Rp2DaqInterface;
 
 namespace SimpleOsciloscope.UI
 {
@@ -15,9 +15,14 @@ namespace SimpleOsciloscope.UI
     {
         public static class AdcConfig
         {
-            public static int ResolutionBits { get;private set; }
+            public static int ResolutionBits { get; private set; }
             public static double MaxVoltage { get; private set; }
-            public static long SampleRate;
+            public static long SampleRate
+            {
+                get;
+                set;
+            }
+
 
             public static void Set(IDaqInterface ifs)
             {
@@ -55,10 +60,10 @@ namespace SimpleOsciloscope.UI
         {
             var lst = new List<AdcChannelInfo>();
 
-            var ids = new RpiPicoDaqInterface.Rp2040AdcChannels[]{
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio28,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio26,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio27,
+            var ids = new Rp2DaqInterface.Rp2040AdcChannels[]{
+                    Rp2DaqInterface.Rp2040AdcChannels.Gpio28,
+                    Rp2DaqInterface.Rp2040AdcChannels.Gpio26,
+                    Rp2DaqInterface.Rp2040AdcChannels.Gpio27,
                     //RpiPicoDaqInterface.Rp2040AdcChannels.InternalReference,
                     //RpiPicoDaqInterface.Rp2040AdcChannels.InternalTempratureSensor
                     };

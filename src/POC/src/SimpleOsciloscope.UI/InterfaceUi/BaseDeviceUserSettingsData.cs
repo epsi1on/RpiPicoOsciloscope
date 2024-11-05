@@ -7,5 +7,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
     public abstract class BaseDeviceUserSettingsData: ISerializable
     {
         public abstract void GetObjectData(SerializationInfo info, StreamingContext context);
+
+        public abstract int GetAdcSampleRate();
     }
 }

@@ -58,12 +58,17 @@ namespace SimpleOsciloscope.UI
 
             long[] histogram;
             long histogramSum;
+            long tmp;
 
             {
                 histogram = new long[4096];
 
                 for (int i = 0; i < ys.Length; i++)
+                {
+                    tmp = ys[i];
                     histogram[ys[i]]++;
+                }
+                    
 
                 histogramSum = histogram.Sum();
             }

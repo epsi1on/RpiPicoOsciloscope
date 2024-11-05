@@ -12,7 +12,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
     {
         public override IDaqInterface GenerateDaqInterface(BaseDeviceCalibrationData calibrationData, BaseDeviceUserSettingsData userSettings)
         {
-            var buf = new RpiPicoDaqInterface(userSettings, calibrationData);
+            var buf = new Rp2DaqInterface(userSettings, calibrationData);
 
             return buf;
             
@@ -48,7 +48,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
             var set = new Rp2daqUserSettings();
 
             set.SampleRate = 500_000;
-            set.ChannelId =  RpiPicoDaqInterface.Rp2040AdcChannels.Gpio27;
+            set.ChannelId =  Rp2DaqInterface.Rp2040AdcChannels.Gpio27;
             set.BitWidth = 12;
 
             return set;

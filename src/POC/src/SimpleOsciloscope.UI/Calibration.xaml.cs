@@ -63,10 +63,10 @@ namespace SimpleOsciloscope.UI
 
             double a1, a2, b1, b2;
 
-			RpiPicoDaqInterface.GetCalibrationParameters(0, wnd.Context._10xLwGnd, 3.3, wnd.Context._10xLwVcc,
+			Rp2DaqInterface.GetCalibrationParameters(0, wnd.Context._10xLwGnd, 3.3, wnd.Context._10xLwVcc,
 				out a1, out b1);
 
-			RpiPicoDaqInterface.GetCalibrationParameters(0, wnd.Context._10xHiGnd, 3.3, wnd.Context._10xHiVcc,
+			Rp2DaqInterface.GetCalibrationParameters(0, wnd.Context._10xHiGnd, 3.3, wnd.Context._10xHiVcc,
 				out a2, out b2);
 
 			var fl = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
@@ -157,7 +157,7 @@ namespace SimpleOsciloscope.UI
             public void Init(string portName, bool gnd)
 			{
 				PortName = portName;
-				Intfs = new HardwareInterface.RpiPicoDaqInterface(portName, 0);
+				Intfs = new HardwareInterface.Rp2DaqInterface(portName, 0);
 
 				Intfs.Connect();
 				Intfs.StopAdc();
@@ -223,7 +223,7 @@ namespace SimpleOsciloscope.UI
 				Level2Visibility = CanContinue;
             }
 
-			public HardwareInterface.RpiPicoDaqInterface Intfs;
+			public HardwareInterface.Rp2DaqInterface Intfs;
 
             #region TargetChannel Property and field
 
@@ -771,7 +771,7 @@ namespace SimpleOsciloscope.UI
 			var chn = this.Context.SelectedChannel.Id;
 
 
-			RpiPicoDaqInterface.Rp2040AdcChannels gpio;
+			Rp2DaqInterface.Rp2040AdcChannels gpio;
 
 			{
 				var pns = UiState.AdcPins();
@@ -781,20 +781,20 @@ namespace SimpleOsciloscope.UI
 				switch (gpioId)
 				{
 					case 28:
-						gpio = RpiPicoDaqInterface.Rp2040AdcChannels.Gpio28;
+						gpio = Rp2DaqInterface.Rp2040AdcChannels.Gpio28;
 						break;
 					case 27:
-                        gpio = RpiPicoDaqInterface.Rp2040AdcChannels.Gpio27;
+                        gpio = Rp2DaqInterface.Rp2040AdcChannels.Gpio27;
                         break;
 					case 26:
-                        gpio = RpiPicoDaqInterface.Rp2040AdcChannels.Gpio26;
+                        gpio = Rp2DaqInterface.Rp2040AdcChannels.Gpio26;
                         break;
 					default:
 						throw new NotImplementedException();
 				}
 			}
 
-			var mask = RpiPicoDaqInterface.GetChannelMask(gpio);
+			var mask = Rp2DaqInterface.GetChannelMask(gpio);
 
 			var center = AdcSampler.GetAdcMedian(Context.Intfs.PortName, this.Context.SelectedChannel);
 

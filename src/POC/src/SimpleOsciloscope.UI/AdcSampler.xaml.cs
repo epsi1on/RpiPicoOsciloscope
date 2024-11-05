@@ -41,7 +41,7 @@ namespace SimpleOsciloscope.UI
 			wnd.Context.SerialPortName = portName;
 
 			wnd.Context.Init();
-			wnd.Context.ChannelMask = RpiPicoDaqInterface.GetChannelMask(inf.RpChannel);
+			wnd.Context.ChannelMask = Rp2DaqInterface.GetChannelMask(inf.RpChannel);
             wnd.Context.Chn = inf; 
 			
 			wnd.Context.StartAdcAsync();
@@ -473,7 +473,7 @@ namespace SimpleOsciloscope.UI
 
             public void Init()
 			{
-                var hw = intfs = new RpiPicoDaqInterface(SerialPortName, sampleRate);
+                var hw = intfs = new Rp2DaqInterface(SerialPortName, sampleRate);
                 _Repository = new DataRepository();
 				_Repository.Init(sampleRate);
 
@@ -719,7 +719,7 @@ namespace SimpleOsciloscope.UI
 				hw.ReadAdcData();
 				*/
 			}
-			public RpiPicoDaqInterface intfs;
+			public Rp2DaqInterface intfs;
 
             public void Stop()
 			{

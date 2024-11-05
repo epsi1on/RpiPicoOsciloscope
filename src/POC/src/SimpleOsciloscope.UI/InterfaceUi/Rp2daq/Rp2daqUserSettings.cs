@@ -12,7 +12,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
     {
         public int SampleRate;
         public string ComPortName;
-        public HardwareInterface.RpiPicoDaqInterface.Rp2040AdcChannels ChannelId;
+        public HardwareInterface.Rp2DaqInterface.Rp2040AdcChannels ChannelId;
         public int BitWidth;
 
         public Rp2daqUserSettings()
@@ -27,11 +27,16 @@ namespace SimpleOsciloscope.UI.InterfaceUi
             info.AddValue("BitWidth", BitWidth);
         }
 
+        public override int GetAdcSampleRate()
+        {
+            return SampleRate;
+        }
+
         public Rp2daqUserSettings(SerializationInfo info, StreamingContext context)
         {
             ComPortName = info.GetString("ComPortName");
             SampleRate = info.GetInt32("SampleRate");
-            ChannelId = (HardwareInterface.RpiPicoDaqInterface.Rp2040AdcChannels) info.GetInt32("ChannelId");
+            ChannelId = (HardwareInterface.Rp2DaqInterface.Rp2040AdcChannels) info.GetInt32("ChannelId");
             BitWidth = info.GetInt32("BitWidth");
         }
     }

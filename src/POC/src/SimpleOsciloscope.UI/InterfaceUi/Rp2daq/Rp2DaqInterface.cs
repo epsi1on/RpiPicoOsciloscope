@@ -39,7 +39,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         public readonly int PinAcDc = -1;//ac coupling cap button
         public readonly int PinAdc = -1;//gpio# for adc
 
-        public readonly RpiPicoDaqInterface.Rp2040AdcChannels RpChannel;
+        public readonly Rp2DaqInterface.Rp2040AdcChannels RpChannel;
 
 
         //public double NormalPullupResistor = double.MaxValue;
@@ -61,7 +61,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         public bool AcDcMode { get; set; }// ac/dc button is pressed
         public bool _10xMode { get; set; }// 10x button is active
 
-        public AdcChannelInfo(int id, int pin10x, int pinAcDc, double normalAlpha, double normalBeta, double _10xAlpha, double _10xBeta, RpiPicoDaqInterface.Rp2040AdcChannels rpChannel)
+        public AdcChannelInfo(int id, int pin10x, int pinAcDc, double normalAlpha, double normalBeta, double _10xAlpha, double _10xBeta, Rp2DaqInterface.Rp2040AdcChannels rpChannel)
         {
             Id = id;
             Pin10x = pin10x;
@@ -76,7 +76,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
     }
 
 
-    public class RpiPicoDaqInterface: IDaqInterface
+    public class Rp2DaqInterface: IDaqInterface
     {
         //public static AdcChannelInfo[] Channels;//= InitChannels();
 
@@ -168,7 +168,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
         public bool IsConnected = false;
 
 
-        public RpiPicoDaqInterface(BaseDeviceUserSettingsData setts, BaseDeviceCalibrationData calib)
+        public Rp2DaqInterface(BaseDeviceUserSettingsData setts, BaseDeviceCalibrationData calib)
         {
             //AdcResolutionBits = adcResolutionBits;
             //AdcSampleRate = adcSampleRate;
@@ -178,7 +178,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             this.CalibrationData = calib as Rp2daqCalibrationData;
         }
 
-        public RpiPicoDaqInterface(string portName, long adcSampleRate)
+        public Rp2DaqInterface(string portName, long adcSampleRate)
         {
             //AdcResolutionBits = adcResolutionBits;
             AdcSampleRate = adcSampleRate;
@@ -871,7 +871,14 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
         public void DisConnect()
         {
-            throw new NotImplementedException();
+            StopAdc();
+
+            if (Port != null)
+                Port.Close();
+
+            Port = null;
+
+            IsConnected = false;
         }
     }
 }

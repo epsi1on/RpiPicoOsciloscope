@@ -382,6 +382,13 @@
     <Compile Include="InterfaceUi\BaseDeviceInterface.cs" />
     <Compile Include="InterfaceUi\BaseDeviceStateData.cs" />
     <Compile Include="InterfaceUi\BaseDeviceUserSettingsData.cs" />
+    <Compile Include="InterfaceUi\FakeDaq\FakeDaqCalibrationData.cs" />
+    <Compile Include="InterfaceUi\FakeDaq\FakeDaqControl.xaml.cs">
+      <DependentUpon>FakeDaqControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="InterfaceUi\FakeDaq\FakeDaqInterface.cs" />
+    <Compile Include="InterfaceUi\FakeDaq\FakeDaqUserSettings.cs" />
+    <Compile Include="InterfaceUi\FakeDaq\FakeInterfaceUi.cs" />
     <Compile Include="InterfaceUi\Interfaces.cs" />
     <Compile Include="InterfaceUi\Rp2daq\Rp2daqCalibrationData.cs" />
     <Compile Include="InterfaceUi\Rp2daq\Rp2daqUserSettings.cs" />
@@ -429,6 +436,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="InterfaceUi\FakeDaq\FakeDaqControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="InterfaceUi\Rp2daq\Rp2DaqInterfaceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -442,7 +453,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HardwareInterface\RpiPicoDaqInterface.cs" />
+    <Compile Include="InterfaceUi\Rp2daq\Rp2DaqInterface.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

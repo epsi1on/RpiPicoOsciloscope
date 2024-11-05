@@ -313,6 +313,7 @@ namespace SimpleOsciloscope.UI.Render
         public void ReSetZoom()
         {
             var sr = UiState.AdcConfig.SampleRate;
+
             this.MinFreqShow = 0;
             this.MaxFreqShow = sr / 2;
         }

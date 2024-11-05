@@ -61,7 +61,14 @@ namespace SimpleOsciloscope.UI.InterfaceUi
             }
             else
             {
-                buf = SerializationUtil.DeSerialize(str) as BaseDeviceUserSettingsData;
+                try
+                {
+                    buf = SerializationUtil.DeSerialize(str) as BaseDeviceUserSettingsData;
+                }
+                catch
+                {
+                    buf = GetDefaultUserSettings();
+                }
             }
 
 

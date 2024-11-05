@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleOsciloscope.UI.InterfaceUi.FakeDaq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi
     {
         public static InterfaceUi.BaseDeviceInterface[] GetInterfaces()
         {
-            var buf = new InterfaceUi.BaseDeviceInterface[] { new Rp2DaqInterfaceUi() };
+            var buf = new InterfaceUi.BaseDeviceInterface[] { new Rp2DaqInterfaceUi(), new FakeInterfaceUi() };
             return buf;
         }
     }
