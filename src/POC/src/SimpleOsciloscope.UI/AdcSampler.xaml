@@ -56,8 +56,11 @@
             <TextBlock Text="  (It is too noisy yet, try to keep probe on the pin)" VerticalAlignment="Top" Visibility="{Binding IsGood, ConverterParameter=1, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
             <TextBlock Text="  (you can click the finish button)" VerticalAlignment="Top" Visibility="{Binding IsGood, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
 
+            <!--
             <iconPacks:PackIconMaterialDesign Kind="Check" Foreground="Green" Visibility="{Binding IsGood, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
             <iconPacks:PackIconMaterialDesign Kind="Report" Foreground="Red" Visibility="{Binding IsGood, ConverterParameter=1, Converter={StaticResource ParametricBooleanToVisibilityConverter}}"/>
+            
+            -->
             <Rectangle Width="50">
                 <Rectangle.Fill>
                     <RadialGradientBrush Opacity="0.7">
