@@ -138,10 +138,13 @@ namespace SimpleOsciloscope.UI.Render
 
             using (var ctx = Bmp2.GetBitmapContext())
             {
-                var st = Math.Max(minFreq, 0);
-                var en = Math.Min(maxFreq, cpx.Length);
+                var stFreq = Math.Max(minFreq, 0);
+                var enFreq = Math.Min(maxFreq, sampleRate/2);
 
-                for (var i = (int)st; i < en; i++)
+                var stId = stFreq * cpx.Length / sampleRate;
+                var enId = enFreq * cpx.Length / sampleRate;
+
+                for (var i = (int)stId; i < enId; i++)
                 {
                     
                     var mag = cpx[i].Magnitude;

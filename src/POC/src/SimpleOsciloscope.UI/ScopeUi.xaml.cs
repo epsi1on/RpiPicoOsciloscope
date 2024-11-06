@@ -1220,14 +1220,28 @@ namespace SimpleOsciloscope.UI
 
             void RenderLoopSync()
             {
-                var wait = (1 / UiState.RenderFramerate) * 1000;
+                var fps = UiState.RenderFramerate;
+
+                var rateFrameMs = (1 / fps) * 1000;//how many milis between two consecutive frames
+
+
+                var tm = Stopwatch.StartNew();
+
 
                 while (true)
                 {
+                    
+
                     if (!RenderLoopFlag)
                         return;
 
+                    tm.Restart();
                     RenderShot();
+                    tm.Stop();
+
+                    var wait = rateFrameMs - tm.ElapsedMilliseconds;
+
+                    
 
                     try
                     {
@@ -1239,7 +1253,10 @@ namespace SimpleOsciloscope.UI
                     }
                     //this.TotalSmaples = UiState.Instance.CurrentRepo.Samples.Index;// s.Sum(i => i.Sets);
                     //this.TotalSamplesStr = Utils.numStr(this.TotalSmaples);
-                    Thread.Sleep((int)wait);
+
+
+                    if (wait > 0)
+                        Thread.Sleep((int)wait);
                 }
             }
 

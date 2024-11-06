@@ -208,15 +208,53 @@ namespace SimpleOsciloscope.UI.InterfaceUi.FakeDaq
 
             #endregion
 
+            #region Noise Property and field
+
+            [Obfuscation(Exclude = true, ApplyToMembers = false)]
+            public double Noise
+            {
+                get { return _Noise; }
+                set
+                {
+                    if (AreEqualObjects(_Noise, value))
+                        return;
+
+                    var _fieldOldValue = _Noise;
+
+                    _Noise = value;
+
+                    ContextClass.OnNoiseChanged(this, new PropertyValueChangedEventArgs<double>(_fieldOldValue, value));
+
+                    this.OnPropertyChanged("Noise");
+                }
+            }
+
+            private double _Noise;
+
+            public EventHandler<PropertyValueChangedEventArgs<double>> NoiseChanged;
+
+            public static void OnNoiseChanged(object sender, PropertyValueChangedEventArgs<double> e)
+            {
+                var obj = sender as ContextClass;
+
+                if (obj.NoiseChanged != null)
+                    obj.NoiseChanged(obj, e);
+            }
+
+            #endregion
+
+
         }
 
         public BaseDeviceUserSettingsData GetUserSettings()
         {
             var buf = new FakeDaqUserSettings();
+
             buf.SampleRate = Context.SampleRate;
             buf.Frequency = Context.Frequency;
             buf.Offset = Context.Offset;
             buf.Amplitude = Context.Amplitude;
+            buf.Noise = Context.Noise;
 
             return buf;
         }
@@ -238,6 +276,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi.FakeDaq
             this.Context.Offset = c.Offset;
             this.Context.Frequency = c.Frequency;
             this.Context.Amplitude = c.Amplitude;
+            this.Context.Noise = c.Noise;
 
         }
     }

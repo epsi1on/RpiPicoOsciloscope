@@ -11,11 +11,14 @@ namespace SimpleOsciloscope.UI.InterfaceUi.FakeDaq
     public class FakeDaqUserSettings : BaseDeviceUserSettingsData
     {
         public int SampleRate { get; set; }
+
         public double Frequency { get; set; }
 
         public double Offset { get; set; }
 
         public double Amplitude { get; set; }
+
+        public double Noise { get; set; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -23,6 +26,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi.FakeDaq
             info.AddValue(nameof(Frequency), Frequency);
             info.AddValue(nameof(Offset), Offset);
             info.AddValue(nameof(Amplitude), Amplitude);
+            info.AddValue(nameof(Noise), Noise);
         }
 
         public override int GetAdcSampleRate()
@@ -40,6 +44,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi.FakeDaq
             Frequency = info.GetDouble("Frequency");
             Offset = info.GetDouble("Offset");
             Amplitude = info.GetDouble("Amplitude");
+            Noise = info.GetDouble("Noise");
         }
 
 

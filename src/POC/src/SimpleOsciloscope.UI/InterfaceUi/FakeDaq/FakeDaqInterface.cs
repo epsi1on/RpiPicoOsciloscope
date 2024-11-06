@@ -40,6 +40,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi.FakeDaq
 
         public void StartSync()
         {
+            var rnd = new Random();
 
             var resolution = 12;
             short adcMax = (short)(1 << resolution);//2 ^ resolution
@@ -57,6 +58,8 @@ namespace SimpleOsciloscope.UI.InterfaceUi.FakeDaq
             var freq = UserSettings.Frequency;
             var offset = UserSettings.Offset;
             var ampl = UserSettings.Amplitude;
+            var noise = UserSettings.Noise;
+
 
             var alpha = UiState.Instance.CurrentRepo.LastAlpha = 2 * offset / adcMax;
             var beta = UiState.Instance.CurrentRepo.LastBeta = ampl - offset;
@@ -70,7 +73,11 @@ namespace SimpleOsciloscope.UI.InterfaceUi.FakeDaq
 
             var dt = 1.0 / sampleRate;
 
-            var omega = 2* Math.PI * freq;
+            var omega = 2 * Math.PI * freq;
+
+            var noiseAdc = (short)(noise / alpha);
+
+            var haveNoise = noiseAdc != 0;
 
             while (!StopFlag)
             {
@@ -89,9 +96,14 @@ namespace SimpleOsciloscope.UI.InterfaceUi.FakeDaq
                     short res = (short)(sin * halfMax + halfMax);
 
                     //rrf.Add((float)(res * alpha + beta));
+                    if (haveNoise)
+                        res = (short)(res + rnd.Next(-noiseAdc, noiseAdc));
 
                     if (res > adcMax)
                         res = adcMax;
+
+                    if (res < 0)
+                        res = 0;
 
                     rr.Add(res);
                 }

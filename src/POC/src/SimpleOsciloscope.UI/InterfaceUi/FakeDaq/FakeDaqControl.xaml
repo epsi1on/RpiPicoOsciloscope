@@ -8,10 +8,12 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50*"/>
-            <RowDefinition Height="60*"/>
-            <RowDefinition Height="59*"/>
-            <RowDefinition Height="281*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="169*"/>
@@ -22,11 +24,13 @@
         <TextBlock Grid.Row="1" Text="Frequency" />
         <TextBlock Grid.Row="2" Text="Offset" />
         <TextBlock Grid.Row="3" Text="Amplitude" />
+        <TextBlock Grid.Row="4" Text="Noise" />
 
         <TextBox Grid.Row="0" Text="{Binding SampleRate}" Grid.Column="1"/>
         <TextBox Grid.Row="1" Text="{Binding Frequency}" Grid.Column="1"/>
         <TextBox Grid.Row="2" Text="{Binding Offset}" Grid.Column="1"/>
         <TextBox Grid.Row="3" Text="{Binding Amplitude}" Grid.Column="1"/>
+        <TextBox Grid.Row="4" Text="{Binding Noise}" Grid.Column="1"/>
         
     </Grid>
 </UserControl>
