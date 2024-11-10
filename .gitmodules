@@ -4,3 +4,6 @@
 [submodule "src/POC/src/SharpFFTW"]
 	path = src/POC/src/SharpFFTW
 	url = https://github.com/wo80/SharpFFTW.git
+[submodule "src/POC/src/WriteableBitmapEx"]
+	path = src/POC/src/WriteableBitmapEx
+	url = https://github.com/epsi1on/WriteableBitmapEx.git
