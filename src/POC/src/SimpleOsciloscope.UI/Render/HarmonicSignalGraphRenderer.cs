@@ -2,6 +2,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Media;
@@ -29,8 +30,8 @@ namespace SimpleOsciloscope.UI
         //public static int Width = 500;
         //public static int Height = 500;
 
-        RgbBitmap BMP;
-        WriteableBitmap Bmp2;
+        //RgbBitmap BMP;
+        //WriteableBitmap Bmp2;
 
         static readonly IntThickness Margin = new IntThickness(40,30,20,10);
         static readonly int MarginLeft = 30;
@@ -146,7 +147,7 @@ namespace SimpleOsciloscope.UI
         }
 
 
-        private void DrawGridsF(WriteableBitmap bmp, float minY, float maxY)
+        private void DrawGridsF(BitmapContext bmp, float minY, float maxY)
         {
             var trsY = OneDTransformation.FromInOut(maxY, minY, Margin.Top, bmp.Height - Margin.Bottom);
 
@@ -160,8 +161,8 @@ namespace SimpleOsciloscope.UI
 
             var delta = ((maxY - minY) * 1.0 / count);
 
-            var h = bmp.PixelHeight;
-            var w = bmp.PixelWidth;
+            var h = bmp.Height;
+            var w = bmp.Width;
 
             for (var ii = 0; ii <= count; ii++)
             {
@@ -191,7 +192,8 @@ namespace SimpleOsciloscope.UI
 
                 var ctx = new BitmapContext();
 
-                WriteableBitmapEx.FillText(bmp, formattedText, 5, (int)(yp - textSize / 2), Colors.Blue);
+                BitmapContextExtensions.
+                FillText(bmp, formattedText, 5, (int)(yp - textSize / 2), Colors.Blue);
             }
 
             bmp.DrawLine(Margin.Left, Margin.Top, Margin.Left, h - Margin.Bottom, col);
@@ -207,6 +209,11 @@ namespace SimpleOsciloscope.UI
         /// <param name="sampleRate">sample per second</param>
         public RgbBitmap Render(out double frequency)
         {
+            throw new NotImplementedException();
+
+            RgbBitmap BMP;
+            WriteableBitmap Bmp2;
+
             var w = UiState.Instance.RenderBitmapWidth;
             var h = UiState.Instance.RenderBitmapHeight;
 
@@ -374,6 +381,12 @@ namespace SimpleOsciloscope.UI
 
         public WriteableBitmap Render2(out double frequency, out double vmin, out double vmax)
         {
+            throw new NotImplementedException();
+
+            RgbBitmap BMP;
+            WriteableBitmap Bmp2;
+
+
             var w = UiState.Instance.RenderBitmapWidth;
             var h = UiState.Instance.RenderBitmapHeight;
 
@@ -386,7 +399,7 @@ namespace SimpleOsciloscope.UI
             var repo = UiState.Instance.CurrentRepo;
 
             var arr = (FixedLengthListRepo<short>)repo.Samples;
-            var arrf = (FixedLengthListRepo<float>)repo.SamplesF;
+            //var arrf = (FixedLengthListRepo<float>)repo.SamplesF;
 
             vmin = vmax = 0;
 
@@ -403,12 +416,12 @@ namespace SimpleOsciloscope.UI
             var l = arr.FixedLength;
 
             var ys = ArrayPool.Short(l);
-            var ysf = ArrayPool.Float(l);
+            //var ysf = ArrayPool.Float(l);
 
             var xs = ArrayPool.Double(l);
 
             arr.CopyTo(ys);
-            arrf.CopyTo(ysf);
+            //arrf.CopyTo(ysf);
 
             var hist = ArrayPool.Long(4096);
 
@@ -441,8 +454,8 @@ namespace SimpleOsciloscope.UI
             var dtr = new HybridFrequencyDetector();
             
 
-            if (!dtr.TryGetFrequency(ys, sampleRate, out freq, out shiftRadian))
-                throw new System.Exception();
+            //if (!dtr.TryGetFrequency_old(ys, sampleRate, out freq, out shiftRadian))
+            //    throw new System.Exception();
 
             double dutyCycle;
 
@@ -461,8 +474,8 @@ namespace SimpleOsciloscope.UI
 
             var twl = sp * waveLength;
 
-            var min =  ysf.Min();
-            var max = ysf.Max();// MathUtil.MaxValueForBits(UiState.AdcConfig.ResolutionBits);//.Instance.CurrentRepo.AdcMaxValue;
+            var min = 0.0;// ysf.Min();
+            var max = 0.0;// ysf.Max();// MathUtil.MaxValueForBits(UiState.AdcConfig.ResolutionBits);//.Instance.CurrentRepo.AdcMaxValue;
 
             vmin = min;
             vmax = max;
@@ -481,7 +494,7 @@ namespace SimpleOsciloscope.UI
                 Bmp2.Clear(Colors.Black);
 
 
-                DrawGridsF(Bmp2, min, max);
+                //DrawGridsF(Bmp2, min, max);
 
                 //var windowSize = l / 10000;
                 //var windowStart = l / 2;
@@ -541,7 +554,7 @@ namespace SimpleOsciloscope.UI
 
                             xi = xi % twl;
 
-                            var ty = ysf[i];
+                            var ty = 0.0;// ysf[i];
 
                             x = (int)trsX.Transform(xi);
                             y = (int)trsY.Transform(ty);
@@ -563,14 +576,22 @@ namespace SimpleOsciloscope.UI
             
         }
 
-        public void Clear()
+        public void Clear(BitmapContext context)
         {
-            this.Bmp2 = null;
-            this.BMP = null;
+            //this.Bmp2 = null;
+            //this.BMP = null;
+
+            context.Clear();
         }
 
         public WriteableBitmap Render3(SignalPropertyList properties)
         {
+            throw new NotImplementedException();
+
+            RgbBitmap BMP;
+            WriteableBitmap Bmp2;
+
+
             double frequency, vmin, vmax;
 
             var w = UiState.Instance.RenderBitmapWidth;
@@ -589,7 +610,7 @@ namespace SimpleOsciloscope.UI
             var repo = UiState.Instance.CurrentRepo;
 
             var arr = (FixedLengthListRepo<short>)repo.Samples;
-            var arrf = (FixedLengthListRepo<float>)repo.SamplesF;
+            //var arrf = (FixedLengthListRepo<float>)repo.SamplesF;
 
             
             vmin = vmax = 0;
@@ -677,7 +698,7 @@ namespace SimpleOsciloscope.UI
                 Bmp2.Clear(Colors.Black);
 
 
-                DrawGridsF(Bmp2, (float)min, (float)max);
+                //DrawGridsF(Bmp2, (float)min, (float)max);
 
                 var dt = 1.0 / UiState.AdcConfig.SampleRate;//repo.AdcSampleRate;
 
@@ -765,6 +786,176 @@ namespace SimpleOsciloscope.UI
             var volt = LastYTrans.TransformBack(y);
 
             return FriendlyStringUtil.ToSI(volt, "0.000") + "V";
+        }
+
+        public void DoRender(BitmapContext context, SignalPropertyList properties)
+        {
+            double frequency, vmin, vmax;
+
+            var w = UiState.Instance.RenderBitmapWidth;
+            var h = UiState.Instance.RenderBitmapHeight;
+
+
+            var alpha = UiState.Instance.CurrentRepo.LastAlpha;
+            var beta = UiState.Instance.CurrentRepo.LastBeta;
+
+            var repo = UiState.Instance.CurrentRepo;
+
+            var arr = (FixedLengthListRepo<short>)repo.Samples;
+            //var arrf = (FixedLengthListRepo<float>)repo.SamplesF;
+
+
+            vmin = vmax = 0;
+
+            {
+
+                if (arr.TotalWrites < arr.FixedLength)
+                {
+                    frequency = -1;
+                    //return Bmp2;
+                }
+
+            }
+
+            context.Clear();
+
+            var l = arr.FixedLength;
+
+            var ys = ArrayPool.Short(l);
+            //var ysf = ArrayPool.Float(l);
+
+
+            //properties.Max = ys.Max();
+            //properties.Min = ys.Min();
+
+            var xs = ArrayPool.Double(l);
+
+            arr.CopyTo(ys);
+            //arrf.CopyTo(ysf);
+
+            var hist = ArrayPool.Long(4096);
+
+            {
+                for (int i = 0; i < 4096; i++)
+                    hist[i] = 0;
+
+                for (int i = ys.Length - 1; i >= 0; i--)
+                {
+                    hist[ys[i]]++;
+                }
+            }
+
+
+            var sampleRate = UiState.AdcConfig.SampleRate;
+
+            {
+                var deltaT = 1.0 / sampleRate;
+
+
+                for (int i = 0; i < l; i++)
+                {
+                    xs[i] = i * deltaT;
+                }
+            }
+
+            double freq, shiftRadian;
+
+            freq = properties.Frequency;
+
+            //freq = 150;
+
+            shiftRadian = properties.PhaseRadian;
+
+            var waveLength = 1 / freq;
+
+            var sp = CyclesToShow;// cycles to show
+
+            var twl = sp * waveLength;
+
+            var min = ys.Min() * alpha + beta;
+            var max = ys.Max() * alpha + beta;// MathUtil.MaxValueForBits(UiState.AdcConfig.ResolutionBits);//.Instance.CurrentRepo.AdcMaxValue;
+
+            vmin = min;
+            vmax = max;
+
+            {
+                var trsX = OneDTransformation.FromInOut(0, twl, Margin.Left, w - Margin.Right);
+                var trsY = LastYTrans = OneDTransformation.FromInOut(min, max, h - Margin.Bottom, Margin.Top);
+
+                int x, y;
+
+                byte r = 255;
+                byte b = 255;
+                byte g = 255;
+
+
+                context.Clear(Colors.Black);
+
+
+                DrawGridsF(context, (float)min, (float)max);
+
+                var dt = 1.0 / UiState.AdcConfig.SampleRate;//repo.AdcSampleRate;
+
+                {
+                    var st = 0;
+                    var en = l;// lamdaCount * drawWindowCount;
+
+                    var oCnt = NumberOfCyclesToRender;//oCnt x oscilations
+
+                    {
+                        var cnt2 = MinPointsToRender / (sampleRate * waveLength);
+
+                        if (cnt2 > oCnt)
+                            oCnt = (int)cnt2;
+                    }
+
+                    var samples = oCnt * waveLength * sampleRate;
+
+                    st = 0;
+                    en = (int)samples;
+
+                    if (en > l)
+                        en = l;
+
+                    var shiftSec = shiftRadian / (2 * Math.PI) * waveLength;
+
+                    Console.WriteLine("Shift: " + shiftRadian);
+
+                    var ctx = context;
+
+                    //using (var ctx = Bmp2.GetBitmapContext())
+                    {
+                        for (var i = st; i < en; i++)
+                        {
+                            var xi = xs[i];
+
+                            xi = xi + shiftSec;//% twl;
+
+                            while (xi < 0)
+                                xi += twl;
+
+                            xi = xi % twl;
+
+                            var ty = ys[i] * alpha + beta;
+
+                            x = (int)trsX.Transform(xi);
+                            y = (int)trsY.Transform(ty);
+
+                            if (x > 0 && y > 0 && x < w && y < h)
+                                BitmapContextExtensions.SetPixel(ctx, x, y, r, g, b);
+                        }
+                    }
+
+                }
+            }
+
+            ArrayPool.Return(xs);
+            ArrayPool.Return(hist);
+            ArrayPool.Return(ys);
+            frequency = freq;
+
+            //return Bmp2;
+
         }
 
         object lc = new object();

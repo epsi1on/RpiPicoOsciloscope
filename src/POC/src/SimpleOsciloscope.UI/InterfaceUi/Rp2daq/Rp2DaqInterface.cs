@@ -428,7 +428,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             float volt1, volt2;
 
             var arr = TargetRepository.Samples;
-            var arrF = TargetRepository.SamplesF;
+            //var arrF = TargetRepository.SamplesF;
             //this is only single channel
 
 
@@ -470,12 +470,13 @@ namespace SimpleOsciloscope.UI.HardwareInterface
                 arr.Add((short)v1);
                 arr.Add((short)v2);
 
+                /*
                 volt1 = (float)(v1 * alpha + beta);
                 volt2 = (float)(v2 * alpha + beta);
 
                 arrF.Add(volt1);
                 arrF.Add(volt2);
-
+                */
 
                 TotalReads += 2;
             }
@@ -650,7 +651,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
             var arr = TargetRepository.Samples;
 
-            var arrF = TargetRepository.SamplesF;
+            //var arrF = TargetRepository.SamplesF;
 
             var _4Count = 0;
 

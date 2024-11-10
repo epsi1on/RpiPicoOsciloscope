@@ -249,9 +249,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WriteableBitmapEx.Wpf, Version=1.6.8.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
-      <HintPath>..\packages\WriteableBitmapEx.1.6.8\lib\net40\WriteableBitmapEx.Wpf.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -261,10 +258,11 @@
     <Compile Include="AdcSampler.xaml.cs">
       <DependentUpon>AdcSampler.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ArrayGraphPlotter.cs" />
+    <Compile Include="ADC_Report.cs" />
+    <Compile Include="RecycleBim\ArrayGraphPlotter.cs" />
     <Compile Include="ArrayPool.cs" />
     <Compile Include="Audio\NAudioPlayer.cs" />
-    <Compile Include="ByteArrayPool.cs" />
+    <Compile Include="RecycleBim\ByteArrayPool.cs" />
     <Compile Include="Calibration.xaml.cs">
       <DependentUpon>Calibration.xaml</DependentUpon>
     </Compile>
@@ -364,7 +362,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="ADC_Report.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -417,6 +414,10 @@
     <ProjectReference Include="..\SharpFFTW\SharpFFTW\SharpFFTW.csproj">
       <Project>{e80f6357-4e7d-402f-bc9a-05ee06a79763}</Project>
       <Name>SharpFFTW</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WriteableBitmapEx\Source\WriteableBitmapEx.Wpf\WriteableBitmapEx.Wpf.csproj">
+      <Project>{9578757b-a9d9-4a14-a3ad-bc64f7951c7b}</Project>
+      <Name>WriteableBitmapEx.Wpf</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

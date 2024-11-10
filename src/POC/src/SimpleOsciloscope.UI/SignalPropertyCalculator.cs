@@ -83,13 +83,18 @@ namespace SimpleOsciloscope.UI
             buf.Percentile1Domain = (short)(buf.MaxPercentile1 - buf.MinPercentile1);
             buf.Percentile5Domain = (short)(buf.MaxPercentile5 - buf.MinPercentile5);
 
+            if (buf.FftContext == null)
+                buf.FftContext = new System.Numerics.Complex[lst.FixedLength];
+
+            FftwUtil.CalcFft(ys, buf.FftContext);
+
 
             {
                 double freq, shiftRadian;
-                var dtr = new HybridFrequencyDetector();
+                var dtr = (IFrequencyDetector)(new HybridFrequencyDetector());
 
 
-                if (!dtr.TryGetFrequency(ys, sampleRate, out freq, out shiftRadian))
+                if (!dtr.TryGetFrequency(ys, buf.FftContext, sampleRate, out freq, out shiftRadian))
                 {
                     freq = -1;
                     shiftRadian = -1;

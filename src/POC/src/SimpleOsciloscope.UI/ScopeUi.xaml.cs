@@ -71,6 +71,10 @@ namespace SimpleOsciloscope.UI
 
             internal void Init()
             {
+                this.BitmapSource = BitmapFactory.New(UiState.Instance.RenderBitmapHeight, UiState.Instance.RenderBitmapWidth);
+
+                this.ScopeBitmapContext = BitmapSource.GetBitmapContext();
+
                 Renderers = new IScopeRenderer[] {
                     new HarmonicSignalGraphRenderer(),
                     new HitBasedSignalGraphRender(),
@@ -101,110 +105,18 @@ namespace SimpleOsciloscope.UI
                 }
 
                 {
-                    /*
-                    this.ShowFftChanged += (a, b) =>
-                    {
-                        if (b.NewValue)
-                            this.RenderType = RenderTypes.Fft;
-                    };
-
-
-                    this.ShowHarmonicChanged += (a, b) =>
-                    {
-                        if (b.NewValue)
-                            this.RenderType = RenderTypes.Harmonic;
-                    };
-
-                    this.ShowHitBasedChanged += (a, b) =>
-                    {
-                        if (b.NewValue)
-                            this.RenderType = RenderTypes.HitBased;
-                    };
-                    */
-
-                    //this.ShowHarmonicChanged 
+                   
                     this.RenderTypeChanged += (a, b) => updateRenderType();
                 }
 
                 {
-                    this.BitmapSource = new WriteableBitmap(UiState.Instance.RenderBitmapWidth, UiState.Instance.RenderBitmapHeight, 96, 96, pixelFormat: UiState.BitmapPixelFormat, null);
+                    //this.BitmapSource = new WriteableBitmap(UiState.Instance.RenderBitmapWidth, UiState.Instance.RenderBitmapHeight, 96, 96, pixelFormat: UiState.BitmapPixelFormat, null);
                     //this.SampleRate = 500_000;// (long)UiState.AdcConfig.SampleRate;
                 }
 
                 {
-                    RefreshPorts();
+                    //RefreshPorts();
                     this.IsNotConnected = true;
-                }
-
-                {
-                    //this.SampleRate = 500_000;
-                }
-
-                //this.ListenToAudioChanged += AudioChanged;
-
-                {
-                    /*
-                    var lst = new List<ChannelInfo>();
-                    var ids = new RpiPicoDaqInterface.Rp2040AdcChannels[]{
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio26,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio27,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.Gpio28,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.InternalReference,
-                    RpiPicoDaqInterface.Rp2040AdcChannels.InternalTempratureSensor
-                    };
-
-                    var pins = RpiPicoDaqInterface.AdcPins();
-                    var g26 = pins.FindFirstIndexOf(i => i == 26);
-                    var g27 = pins.FindFirstIndexOf(i => i == 27);
-                    var g28 = pins.FindFirstIndexOf(i => i == 28);
-
-                    var titles = new string[] {
-                        (g26 + 1).ToString(),
-                        (g27 + 1).ToString(),
-                        (g28 + 1).ToString(),
-                                    "VRef ",
-                        "Tmpr"
-                    };
-
-                    var descs = new string[] { 
-                        "ADC Probe", 
-                        "ADC Probe", 
-                        "ADC Probe", 
-                        "Internal Voltage Reference", 
-                        "Internal Temprature Sensor" };
-
-
-                    for (int i = 0; i < 5; i++)
-                    {
-                        var inf = new ChannelInfo();
-                        inf.ChannelId = ids[i];
-                        inf.Title = titles[i];
-                        inf.Description = descs[i];
-                        lst.Add(inf);
-                    }
-
-
-                    
-
-                    this.AvailableChannels =
-                        //new ObservableCollection<ChannelInfo>(lst.OrderBy(i => i.Title).ToArray());
-                        new ObservableCollection<ChannelInfo>(UiState.Instance.Channels);
-
-                    */
-                }
-
-                {
-                    /*
-                    var lastPort = Settings.Default.lastPort;
-                    var lastChnIdx = Settings.Default.lastChannelIndex;
-                    var lastSrate = Settings.Default.lastSampleRate;
-
-                    if (AvailablePorts.Contains(lastPort))
-                        SelectedPort = lastPort;
-
-                    SelectedChannel = AvailableChannels[lastChnIdx];
-                    */
-                    //SampleRate = lastSrate;
                 }
             }
 
@@ -504,114 +416,8 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
-            /*
-
-            #region SampleRate Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public long SampleRate
-            {
-                get { return _SampleRate; }
-                set
-                {
-                    if (AreEqualObjects(_SampleRate, value))
-                        return;
-
-                    var _fieldOldValue = _SampleRate;
-
-                    _SampleRate = value;
-
-                    ContextClass.OnSampleRateChanged(this, new PropertyValueChangedEventArgs<long>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("SampleRate");
-                }
-            }
-
-            private long _SampleRate;
-
-            public EventHandler<PropertyValueChangedEventArgs<long>> SampleRateChanged;
-
-            public static void OnSampleRateChanged(object sender, PropertyValueChangedEventArgs<long> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.SampleRateChanged != null)
-                    obj.SampleRateChanged(obj, e);
-            }
-
-            #endregion
-
-            */
-            #region AvailablePorts Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public ObservableCollection<string> AvailablePorts
-            {
-                get { return _AvailablePorts; }
-                set
-                {
-                    if (AreEqualObjects(_AvailablePorts, value))
-                        return;
-
-                    var _fieldOldValue = _AvailablePorts;
-
-                    _AvailablePorts = value;
-
-                    ContextClass.OnAvailablePortsChanged(this, new PropertyValueChangedEventArgs<ObservableCollection<string>>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("AvailablePorts");
-                }
-            }
-
-            private ObservableCollection<string> _AvailablePorts;
-
-            public EventHandler<PropertyValueChangedEventArgs<ObservableCollection<string>>> AvailablePortsChanged;
-
-            public static void OnAvailablePortsChanged(object sender, PropertyValueChangedEventArgs<ObservableCollection<string>> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.AvailablePortsChanged != null)
-                    obj.AvailablePortsChanged(obj, e);
-            }
-
-            #endregion
-
-            #region SelectedPort Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public string SelectedPort
-            {
-                get { return _SelectedPort; }
-                set
-                {
-                    if (AreEqualObjects(_SelectedPort, value))
-                        return;
-
-                    var _fieldOldValue = _SelectedPort;
-
-                    _SelectedPort = value;
-
-                    ContextClass.OnSelectedPortChanged(this, new PropertyValueChangedEventArgs<string>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("SelectedPort");
-                }
-            }
-
-            private string _SelectedPort;
-
-            public EventHandler<PropertyValueChangedEventArgs<string>> SelectedPortChanged;
-
-            public static void OnSelectedPortChanged(object sender, PropertyValueChangedEventArgs<string> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.SelectedPortChanged != null)
-                    obj.SelectedPortChanged(obj, e);
-            }
-
-            #endregion
-
+            
+            
             #region IsNotConnected Property and field
 
             [Obfuscation(Exclude = true, ApplyToMembers = false)]
@@ -1079,8 +885,8 @@ namespace SimpleOsciloscope.UI
 
                 foreach (var item in Renderers)
                 {
-                    if (item != null)
-                        item.Clear();
+                    //if (item != null)
+                    //    item.Clear();
                 }
 
                 /*
@@ -1201,7 +1007,7 @@ namespace SimpleOsciloscope.UI
                 }
 
                 foreach (var rnd in Renderers)
-                    rnd.Clear();
+                    rnd.Clear(this.ScopeBitmapContext);
 
             }
 
@@ -1235,6 +1041,8 @@ namespace SimpleOsciloscope.UI
                     if (!RenderLoopFlag)
                         return;
 
+
+                    
                     tm.Restart();
                     RenderShot();
                     tm.Stop();
@@ -1265,7 +1073,8 @@ namespace SimpleOsciloscope.UI
             private Thread RenderThread;
             private Thread DaqThread;
             private IDaqInterface DaqInterface;
-
+            public BitmapContext ScopeBitmapContext;
+            //public WriteableBitmap ScopeBitmap;
 
 
             void RenderShot()
@@ -1278,22 +1087,42 @@ namespace SimpleOsciloscope.UI
 
                 var prps = SignalPropertyCalculator.Calculate();
 
+                this.Frequency = prps.Frequency;
+
                 this.SignalInfo = prps;
 
                 this.DutyCycle = prps.PwmDutyCycle;
 
 
                 //var bmp = render.Render2(out freq, out min, out max);
-                var bmp = renderer.Render3(prps);
+                //var bmp = renderer.Render3(prps);
 
+                renderer.DoRender(ScopeBitmapContext, prps);
 
+                /*
                 {
                     var minF = prps.Min * prps.alpha + prps.beta;
                     var maxF = prps.Max * prps.alpha + prps.beta;
 
                     this.MinMaxP2p = string.Format("{0:0.00},{1:0.00},{2:0}mv", minF, maxF, (minF - maxF) * 1000);
                 }
+                */
 
+                {
+                    var w = this.ScopeBitmapContext.Width;
+                    var h = this.ScopeBitmapContext.Height;
+
+                    this.BitmapSource.AddDirtyRectThreadSafe(new Int32Rect(0, 0, w, h));
+
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        this.BitmapSource.Lock();
+                        this.BitmapSource.AddDirtyRect(new Int32Rect(0, 0, w, h));
+                        this.BitmapSource.Unlock();
+                    }), System.Windows.Threading.DispatcherPriority.Render);
+                }
+                
+                /*
                 var t = bmp;
 
                 using (var ctx = bmp.GetBitmapContext())
@@ -1308,6 +1137,7 @@ namespace SimpleOsciloscope.UI
                         }), System.Windows.Threading.DispatcherPriority.Render);
                     }
                 }
+                */
             }
 
 
@@ -1363,8 +1193,8 @@ namespace SimpleOsciloscope.UI
 
             internal void RefreshPorts()
             {
-                this.AvailablePorts = new ObservableCollection<string>(SerialPort.GetPortNames());
-                this.SelectedPort = this.AvailablePorts.FirstOrDefault();
+                //this.AvailablePorts = new ObservableCollection<string>(SerialPort.GetPortNames());
+                //this.SelectedPort = this.AvailablePorts.FirstOrDefault();
             }
 
             public void OnMouseWheelZoom(Point center, double delta)
@@ -1429,13 +1259,15 @@ namespace SimpleOsciloscope.UI
 
         private void BtnRefreshPorts_Click(object sender, RoutedEventArgs e)
         {
-            Context.RefreshPorts();
+            //Context.RefreshPorts();
         }
+
 
         private void BtnCalib_Click(object sender, RoutedEventArgs e)
         {
-            Calibration.Calibrate(Context.SelectedPort);
+            //Calibration.Calibrate(Context.SelectedPort);
         }
+        
 
         private void btnFftClick_Click(object sender, RoutedEventArgs e)
         {

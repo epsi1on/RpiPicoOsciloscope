@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -94,6 +95,11 @@ namespace SimpleOsciloscope.UI.FrequencyDetection
 
             return false;
 
+            throw new NotImplementedException();
+        }
+
+        public bool TryGetFrequency(short[] ys, Complex[] fftContext, double samplingRate, out double freq, out double phaseShift)
+        {
             throw new NotImplementedException();
         }
     }

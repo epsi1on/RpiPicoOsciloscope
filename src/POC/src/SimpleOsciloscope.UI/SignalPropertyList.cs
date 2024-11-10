@@ -31,6 +31,8 @@ namespace SimpleOsciloscope.UI
 
         public bool Error { get; set; }
 
+
+        public System.Numerics.Complex[] FftContext;
         
     }
 }

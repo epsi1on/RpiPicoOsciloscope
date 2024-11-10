@@ -8,7 +8,7 @@ namespace SimpleOsciloscope.UI
     public class DataRepository
     {
 
-        public static readonly double RepoLengthSecs = 0.001;
+        public static readonly double RepoLengthSecsMemoryDepth = 1;
 
         //public static readonly int RepoLength =
         //5_000_000 * 3;//1.5 M sample capacity, 3 sec for 500ksps
@@ -25,7 +25,7 @@ namespace SimpleOsciloscope.UI
         //public ChannelData Channel2 = new ChannelData(RepoLength);
         public ISampleRepository<short> Samples;//= new FixedLengthList<short>(RepoLength);
 
-        public ISampleRepository<float> SamplesF;//= new FixedLengthList<short>(RepoLength);
+        //public ISampleRepository<float> SamplesF;//= new FixedLengthList<short>(RepoLength);
 
         //public ISampleRepository<short> Samples;//= new FixedLengthList<short>(RepoLength);
 
@@ -37,10 +37,10 @@ namespace SimpleOsciloscope.UI
             UiState.AdcConfig.SampleRate = sampleRate;
             //AdcSampleRate = sampleRate;
 
-            var lng = (int)(sampleRate * RepoLengthSecs);
+            var lng = (int)(sampleRate * RepoLengthSecsMemoryDepth);
 
             Samples = new FixedLengthListRepo<short>(lng);
-            SamplesF = new FixedLengthListRepo<float>(lng);
+            //SamplesF = new FixedLengthListRepo<float>(lng);
         }
     }
 

@@ -12,9 +12,9 @@ namespace SimpleOsciloscope.UI
     {
         public class Pooll<T> where T : struct
         {
-            public int Rents = 0;
-            public int Returns = 0;
-            public int Allocates = 0;
+            public static int Rents = 0;
+            public static int Returns = 0;
+            public static int Allocates = 0;
 
 
 

@@ -65,7 +65,7 @@ namespace SimpleOsciloscope.UI.InterfaceUi.FakeDaq
             var beta = UiState.Instance.CurrentRepo.LastBeta = ampl - offset;
 
             var rr = TargetRepository.Samples;
-            var rrf = TargetRepository.SamplesF;
+            //var rrf = TargetRepository.SamplesF;
 
             var l = 100_000;
 

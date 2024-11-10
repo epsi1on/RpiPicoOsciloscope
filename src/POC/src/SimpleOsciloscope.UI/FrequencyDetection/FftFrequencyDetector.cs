@@ -15,7 +15,7 @@ namespace SimpleOsciloscope.UI
 {
     public class FftFrequencyDetector : IFrequencyDetector
     {
-        public Complex[] tmp1,tmp2;
+        
 
         /// <summary>
         /// calculates the frequency from input array
@@ -24,14 +24,15 @@ namespace SimpleOsciloscope.UI
         /// <param name="ys">volt</param>
         /// <param name="freq">[output] calculated frequency</param>
         /// <returns>true, if freq found, false otherwise</returns>
-        public bool TryGetFrequency(short[] ys, double samplingRate, out double fre, out double phaseRadian)
+        public bool TryGetFrequency_old(short[] ys, double samplingRate, out double fre, out double phaseRadian)
         {
-            //https://stackoverflow.com/questions/3949324/calculate-autocorrelation-using-fft-in-matlab
-            //https://stackoverflow.com/questions/59265603/how-to-find-period-of-signal-autocorrelation-vs-fast-fourier-transform-vs-power
+            Complex[] tmp1 = null, tmp2 = null;
+        //https://stackoverflow.com/questions/3949324/calculate-autocorrelation-using-fft-in-matlab
+        //https://stackoverflow.com/questions/59265603/how-to-find-period-of-signal-autocorrelation-vs-fast-fourier-transform-vs-power
 
 
-            //https://stackoverflow.com/a/7675171
-            var n = ys.Length;
+        //https://stackoverflow.com/a/7675171
+        var n = ys.Length;
             phaseRadian = 0;
 
             if (tmp1 == null)
@@ -116,8 +117,102 @@ namespace SimpleOsciloscope.UI
             return true;
         }
 
+        public bool TryGetFrequency(short[] ys, Complex[] fftContext, double samplingRate, out double fre, out double phaseRadian)
+        {
+            //https://stackoverflow.com/questions/3949324/calculate-autocorrelation-using-fft-in-matlab
+            //https://stackoverflow.com/questions/59265603/how-to-find-period-of-signal-autocorrelation-vs-fast-fourier-transform-vs-power
 
 
+            //https://stackoverflow.com/a/7675171
+            
+            var n = ys.Length;
+            phaseRadian = 0;
+
+            /*
+
+            if (tmp1 == null)
+                tmp1 = new Complex[ys.Length];
+
+            if (tmp2 == null)
+                tmp2 = new Complex[ys.Length];
+
+
+            var sum = ys.Sum(i => (long)i);
+            var avg = sum / (double)ys.Length;
+
+            for (int i = 0; i < ys.Length; i++)
+            {
+                tmp1[i] = new Complex(ys[i] - avg, 0);
+            }
+
+            using (var pinIn = new PinnedArray<Complex>(tmp1))
+            using (var pinOut = new PinnedArray<Complex>(tmp2))
+            {
+                DFT.FFT(pinIn, pinOut);
+                //DFT.IFFT(pinOut, pinOut);
+            }
+            */
+            var cpx = fftContext;
+
+
+            var maxIdx = 1;
+
+
+            for (int i = 1; i < cpx.Length / 2; i++)
+            {
+                if (Math.Abs(cpx[i].Magnitude) > Math.Abs(cpx[maxIdx].Magnitude))
+                    maxIdx = i;
+            }
+
+            var freq = maxIdx * samplingRate / cpx.Length;
+
+            var phs = phaseRadian = cpx[maxIdx].Phase;
+
+            for (int i = 1; i < cpx.Length; i++)
+            {
+                //tmp2[i] = new Complex(tmp2[i].Magnitude, 0);
+
+                //if (Math.Abs(tmp2[i].Magnitude) > Math.Abs(tmp2[maxIdx].Magnitude))
+                //    maxIdx = i;
+            }
+
+
+
+
+            /*
+
+            using (var pinIn = new PinnedArray<Complex>(tmp1))
+            using (var pinOut = new PinnedArray<Complex>(tmp2))
+            {
+                //DFT.FFT(pinIn, pinOut);
+                DFT.IFFT(pinOut, pinIn);
+            }
+
+
+            for (int i = 1; i < tmp2.Length / 2; i++)
+            {
+                //tmp2[i] = new Complex(tmp2[i].Magnitude, 0);
+
+                if (Math.Abs(tmp1[i].Magnitude) > Math.Abs(tmp1[maxIdx].Magnitude))
+                    maxIdx = i;
+            }
+            */
+            var vw = 1 / freq;
+
+            //phaseShift = (  phs/( 2*Math.PI)) * vw;
+
+
+            var tt = cpx[maxIdx];
+
+            fre = freq;// Math.Abs(tt.Imaginary);
+
+            //Console.WriteLine(tmp1[i] / tmp2[i]);
+
+            //FFTW.NET.DFT.FFT(tmp1, tmp2, PlannerFlags.Default, 1);
+
+
+            return true;
+        }
 
         private int[] FindKBiggestNumbersM(int[] testArray, int k)
         {
