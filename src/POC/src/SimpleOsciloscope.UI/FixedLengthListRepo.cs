@@ -45,7 +45,7 @@ namespace SimpleOsciloscope.UI
             }
         }
 
-        public void CopyTo(T[] other)
+        public void CopyToOld(T[] other)
         {
             if (other.Length != FixedLength)
                 throw new Exception();
@@ -74,6 +74,37 @@ namespace SimpleOsciloscope.UI
                 {
                     other[i - t] = thisArr[i];
                 }
+            }
+        }
+
+        public void CopyTo(T[] other)
+        {
+            if (other.Length != FixedLength)
+                throw new Exception();
+
+            Array.Clear(other, 0, other.Length);
+
+            var tmp = new T[1000];
+
+            int sz;
+
+            unsafe
+            {
+                sz = sizeof(T);
+            }
+
+            lock (lc)
+            {
+                var L = this.FixedLength;
+                var idx = this.Index;
+                var t = Index % L;
+
+                var thisArr = this.arr;
+
+                Buffer.BlockCopy(thisArr, sz * t, other, 0, sz * (L - t));
+
+                Buffer.BlockCopy(thisArr, 0, other, sz * (L - t), sz * t);
+
             }
         }
 
