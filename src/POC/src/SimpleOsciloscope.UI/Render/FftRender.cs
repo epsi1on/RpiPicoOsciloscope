@@ -381,7 +381,7 @@ namespace SimpleOsciloscope.UI.Render
 
             //arr.CopyTo(input);
 
-            var cpx = props.FftContext;
+            var cpx = props.FftContext.Context;
 
             var sampleRate = UiState.AdcConfig.SampleRate;
 

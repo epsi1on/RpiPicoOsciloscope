@@ -6,6 +6,9 @@ namespace SimpleOsciloscope.UI
 {
     public class SignalPropertyCalculator
     {
+
+        static System.Diagnostics.Stopwatch wc = new System.Diagnostics.Stopwatch();
+
         public static SignalPropertyList Calculate()
         {
             var repo = UiState.Instance.CurrentRepo;
@@ -20,9 +23,7 @@ namespace SimpleOsciloscope.UI
             var beta = repo.LastBeta;
             var sampleRate = UiState.AdcConfig.SampleRate;
 
-
             var buf = new SignalPropertyList();
-
 
             buf.alpha = alpha;
             buf.beta = beta;
@@ -68,7 +69,6 @@ namespace SimpleOsciloscope.UI
                     tmp = ys[i];
                     histogram[ys[i]]++;
                 }
-                    
 
                 histogramSum = histogram.Sum();
             }
@@ -83,10 +83,13 @@ namespace SimpleOsciloscope.UI
             buf.Percentile1Domain = (short)(buf.MaxPercentile1 - buf.MinPercentile1);
             buf.Percentile5Domain = (short)(buf.MaxPercentile5 - buf.MinPercentile5);
 
-            if (buf.FftContext == null)
-                buf.FftContext = new System.Numerics.Complex[lst.FixedLength];
 
-            FftwUtil.CalcFft(ys, buf.FftContext);
+            //if (buf.FftContext == null)
+            wc.Restart();
+            buf.FftContext = FftContext.FromSignal(ys);
+            wc.Stop();
+
+            Log.Info("FFT took {0} ms", wc.ElapsedMilliseconds);
 
 
             {
@@ -123,6 +126,7 @@ namespace SimpleOsciloscope.UI
             }
 
             ArrayPool.Return(ys);
+
             return buf;
         }
 

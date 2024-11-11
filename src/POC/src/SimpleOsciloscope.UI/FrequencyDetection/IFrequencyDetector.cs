@@ -6,7 +6,7 @@ namespace SimpleOsciloscope.UI
     {
         //bool TryGetFrequency(short[] ys, double samplingRate, out double freq, out double phaseShift);
 
-        bool TryGetFrequency(short[] ys, Complex[] fftContext, double samplingRate, out double freq, out double phaseShift);
+        bool TryGetFrequency(short[] ys, FftContext fftContext, double samplingRate, out double freq, out double phaseShift);
     }
 
 

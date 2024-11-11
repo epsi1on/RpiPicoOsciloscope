@@ -725,7 +725,6 @@ namespace SimpleOsciloscope.UI
 
                     var shiftSec = shiftRadian / (2 * Math.PI) * waveLength;
 
-                    Console.WriteLine("Shift: " + shiftRadian);
                     using (var ctx = Bmp2.GetBitmapContext())
                     {
                         for (var i = st; i < en; i++)
@@ -919,7 +918,7 @@ namespace SimpleOsciloscope.UI
 
                     var shiftSec = shiftRadian / (2 * Math.PI) * waveLength;
 
-                    Console.WriteLine("Shift: " + shiftRadian);
+                    //Console.WriteLine("Shift: " + shiftRadian);
 
                     var ctx = context;
 

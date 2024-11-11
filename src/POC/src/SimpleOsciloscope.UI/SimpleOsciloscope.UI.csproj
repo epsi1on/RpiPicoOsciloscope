@@ -259,6 +259,8 @@
       <DependentUpon>AdcSampler.xaml</DependentUpon>
     </Compile>
     <Compile Include="ADC_Report.cs" />
+    <Compile Include="FftContext.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="RecycleBim\ArrayGraphPlotter.cs" />
     <Compile Include="ArrayPool.cs" />
     <Compile Include="Audio\NAudioPlayer.cs" />

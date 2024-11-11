@@ -68,7 +68,7 @@ namespace SimpleOsciloscope.UI.FrequencyDetection
             throw new NotImplementedException();
         }
 
-        public bool TryGetFrequency(short[] ys, Complex[] fftContext, double samplingRate, out double freq, out double phaseShift)
+        public bool TryGetFrequency(short[] ys, FftContext fftContext, double samplingRate, out double freq, out double phaseShift)
         {
             double f, d;
 

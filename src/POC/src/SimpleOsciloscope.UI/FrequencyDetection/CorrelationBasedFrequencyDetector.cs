@@ -476,7 +476,7 @@ namespace SimpleOsciloscope.UI
             return true;
         }
 
-        public bool TryGetFrequency(short[] ys, Complex[] fftContext, double samplingRate, out double freq, out double phaseShift)
+        public bool TryGetFrequency(short[] ys, FftContext fftContext, double samplingRate, out double freq, out double phaseShift)
         {
             var y2s = ArrayPool.Double(ys.Length);
 

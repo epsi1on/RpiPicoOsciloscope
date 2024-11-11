@@ -510,7 +510,7 @@ namespace SimpleOsciloscope.UI.Render
 
             //FftwUtil.CalcFft(input, cpx);
 
-            var cpx = properties.FftContext;
+            var cpx = properties.FftContext.Context;
 
             var sampleRate = UiState.AdcConfig.SampleRate;
 

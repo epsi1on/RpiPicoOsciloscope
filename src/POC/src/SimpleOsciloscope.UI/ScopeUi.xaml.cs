@@ -200,9 +200,6 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
-
-
-
             #region INotifyPropertyChanged members and helpers
 
             public event PropertyChangedEventHandler PropertyChanged;
@@ -276,76 +273,6 @@ namespace SimpleOsciloscope.UI
             #endregion
 
 
-            #region TotalSmaples Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public long TotalSmaples
-            {
-                get { return _TotalSmaples; }
-                set
-                {
-                    if (AreEqualObjects(_TotalSmaples, value))
-                        return;
-
-                    var _fieldOldValue = _TotalSmaples;
-
-                    _TotalSmaples = value;
-
-                    ContextClass.OnTotalSmaplesChanged(this, new PropertyValueChangedEventArgs<long>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("TotalSmaples");
-                }
-            }
-
-            private long _TotalSmaples;
-
-            public EventHandler<PropertyValueChangedEventArgs<long>> TotalSmaplesChanged;
-
-            public static void OnTotalSmaplesChanged(object sender, PropertyValueChangedEventArgs<long> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.TotalSmaplesChanged != null)
-                    obj.TotalSmaplesChanged(obj, e);
-            }
-
-            #endregion
-
-            #region TotalSamplesStr Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public string TotalSamplesStr
-            {
-                get { return _TotalSamplesStr; }
-                set
-                {
-                    if (AreEqualObjects(_TotalSamplesStr, value))
-                        return;
-
-                    var _fieldOldValue = _TotalSamplesStr;
-
-                    _TotalSamplesStr = value;
-
-                    ContextClass.OnTotalSamplesStrChanged(this, new PropertyValueChangedEventArgs<string>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("TotalSamplesStr");
-                }
-            }
-
-            private string _TotalSamplesStr;
-
-            public EventHandler<PropertyValueChangedEventArgs<string>> TotalSamplesStrChanged;
-
-            public static void OnTotalSamplesStrChanged(object sender, PropertyValueChangedEventArgs<string> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.TotalSamplesStrChanged != null)
-                    obj.TotalSamplesStrChanged(obj, e);
-            }
-
-            #endregion
-
             #region BitmapSource Property and field
 
             [Obfuscation(Exclude = true, ApplyToMembers = false)]
@@ -415,8 +342,6 @@ namespace SimpleOsciloscope.UI
             }
 
             #endregion
-
-            
             
             #region IsNotConnected Property and field
 
@@ -453,296 +378,7 @@ namespace SimpleOsciloscope.UI
 
             #endregion
 
-            #region MinMaxP2p Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public string MinMaxP2p
-            {
-                get { return _MinMaxP2p; }
-                set
-                {
-                    if (AreEqualObjects(_MinMaxP2p, value))
-                        return;
-
-                    var _fieldOldValue = _MinMaxP2p;
-
-                    _MinMaxP2p = value;
-
-                    ContextClass.OnMinMaxP2pChanged(this, new PropertyValueChangedEventArgs<string>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("MinMaxP2p");
-                }
-            }
-
-            private string _MinMaxP2p;
-
-            public EventHandler<PropertyValueChangedEventArgs<string>> MinMaxP2pChanged;
-
-            public static void OnMinMaxP2pChanged(object sender, PropertyValueChangedEventArgs<string> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.MinMaxP2pChanged != null)
-                    obj.MinMaxP2pChanged(obj, e);
-            }
-
-            #endregion
-
             
-
-            #region DutyCycle Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public double DutyCycle
-            {
-                get { return _DutyCycle; }
-                set
-                {
-                    if (AreEqualObjects(_DutyCycle, value))
-                        return;
-
-                    var _fieldOldValue = _DutyCycle;
-
-                    _DutyCycle = value;
-
-                    ContextClass.OnDutyCycleChanged(this, new PropertyValueChangedEventArgs<double>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("DutyCycle");
-                }
-            }
-
-            private double _DutyCycle;
-
-            public EventHandler<PropertyValueChangedEventArgs<double>> DutyCycleChanged;
-
-            public static void OnDutyCycleChanged(object sender, PropertyValueChangedEventArgs<double> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.DutyCycleChanged != null)
-                    obj.DutyCycleChanged(obj, e);
-            }
-
-            #endregion
-
-            #region AvailableChannels Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public ObservableCollection<ChannelInfo> AvailableChannels
-            {
-                get { return _AvailableChannels; }
-                set
-                {
-                    if (AreEqualObjects(_AvailableChannels, value))
-                        return;
-
-                    var _fieldOldValue = _AvailableChannels;
-
-                    _AvailableChannels = value;
-
-                    ContextClass.OnAvailableChannelsChanged(this, new PropertyValueChangedEventArgs<ObservableCollection<ChannelInfo>>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("AvailableChannels");
-                }
-            }
-
-            private ObservableCollection<ChannelInfo> _AvailableChannels;
-
-            public EventHandler<PropertyValueChangedEventArgs<ObservableCollection<ChannelInfo>>> AvailableChannelsChanged;
-
-            public static void OnAvailableChannelsChanged(object sender, PropertyValueChangedEventArgs<ObservableCollection<ChannelInfo>> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.AvailableChannelsChanged != null)
-                    obj.AvailableChannelsChanged(obj, e);
-            }
-
-            #endregion
-
-            #region SelectedChannel Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public ChannelInfo SelectedChannel
-            {
-                get { return _SelectedChannel; }
-                set
-                {
-                    if (AreEqualObjects(_SelectedChannel, value))
-                        return;
-
-                    var _fieldOldValue = _SelectedChannel;
-
-                    _SelectedChannel = value;
-
-                    ContextClass.OnSelectedChannelChanged(this, new PropertyValueChangedEventArgs<ChannelInfo>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("SelectedChannel");
-                }
-            }
-
-            private ChannelInfo _SelectedChannel;
-
-            public EventHandler<PropertyValueChangedEventArgs<ChannelInfo>> SelectedChannelChanged;
-
-            public static void OnSelectedChannelChanged(object sender, PropertyValueChangedEventArgs<ChannelInfo> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.SelectedChannelChanged != null)
-                    obj.SelectedChannelChanged(obj, e);
-            }
-
-            #endregion
-
-            #region SignalInfo Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public SignalPropertyList SignalInfo
-            {
-                get {
-                    return _SignalInfo; }
-                set
-                {
-                    if (AreEqualObjects(_SignalInfo, value))
-                        return;
-
-                    var _fieldOldValue = _SignalInfo;
-
-                    _SignalInfo = value;
-
-                    ContextClass.OnSignalInfoChanged(this, new PropertyValueChangedEventArgs<SignalPropertyList>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("SignalInfo");
-                }
-            }
-
-            private SignalPropertyList _SignalInfo;
-
-            public EventHandler<PropertyValueChangedEventArgs<SignalPropertyList>> SignalInfoChanged;
-
-            public static void OnSignalInfoChanged(object sender, PropertyValueChangedEventArgs<SignalPropertyList> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.SignalInfoChanged != null)
-                    obj.SignalInfoChanged(obj, e);
-            }
-
-            #endregion
-
-            /**/
-
-            #region ShowFft Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public bool ShowFft
-            {
-                get { return _ShowFft; }
-                set
-                {
-                    if (AreEqualObjects(_ShowFft, value))
-                        return;
-
-                    var _fieldOldValue = _ShowFft;
-
-                    _ShowFft = value;
-
-                    ContextClass.OnShowFftChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("ShowFft");
-
-                    ShowHarmonic = !value;
-                }
-            }
-
-            private bool _ShowFft;
-
-            public EventHandler<PropertyValueChangedEventArgs<bool>> ShowFftChanged;
-
-            public static void OnShowFftChanged(object sender, PropertyValueChangedEventArgs<bool> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.ShowFftChanged != null)
-                    obj.ShowFftChanged(obj, e);
-            }
-
-            #endregion
-
-            #region ShowHarmonic Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public bool ShowHarmonic
-            {
-                get { return _ShowHarmonic; }
-                set
-                {
-                    if (AreEqualObjects(_ShowHarmonic, value))
-                        return;
-
-                    var _fieldOldValue = _ShowHarmonic;
-
-                    _ShowHarmonic = value;
-
-                    ContextClass.OnShowHarmonicChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("ShowHarmonic");
-
-                    ShowFft = !value;
-                }
-            }
-
-            private bool _ShowHarmonic;
-
-            public EventHandler<PropertyValueChangedEventArgs<bool>> ShowHarmonicChanged;
-
-            public static void OnShowHarmonicChanged(object sender, PropertyValueChangedEventArgs<bool> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.ShowHarmonicChanged != null)
-                    obj.ShowHarmonicChanged(obj, e);
-            }
-
-            #endregion
-
-            #region ShowHitBased Property and field
-
-            [Obfuscation(Exclude = true, ApplyToMembers = false)]
-            public bool ShowHitBased
-            {
-                get { return _ShowHitBased; }
-                set
-                {
-                    if (AreEqualObjects(_ShowHitBased, value))
-                        return;
-
-                    var _fieldOldValue = _ShowHitBased;
-
-                    _ShowHitBased = value;
-
-                    ContextClass.OnShowHitBasedChanged(this, new PropertyValueChangedEventArgs<bool>(_fieldOldValue, value));
-
-                    this.OnPropertyChanged("ShowHitBased");
-                }
-            }
-
-            private bool _ShowHitBased;
-
-            public EventHandler<PropertyValueChangedEventArgs<bool>> ShowHitBasedChanged;
-
-            public static void OnShowHitBasedChanged(object sender, PropertyValueChangedEventArgs<bool> e)
-            {
-                var obj = sender as ContextClass;
-
-                if (obj.ShowHitBasedChanged != null)
-                    obj.ShowHitBasedChanged(obj, e);
-            }
-
-            #endregion
-
-            /**/
 
             #region RenderType Property and field
 
@@ -864,19 +500,12 @@ namespace SimpleOsciloscope.UI
                 this.renderer = curr;
             }
 
-            /*
-            public class ChannelInfo
-            {
-                public RpiPicoDaqInterface.Rp2040AdcChannels ChannelId { get; set; }
-                public string Title { get; set; }
-                public string Description { get; set; }
-            }
-            */
-
-
             private IScopeRenderer[] Renderers;
 
-            
+            IScopeRenderer renderer;
+
+            private bool RenderLoopFlag = false;
+
 
 
             public void Start(IDaqInterface intfs,int sampleRate)
@@ -1012,18 +641,7 @@ namespace SimpleOsciloscope.UI
             }
 
 
-            IScopeRenderer renderer;
-                //new HitBasedSignalGraphRender();
-                //new FftRender();
-
-            void AudioChanged(object sender, PropertyValueChangedEventArgs<bool> e)
-            {
-                
-            }
-
-
-            private bool RenderLoopFlag = false;
-
+            
             void RenderLoopSync()
             {
                 var fps = UiState.RenderFramerate;
@@ -1036,12 +654,8 @@ namespace SimpleOsciloscope.UI
 
                 while (true)
                 {
-                    
-
                     if (!RenderLoopFlag)
                         return;
-
-
                     
                     tm.Restart();
                     RenderShot();
@@ -1049,33 +663,15 @@ namespace SimpleOsciloscope.UI
 
                     var wait = rateFrameMs - tm.ElapsedMilliseconds;
 
-                    
-
-                    try
-                    {
-                        
-                    }
-                    catch(Exception ex)
-                    {
-
-                    }
-                    //this.TotalSmaples = UiState.Instance.CurrentRepo.Samples.Index;// s.Sum(i => i.Sets);
-                    //this.TotalSamplesStr = Utils.numStr(this.TotalSmaples);
-
-
                     if (wait > 0)
                         Thread.Sleep((int)wait);
                 }
             }
 
-
-
             private Thread RenderThread;
             private Thread DaqThread;
             private IDaqInterface DaqInterface;
             public BitmapContext ScopeBitmapContext;
-            //public WriteableBitmap ScopeBitmap;
-
 
             void RenderShot()
             {
@@ -1087,26 +683,13 @@ namespace SimpleOsciloscope.UI
 
                 var prps = SignalPropertyCalculator.Calculate();
 
-                this.Frequency = prps.Frequency;
-
-                this.SignalInfo = prps;
-
-                this.DutyCycle = prps.PwmDutyCycle;
-
-
-                //var bmp = render.Render2(out freq, out min, out max);
-                //var bmp = renderer.Render3(prps);
-
-                renderer.DoRender(ScopeBitmapContext, prps);
-
-                /*
                 {
-                    var minF = prps.Min * prps.alpha + prps.beta;
-                    var maxF = prps.Max * prps.alpha + prps.beta;
+                    this.Frequency = prps.Frequency;
 
-                    this.MinMaxP2p = string.Format("{0:0.00},{1:0.00},{2:0}mv", minF, maxF, (minF - maxF) * 1000);
+                    //this.SignalInfo = prps;
                 }
-                */
+                
+                renderer.DoRender(ScopeBitmapContext, prps);
 
                 {
                     var w = this.ScopeBitmapContext.Width;
@@ -1121,81 +704,15 @@ namespace SimpleOsciloscope.UI
                         this.BitmapSource.Unlock();
                     }), System.Windows.Threading.DispatcherPriority.Render);
                 }
-                
-                /*
-                var t = bmp;
 
-                using (var ctx = bmp.GetBitmapContext())
-                {
-                    this.Frequency = prps.Frequency;
+                sp.Stop();
 
-                    {
-                        Application.Current.Dispatcher.Invoke(new Action(() =>
-                        {
-                            //CopyBitmap(bmp);
-                            CopyBitmap(ctx);
-                        }), System.Windows.Threading.DispatcherPriority.Render);
-                    }
-                }
-                */
+                Log.Info("Render took {0} ms", sp.ElapsedMilliseconds);
+
+                prps.Dispose();
             }
 
 
-            void CopyBitmap(RgbBitmap bmp)
-            {
-                var dst = this.BitmapSource;
-
-                var w = dst.PixelWidth;
-                var h = dst.PixelHeight;
-
-                ImageUtil.CopyToBitmap(bmp, dst);
-            }
-
-            void CopyBitmap(BitmapContext ctx)
-            {
-                var dst = this.BitmapSource;
-
-                var w = dst.PixelWidth;
-                var h = dst.PixelHeight;
-
-                
-                using (var destCt = dst.GetBitmapContext(ReadWriteMode.ReadWrite))
-                {
-                    ImageUtil.Copy(ctx, destCt);
-                    dst.AddDirtyRect(new Int32Rect(0, 0, dst.PixelWidth, dst.PixelHeight));
-
-                    /*
-                    unsafe
-                    {
-
-                        var l = destCt.Length;
-
-                        var p1 = destCt.Pixels;
-                        var p2 = ctx.Pixels;
-
-                        for (int i = 0; i < l; i++)
-                        {
-                            *p1 = *p2;
-                            p1++;
-                            p2++;
-                        }
-                        //var srcPtr = new IntPtr(ct2.Pixels);
-
-                        //var arr = new Span
-                    }
-                    */
-
-                }
-
-                
-                //ImageUtil.CopyToBitmap(bmp, dst);
-            }
-
-            internal void RefreshPorts()
-            {
-                //this.AvailablePorts = new ObservableCollection<string>(SerialPort.GetPortNames());
-                //this.SelectedPort = this.AvailablePorts.FirstOrDefault();
-            }
 
             public void OnMouseWheelZoom(Point center, double delta)
             {

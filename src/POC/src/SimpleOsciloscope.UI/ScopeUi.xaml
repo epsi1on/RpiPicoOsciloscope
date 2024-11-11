@@ -37,7 +37,7 @@
 
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
                 <Button Content="FFt" MinWidth="100" Click="btnFftClick_Click"/>
-                <Button Content="Harmonic" MinWidth="100" Click="btnHarmonicClick_Click"/>
+                <Button Content="Harmonic (Auto)" MinWidth="100" Click="btnHarmonicClick_Click"/>
                 <Button Content="Hit based" MinWidth="100" Click="btnHitBasedClick_Click"/>
                 <Button Content="Thd" ToolTip="Total Harmonic Distortion" MinWidth="100" Click="btnThdBasedClick_Click"/>
             </StackPanel>

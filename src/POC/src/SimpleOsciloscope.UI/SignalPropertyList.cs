@@ -1,4 +1,5 @@
 ﻿using FftSharp;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -6,7 +7,7 @@ using System.Windows.Documents;
 
 namespace SimpleOsciloscope.UI
 {
-    public class SignalPropertyList
+    public class SignalPropertyList:IDisposable
     {
         public double alpha;
         public double beta;
@@ -32,7 +33,12 @@ namespace SimpleOsciloscope.UI
         public bool Error { get; set; }
 
 
-        public System.Numerics.Complex[] FftContext;
+        public FftContext FftContext;
         
+        public void Dispose()
+        {
+            if (FftContext != null)
+                FftContext.Dispose();
+        }
     }
 }
