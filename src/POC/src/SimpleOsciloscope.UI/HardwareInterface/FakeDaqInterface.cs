@@ -55,7 +55,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
 
                 //var x = start + (end - start) / partitions * i;
 
-                var x = Math.PI * f * time;
+                var x = Math.E + Math.PI * f * time;
 
                 //var y = Math.Sin(x);// +
                                     //(Math.Sin(5 * x) + Math.Sin(3 * x));

@@ -1,6 +1,7 @@
 // The code in this file is provided courtesy of Tamas Szalay. Some functionality has been added.
 
 using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace SharpFFTW.Double
@@ -10,7 +11,33 @@ namespace SharpFFTW.Double
     /// </summary>
     public static class NativeMethods
     {
-        private const string Library = "fftw3";
+
+        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Ansi)]
+        static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string lpFileName);
+
+
+        static NativeMethods()
+        {
+            //static contructor
+
+            string suffix;
+
+            suffix = Environment.Is64BitProcess ? "X64" : "X86";
+
+            var fileName = @"NativeBinaries" + suffix + @"\libfftw3-3.dll";
+
+
+            if(!System.IO.File.Exists(fileName))
+            {
+                throw new Exception("fftw native binary not found at \r\n" + fileName);
+            }
+
+            IntPtr r= LoadLibrary(fileName);
+
+        }
+
+
+        private const string Library = "libfftw3-3";
 
         /// <summary>
         /// Allocates FFTW-optimized unmanaged memory.

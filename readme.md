@@ -4,4 +4,6 @@ A very simple 1 channel osciloscope, uses RPI pico as data acusation (DAQ) unit,
 
 This project uses these projects:
 
-![rp2daq](https://github.com/FilipDominec/rp2daq): as rpi-pico firmware
+- ![rp2daq](https://github.com/FilipDominec/rp2daq): as rpi-pico firmware
+- ![SharpFFTW](https://github.com/wo80/SharpFFTW): for Fast Fourier transform
+- ![WriteableBitmapEx](https://github.com/reneschulte/WriteableBitmapEx): for rendering

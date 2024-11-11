@@ -8,7 +8,7 @@ namespace SimpleOsciloscope.UI
     public class DataRepository
     {
 
-        public static readonly double RepoLengthSecsMemoryDepth = 1;
+        public static readonly double RepoLengthSecsMemoryDepth = 0.1;
 
         //public static readonly int RepoLength =
         //5_000_000 * 3;//1.5 M sample capacity, 3 sec for 500ksps
