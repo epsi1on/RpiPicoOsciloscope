@@ -51,7 +51,7 @@ namespace SimpleOsciloscope.UI
             CurrentRepo = new DataRepository();
             //CurrentRepo.Channels.Add(new ChannelData(DataRepository.RepoLength));
 
-            Channels = InitChannels();
+            //Channels = InitChannels();
         }
 
 
@@ -123,6 +123,7 @@ namespace SimpleOsciloscope.UI
             //var SwPins = new int[] { 19, 21, 18 };
             //var AcDcPins = new int[] { 20, -1, -1 };
 
+            /*
             double normalAlpha, normalBeta;
             double _10xAlpha, _10xBeta;
 
@@ -131,17 +132,20 @@ namespace SimpleOsciloscope.UI
 
             _10xAlpha = double.Parse(ConfigurationManager.AppSettings["ch" + (index) + "_alpha_on"]);
             _10xBeta = double.Parse(ConfigurationManager.AppSettings["ch" + (index) + "_beta_on"]);
-
+            */
             //var pns = AdcPins();
             //var adcPin = pns[chnId];
             //var swPin = SwPins[chnId];
             //var acdcPin = AcDcPins[chnId];
-
+            /*
             var ch1 = new AdcChannelInfo(index, swPin, acdcPin, 
                 normalAlpha, normalBeta,
                 _10xAlpha, _10xBeta, chn);
 
             return ch1;
+            */
+
+            throw new Exception();
         }
 
 

@@ -13,7 +13,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using NAudio.Wave;
 using System.Runtime.Remoting.Channels;
 using System;
 using System.Text;

@@ -1,6 +1,4 @@
-﻿using FftSharp;
-using NAudio.Mixer;
-using SimpleOsciloscope.UI.HardwareInterface;
+﻿using SimpleOsciloscope.UI.HardwareInterface;
 using SimpleOsciloscope.UI.InterfaceUi;
 using SimpleOsciloscope.UI.Properties;
 using SimpleOsciloscope.UI.Render;
@@ -15,7 +13,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -71,7 +68,12 @@ namespace SimpleOsciloscope.UI
 
             internal void Init()
             {
-                this.BitmapSource = BitmapFactory.New(UiState.Instance.RenderBitmapHeight, UiState.Instance.RenderBitmapWidth);
+                if (UiState.Instance == null)
+                    Guid.NewGuid().ToString();
+
+                var h = UiState.Instance.RenderBitmapHeight;
+
+                this.BitmapSource = BitmapFactory.New(h, UiState.Instance.RenderBitmapWidth);
 
                 this.ScopeBitmapContext = BitmapSource.GetBitmapContext();
 

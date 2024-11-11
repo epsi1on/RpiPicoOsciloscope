@@ -1,5 +1,4 @@
-﻿using FFTW.NET;
-using SharpFFTW;
+﻿using SharpFFTW;
 using SharpFFTW.Double;
 using System;
 using System.Collections.Generic;
@@ -87,8 +86,9 @@ namespace SimpleOsciloscope.UI.FrequencyDetection
             outputC.CopyTo(output);
         }
 
-        public static void CalcFft(short[] input, Complex[] output)
+        private static void CalcFft(short[] input, Complex[] output)
         {
+            /*
             var i1 = ArrayPool.Complex(input.Length);
 
             for (int i = 0; i < input.Length; i++)
@@ -103,6 +103,7 @@ namespace SimpleOsciloscope.UI.FrequencyDetection
             }
 
             ArrayPool.Return(i1);
+            */
         }
 
 

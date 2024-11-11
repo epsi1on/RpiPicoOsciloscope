@@ -5,7 +5,6 @@ using uint32_t = System.UInt32;
 using uint64_t = System.UInt64;
 using System.Runtime.InteropServices;
 using int8_t = System.Byte;
-using NAudio.Gui;
 using System.Windows;
 using System.IO;
 

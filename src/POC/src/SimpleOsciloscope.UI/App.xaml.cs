@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using TaskDialogInterop;
 
 namespace SimpleOsciloscope.UI
 {
@@ -34,8 +32,9 @@ namespace SimpleOsciloscope.UI
 
         public static void ShowErrorSync(object e)
         {
+            
             var exception = e as Exception;
-
+            /*
             TaskDialogOptions config = new TaskDialogOptions();
 
             config.Owner = Application.Current.Windows[0];
@@ -53,9 +52,13 @@ namespace SimpleOsciloscope.UI
 
             TaskDialogResult res = TaskDialog.Show(config);
 
+            */
+            MessageBox.Show(exception.Message);
+
 
             //Thread.Sleep(3000);
         }
+
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {

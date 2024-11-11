@@ -4,13 +4,13 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using NAudio.Wave;
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Threading;
 
 namespace SimpleOsciloscope.UI.Audio
 {
+    /*
     public class NAudioPlayer : ISampleRepository<short>, IWaveProvider
     {
 
@@ -88,7 +88,7 @@ namespace SimpleOsciloscope.UI.Audio
 
         private int ReadInternal (float[] buffer, int offset, int sampleCount)
         {
-            var sampleRate = WaveFormat.SampleRate;
+            var sampleRate = 0.0;// WaveFormat.SampleRate;
 
             short dt;
 
@@ -126,4 +126,6 @@ namespace SimpleOsciloscope.UI.Audio
             throw new NotImplementedException();
         }
     }
+
+    */
 }

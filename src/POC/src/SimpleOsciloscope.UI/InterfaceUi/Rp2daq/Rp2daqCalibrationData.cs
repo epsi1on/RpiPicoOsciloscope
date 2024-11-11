@@ -1,5 +1,4 @@
-﻿using FftSharp;
-using SimpleOsciloscope.UI.HardwareInterface;
+﻿using SimpleOsciloscope.UI.HardwareInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;

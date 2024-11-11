@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows;
-using System.Web.UI.WebControls;
 
 namespace SimpleOsciloscope.UI.Render
 {

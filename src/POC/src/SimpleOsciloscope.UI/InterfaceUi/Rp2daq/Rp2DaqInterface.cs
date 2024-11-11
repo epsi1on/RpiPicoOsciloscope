@@ -17,7 +17,6 @@ using System.CodeDom;
 using System.IO.IsolatedStorage;
 using System.Diagnostics;
 using System.Runtime.ConstrainedExecution;
-using FftSharp;
 using System.Windows.Markup.Localizer;
 using uint8_t = System.Byte;
 using uint16_t = System.UInt16;
@@ -847,7 +846,7 @@ namespace SimpleOsciloscope.UI.HardwareInterface
             }
 
             {//read gpio initial values
-                ReadGpioInitialValues();
+                //ReadGpioInitialValues();
             }
 
             {//set calibration parameters

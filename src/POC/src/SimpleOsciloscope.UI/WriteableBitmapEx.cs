@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
-using FftSharp;
 using System.Windows.Media.Media3D;
 
 namespace SimpleOsciloscope.UI
