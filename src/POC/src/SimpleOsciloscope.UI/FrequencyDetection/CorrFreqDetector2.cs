@@ -90,7 +90,7 @@ namespace SimpleOsciloscope.UI.FrequencyDetection
             freq = 0;
             phaseShift = 0;
 
-            FftwUtil.CalcFft(ds, cpx, counter);
+            //FftwUtil.CalcFft(ds, cpx, counter);
 
 
             return false;

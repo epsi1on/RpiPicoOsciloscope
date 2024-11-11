@@ -12,17 +12,79 @@ namespace SimpleOsciloscope.UI.FrequencyDetection
 {
     public static class FftwUtil
     {
+        public static ComplexArray inputC;//pooling
+        public static ComplexArray outputC;//pooling
+
+        public static SharpFFTW.Double.Plan LastPlan;
+
         public static void CalcFftSharp(short[] input, Complex[] output)
         {
-
-            var inputt = new ComplexArray(input.Length);
-            var outputt = new ComplexArray(output.Length);
-
-            var length = 1000;
-
-            var plan1 = Plan.Create1(length, inputt, outputt, Direction.Forward, Options.Estimate);
+            var n = input.Length;
 
 
+            var tt = IntPtr.Size == 8;
+
+            {
+                if (n != output.Length)
+                    throw new Exception();
+
+                //----
+
+                if (inputC != null)
+                    if (inputC.Length != n)
+                    {
+                        inputC.Dispose();
+                        inputC = null;
+                    }
+
+                if (inputC == null)
+                    inputC = new ComplexArray(n);
+
+                //----
+
+                if (outputC != null)
+                    if (outputC.Length != n)
+                    {
+                        outputC.Dispose();
+                        outputC = null;
+                    }
+
+                if (outputC == null)
+                    outputC = new ComplexArray(n);
+
+            }
+
+            var inputt = inputC;// new ComplexArray(input.Length);
+            var outputt = outputC;// new ComplexArray(output.Length);
+
+            var length = input.Length;
+
+            {
+                var cpx = ArrayPool.Complex(n);
+
+                for (int i = 0; i < n; i++)
+                {
+                    cpx[i] = new Complex(input[i], 0);
+                }
+
+                inputC.Set(cpx);
+
+                ArrayPool.Return(cpx);
+            }
+
+            if (LastPlan != null)
+            {
+                LastPlan.Dispose();
+                LastPlan = null;
+            }
+
+            var plan1 = LastPlan = Plan.Create1(length, inputt, outputt, Direction.Forward, Options.Estimate);
+
+            plan1.Execute();
+
+            plan1.Dispose();
+
+            outputC.CopyTo(output);
         }
 
         public static void CalcFft(short[] input, Complex[] output)
@@ -44,22 +106,5 @@ namespace SimpleOsciloscope.UI.FrequencyDetection
         }
 
 
-        public static void CalcFft(double[] input, Complex[] output,int length)
-        {
-            var i1 = ArrayPool.Complex(input.Length);
-
-            for (int i = 0; i < input.Length; i++)
-            {
-                i1[i] = new Complex(input[i], 0);
-            }
-
-            using (var pinIn = new PinnedArray<Complex>(i1))
-            using (var pinOut = new PinnedArray<Complex>(output))
-            {
-                DFT.FFT(pinIn, pinOut);
-            }
-
-            ArrayPool.Return(i1);
-        }
     }
 }

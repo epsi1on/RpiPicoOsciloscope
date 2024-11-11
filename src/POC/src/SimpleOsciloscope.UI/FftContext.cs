@@ -27,7 +27,7 @@ namespace SimpleOsciloscope.UI
             Array.Clear(ph, 0, n);
             Array.Clear(mag, 0, n);
 
-            FftwUtil.CalcFft(signal, ctx);
+            FftwUtil.CalcFftSharp(signal, ctx);
 
             var buf = new FftContext();
             buf.Context= ctx;
